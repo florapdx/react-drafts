@@ -1,0 +1,13 @@
+# Logs
+logs
+*.log
+
+.DS_Store
+
+# Dependency directory
+node_modules
+.tmp
+
+# Generated files
+dist
+coverage

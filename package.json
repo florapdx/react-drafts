@@ -1,0 +1,24 @@
+{
+  "name": "@crossfield/content-editor",
+  "version": "1.0.0",
+  "description": "A React-based content editor",
+  "main": "dist/index.js",
+  "git repository": "",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "npm test"
+  },
+  "keywords": [
+    "editor",
+    "draft-js",
+    "draftjs",
+    "content",
+    "editor",
+    "wysiwyg",
+    "editor"
+  ],
+  "author": "Crossfield team",
+  "license": "MIT"
+}

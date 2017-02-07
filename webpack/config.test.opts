@@ -1,0 +1,5 @@
+--colors
+--require babel-core/register
+--webpack-config config/webpack/config.test.js
+--include dom-test.js
+--glob "*.test.js" app/assets/javascripts
