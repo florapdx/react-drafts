@@ -8,7 +8,7 @@
     "test": "test"
   },
   "scripts": {
-    "start": "webpack-dev-server --port:3000 --hot:true",
+    "start": "webpack-dev-server --config webpack/config.dev.js",
     "clean": "rimraf ./dist",
     "build": "webpack --config webpack/config.dist.js",
     "watch": "webpack -w --config webpack/config.dev.js",

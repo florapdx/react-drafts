@@ -2,12 +2,17 @@ var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
-  entry: './src/content-editor.js',
+  entry: './demo/index.js',
   output: {
-    path: path.resolve(__dirname, '../dist'),
-    filename: 'content-editor.js',
-    libraryTarget: 'umd',
-    library: 'ContentEditor'
+    path: path.resolve(__dirname, '/build/'),
+    publicPath: path.resolve(__dirname, '/build/'),
+    filename: 'bundle.js'
+  },
+  devServer: {
+    contentBase: path.resolve(__dirname, '../demo'),
+    publicPath: path.resolve(__dirname, '/build/'),
+    hot: true,
+    port: 3000
   },
   devtool: 'eval-source-map',
   module: {
@@ -21,10 +26,6 @@ module.exports = {
   },
   resolve: {
     extensions: [' ', '.js']
-  },
-  externals: {
-    "react": 'react',
-    "react-dom": "react-dom"
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin()

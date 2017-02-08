@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Editor, EditorState } from 'draft-js';
 
-class Editor extends Component {
+class ContentEditor extends Component {
   constructor(props) {
     super(props);
 
@@ -21,6 +21,6 @@ class Editor extends Component {
   }
 }
 
-Editor.propTypes = {};
+ContentEditor.propTypes = {};
 
-export default Editor;
+export default ContentEditor;
