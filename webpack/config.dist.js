@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
+var ExtractTextPlugin = require('extract-text-webpack-plugin?sourceMap');
 
 module.exports = {
   entry: './src/index.js',
@@ -15,6 +16,31 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true
+              }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: function() {
+                  return [
+                    require('autoprefixer')
+                  ];
+                }
+              }
+            }
+          ]
+        }),
+        include: path.resolve(__dirname, '../src')
       }
     ]
   },
@@ -25,5 +51,7 @@ module.exports = {
     'react': 'react',
     'react-dom': "react-dom"
   },
-  plugins: []
+  plugins: [
+    new ExtractTextPlugin('csfd-editor-styles.css')
+  ]
 }
