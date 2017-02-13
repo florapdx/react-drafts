@@ -2,55 +2,52 @@
  * Toolbar configs.
  *
  * Config shape: {
- *   id: {String} - the id gets passed to the handler so the right change can be applied,
+ *   id: {String} - the id is used to identify the block style to the handler,
+ *   type: {String} - identifies the block as requiring inline-styles vs specific markup,
  *   icon: {String || null} - name of font-awesome icon for button, if any; if none, button shows text,
  *   text: {String} - if no icon, button shows text; text also shown on hover-over for icon disambiguation
- *   handler: {String} - name of the handler responsible for responding to toolbar button click
  * }
  */
-
-const handleApplyHeadline = id => {};
-const handle
+const TYPE_BLOCK = 'block';
+const TYPE_INLINE = 'inline';
 
 // Headings
-// These are style, and not markup definitions
 
 const heading1 = {
-  id: 'headline-1',
+  id: 'heading-1',
+  type: TYPE_INLINE,
   icon: null,
-  text: 'Headline 1'
-  handler: 'handleApplyHeadline'
+  text: 'Level 1 Heading'
 };
 
 const heading2 = {
-  id: 'headline-2',
+  id: 'heading-2,
+  type: TYPE_INLINE,
   icon: null,
-  text: 'Headline 2'
-  handler: 'handleApplyHeadline'
+  text: 'Level 2 Heading'
 };
 
 const heading3: {
-  id: 'headline-2',
+  id: 'heading-3',
+  type: TYPE_INLINE,
   icon: null,
-  text: 'Headline 3',
-  handler: 'handleApplyHeadline'
+  text: 'Level 3 Heading'
 };
-
 
 // Text styles
 
 const bold = {
-  id: 'bold',
+  id: 'BOLD',
+  type: TYPE_INLINE,
   icon: 'bold',
-  text: 'bold',
-  handler: 'handleApplyTextStyle'
+  text: 'bold'
 };
 
 const italic = {
   id: 'italic',
+  type: TYPE_INLINE,
   icon: 'italic',
-  text: 'italic',
-  handler: 'handleApplyTextStyle'
+  text: 'italic'
 };
 
 const underline = {
@@ -84,17 +81,24 @@ const subtitle = {
   handler: 'handleApplyTextMarkup'
 };
 
+const bulletList = {
+  id: 'bullet',
+  icon: 'list',
+  text: 'Bullet list',
+  handler: 'handleApplyTextMarkup'
+};
+
+const orderedList = {
+  id: 'ordered',
+  icon: 'list',
+  text: 'Ordered list',
+  handler: 'handleApplyTextMarkup'
+};
+
 const quotes = {
   id: 'blockquote',
   icon: 'quote-left',
   text: 'block quote',
-  handler: 'handleApplyTextMarkup'
-};
-
-const code = {
-  id: 'code',
-  icon: 'code',
-  text: 'code',
   handler: 'handleApplyTextMarkup'
 };
 
@@ -107,27 +111,14 @@ const caption = {
 
 const table = {
   id: 'table',
-  icon: '',
+  icon: 'table',
   text: 'table',
   handler: 'handleInsertTable'
 };
 
 const image = {
   id: '',
-  icon: '',
-  text: null,
-  handler: ''
-};
-
-const video = {
-  id: '',
-  icon: '',
-  text: null,
-  handler: ''
-};
-
-const audio = {
-  id: '',
+  type: '',
   icon: '',
   text: null,
   handler: ''
@@ -140,8 +131,9 @@ const embed = {
   handler: ''
 };
 
-export const TOOLBAR_DEFAULTS = { // I think this needs work
+export const TOOLBAR_DEFAULTS = {
   headings: {
+    id: 'headings',
     type: 'menu',
     options: [
       title,
@@ -157,10 +149,9 @@ export const TOOLBAR_DEFAULTS = { // I think this needs work
   underline,
   strikethrough,
   quotes,
-  code,
+  bullet,
+  ordered,
   table,
   image,
-  video,
-  audio,
   embed
 };
