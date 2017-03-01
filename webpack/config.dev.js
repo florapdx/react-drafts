@@ -1,47 +1,66 @@
 var webpack = require('webpack');
 var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var autoprefixer = require('autoprefixer');
 
 module.exports = {
-  entry: './demo/index.js',
+  entry: [
+    'react-hot-loader/patch',
+    './demo/index.js',
+  ],
   output: {
-    path: path.resolve(__dirname, '/build/'),
+    path: path.resolve(__dirname, '../build/'),
     publicPath: path.resolve(__dirname, '/build/'),
     filename: 'bundle.js'
   },
   devServer: {
-    contentBase: path.resolve(__dirname, '../demo'),
+    contentBase: path.resolve(__dirname, '../demo/'),
     publicPath: path.resolve(__dirname, '/build/'),
-    hot: true,
+    hotOnly: true,
+    inline: true,
     port: 3000
   },
-  devtool: 'eval-source-map',
+  devtool: 'inline-source-map',
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        loader: 'babel-loader',
+        use: 'babel-loader',
         exclude: /node_modules/
       },
       {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader'
-        }),
+        use: [
+          'style-loader?singleton',
+          'css-loader',
+          {
+            loader: 'postcss-loader?sourceMap=inline',
+            options: {
+              plugins: function() {
+                return [
+                  require('autoprefixer')
+                ];
+              }
+            }
+          }
+        ],
         include: [
           path.resolve(__dirname, '../node_modules'),
-          path.resolve(__dirname, '../src'),
+          path.resolve(__dirname, '../css'),
           path.resolve(__dirname, '../demo'),
         ]
+      },
+      {
+        test: /\.(eot|svg|ttf|woff(2)?)(\?v=\d+\.\d+\.\d+)?/,
+        use: 'url-loader'
       }
     ]
   },
   resolve: {
-    extensions: [' ', '.js']
+    extensions: [' ', '.js', '.css']
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin('csfd-editor-styles.css')
+    new webpack.NamedModulesPlugin()
   ]
 }

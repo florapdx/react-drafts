@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "A React-based content editor",
   "main": "dist/index.js",
-  "git repository": "",
+  "git repository": "https://github.com/crossfield/toolkit-content-editor",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "start": "webpack-dev-server --config webpack/config.dev.js --open",
+    "start": "webpack-dev-server --config webpack/config.dev.js",
     "clean": "rimraf ./dist",
     "build": "webpack --config webpack/config.dist.js",
     "watch": "webpack -w --config webpack/config.dev.js",
@@ -54,11 +54,16 @@
     "postcss-loader": "^1.2.2",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-hot-loader": "^3.0.0-beta.6",
     "rimraf": "^2.5.4",
     "sinon": "^1.17.7",
     "style-loader": "^0.13.1",
+    "url-loader": "^0.5.8",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.3.0",
     "webpack-node-externals": "^1.5.4"
+  },
+  "dependencies": {
+    "lodash.values": "^4.3.0"
   }
 }

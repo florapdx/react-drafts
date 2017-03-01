@@ -1,5 +1,9 @@
 import React, { PropTypes, Component } from 'react';
-import { TOOLBAR_DEFAULTS } from '../../constants/toolbar';
+import values from 'lodash.values';
+import {
+  CONTEXT_MENU,
+  TOOLBAR_DEFAULTS
+} from '../../constants/toolbar';
 import SimpleDropdown from '../shared/simple-dropdown';
 
 class Toolbar extends Component {
@@ -8,49 +12,64 @@ class Toolbar extends Component {
 
     this.controls = { ...TOOLBAR_DEFAULTS, ...props.toolbarControls };
 
-    const menus = this.controls.findWhere(control => control.type === 'menu');
-    const menuMap = {};
-    menus.forEach(menu => menuMap[id] = );
-
     this.state = {
-      activeButton:
-      activeMenuItems:
-    }
+      activeBlockControl: '',
+      activeInlineControls: []
+    };
 
-    this.handleSelectHeading = this.handleSelectHeading.bind(this);
+    this.handleMenuSelection = this.handleMenuSelection.bind(this);
+    this.handleButtonSelection = this.handleButtonSelection.bind(this);
+  }
+
+  handleMenuSelection(menuFor, id) {
+    this.setState({
+      activeBlockControl: id
+    });
+  }
+
+  handleButtonSelection() {
+
   }
 
   render() {
-    const { active } = this.state;
+    const { activeBlockControl, activeInlineControls } = this.state;
     const { controls } = this;
 
     return (
       <div className="csfd-editor-toolbar">
-        {
-          Object.values(controls).map(control =>)
-          controls.headings && (
-            <SimpleDropdown
-              menuFor={controls.headings.id}
-              options={controls.headings.options}
-              currentSelection={}
-            />
-          )
-        }
-        {
-          this.controls.map(control => (
-            <li className={`csfd-editor__toolbar-control ${control.className}`}>
-              <button className={`csfd-editor__toolbar-control-btn ${control.name === active && 'active'}`}>
-                {control.element}
-              </button>
-            </li>
-          ))
-        }
+        <ul className="csfd-editor-toolbar__controls">
+          {
+            values(controls).map(({ id, context, type, options, icon, label }) =>
+              (context && context === CONTEXT_MENU) ? (
+                <SimpleDropdown
+                  key={id}
+                  menuFor={id}
+                  options={options}
+                  currentSelection={options.indexOf(activeBlockControl) >= 0 ? activeBlockControl : label}
+                  onSelectOption={this.handleMenuSelection}
+                />
+              ) : (
+                <li key={id} className={`csfd-editor__toolbar-control ${id}`}>
+                  <button
+                    className={`csfd-editor__toolbar-control-btn ${(activeBlockControl === id || activeInlineControls.indexOf(id) >= 0) && 'active'}`}
+                    onClick={() => this.handleButtonSelection(id)}
+                  >
+                    <span className={icon ? `btn-inner fa fa-${icon}` : 'btn-inner'} title={label}>
+                      {icon ? null : label}
+                    </span>
+                  </button>
+                </li>
+              )
+            )
+          }
         </ul>
       </div>
     );
   }
 }
 
-Toolbar.propTypes = {};
+Toolbar.propTypes = {
+  toolbarControls: PropTypes.shape({})
+};
 
 export default Toolbar;

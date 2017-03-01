@@ -1,6 +1,7 @@
 {
   "plugins": [
     "transform-object-assign",
+    "react-hot-loader/babel"
   ],
   "presets": ["es2015", "stage-1", "react"]
 }

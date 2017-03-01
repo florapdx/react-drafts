@@ -1,0 +1,48 @@
+.simple-menu {
+  position: relative;
+  min-width: 160px;
+  z-index: 100;
+}
+
+.simple-menu button {
+  width: 100%;
+  background-color: #FFF;
+  color: #3c3c3c;
+  font-family: Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 2em;
+  text-align: center;
+  border: 0;
+}
+
+.simple-menu__label,
+.simple-menu__option {
+  border: 0;
+}
+
+.simple-menu__option button,
+.simple-menu__label button {
+  width: 100%;
+}
+
+.simple-menu__label .fa {
+  display: inline-block;
+  margin-left: 12px;
+}
+
+.simple-menu__option button {
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.simple-menu__dropdown {
+  position: absolute;
+  width: 100%;
+  background-color: #fff;
+  list-style-type: none;
+  margin: 0 0 0 -1px;
+  padding: 0;
+  border: 1px solid #acacac;
+  border-top: 0;
+}

@@ -2,36 +2,59 @@
  * Toolbar configs.
  *
  * Config shape: {
- *   id: {String} - the id is used to identify the block style to the handler,
- *   type: {String} - identifies the block as requiring inline-styles vs specific markup,
+ *   id: {String} - the id is used to identify the block type and style to the handler,
+ *   type: {String} - identifies the block as requiring inline-styles vs specific markup - does not refer to the specific DraftJS block or entity type,
  *   icon: {String || null} - name of font-awesome icon for button, if any; if none, button shows text,
- *   text: {String} - if no icon, button shows text; text also shown on hover-over for icon disambiguation
+ *   text: {String} - if no icon, button shows text; text also shown on hover-over for icon description
  * }
+ *
+ * To group in menu, pass an object with a `context: CONTEXT_MENU` field, and
+ * an `options` field w/an array of control objects.
+ *
+ * See following for official DraftJS block/style ids:
+ * - https://github.com/facebook/draft-js/blob/master/src/model/immutable/DefaultDraftBlockRenderMap.js
+ * - https://github.com/facebook/draft-js/blob/master/src/model/immutable/DefaultDraftInlineStyle.js
  */
-const TYPE_BLOCK = 'block';
-const TYPE_INLINE = 'inline';
 
-// Headings
+// Type constants.
+// Types are native to DraftJS unless of a custom type.
+
+export const TYPE_INLINE = 'inline';
+export const TYPE_BLOCK = 'block';
+export const TYPE_CUSTOM_INLINE = 'custom-inline';
+export const TYPE_CUSTOM_BLOCK = 'custom-block';
+
+// Context
+export const CONTEXT_MENU = 'menu';
+
+// Headings, Titles
 
 const heading1 = {
-  id: 'heading-1',
-  type: TYPE_INLINE,
+  id: 'header-one',
+  type: TYPE_BLOCK,
   icon: null,
-  text: 'Level 1 Heading'
+  label: 'Title/Heading 1'
 };
 
 const heading2 = {
-  id: 'heading-2,
-  type: TYPE_INLINE,
+  id: 'header-two',
+  type: TYPE_BLOCK,
   icon: null,
-  text: 'Level 2 Heading'
+  label: 'Heading 2'
 };
 
-const heading3: {
-  id: 'heading-3',
-  type: TYPE_INLINE,
+const heading3 = {
+  id: 'header-three',
+  type: TYPE_BLOCK,
   icon: null,
-  text: 'Level 3 Heading'
+  label: 'Heading 3'
+};
+
+const heading4 = {
+  id: 'header-four',
+  type: TYPE_BLOCK,
+  icon: null,
+  label: 'Heading 4'
 };
 
 // Text styles
@@ -40,118 +63,93 @@ const bold = {
   id: 'BOLD',
   type: TYPE_INLINE,
   icon: 'bold',
-  text: 'bold'
+  label: 'Bold'
 };
 
 const italic = {
-  id: 'italic',
+  id: 'ITALIC',
   type: TYPE_INLINE,
   icon: 'italic',
-  text: 'italic'
+  label: 'Italic'
 };
 
 const underline = {
-  id: 'underline',
+  id: 'UNDERLINE',
+  type: TYPE_INLINE,
   icon: 'underline',
-  text: 'underline',
-  handler: 'handleApplyTextStyle'
+  label: 'Underline'
 };
 
 const strikethrough = {
-  id: 'strikethrough',
+  id: 'STRIKETHROUGH',
+  type: TYPE_INLINE,
   icon: 'strikethrough',
-  text: 'strikethrough',
-  handler: 'handleApplyTextStyle'
-};
-
-
-// Markup decorators
-
-const title = {
-  id: 'title',
-  icon: null,
-  text: 'Title',
-  handler: 'handleApplyTextMarkup'
-};
-
-const subtitle = {
-  id: 'subtitle',
-  icon: null,
-  text: 'Subtitle',
-  handler: 'handleApplyTextMarkup'
+  label: 'Strikethrough'
 };
 
 const bulletList = {
-  id: 'bullet',
+  id: 'unordered-list-item',
+  type: TYPE_BLOCK,
   icon: 'list',
-  text: 'Bullet list',
-  handler: 'handleApplyTextMarkup'
+  label: 'Bullet list'
 };
 
 const orderedList = {
-  id: 'ordered',
+  id: 'ordered-list-item',
+  type: TYPE_BLOCK,
   icon: 'list',
-  text: 'Ordered list',
-  handler: 'handleApplyTextMarkup'
+  label: 'Ordered list',
 };
 
 const quotes = {
   id: 'blockquote',
+  type: TYPE_BLOCK,
   icon: 'quote-left',
-  text: 'block quote',
-  handler: 'handleApplyTextMarkup'
-};
-
-const caption = {
-  id: 'figcaption',
-  icon: null,
-  text: 'caption',
-  handler: 'handleApplyTextMarkup'
+  label: 'Block quote'
 };
 
 const table = {
   id: 'table',
+  type: TYPE_CUSTOM_BLOCK,
   icon: 'table',
-  text: 'table',
-  handler: 'handleInsertTable'
+  label: 'Table'
 };
 
-const image = {
-  id: '',
-  type: '',
-  icon: '',
-  text: null,
+const link = {
+  id: 'LINK',
+  type: TYPE_CUSTOM_BLOCK,
+  icon: 'link',
+  label: null,
   handler: ''
 };
 
 const embed = {
-  id: '',
-  icon: '',
-  text: null,
-  handler: ''
+  id: 'embed',
+  type: TYPE_CUSTOM_BLOCK,
+  icon: null,
+  label: 'Embed media'
 };
 
 export const TOOLBAR_DEFAULTS = {
   headings: {
     id: 'headings',
-    type: 'menu',
+    context: CONTEXT_MENU,
     options: [
-      title,
-      subtitle,
       heading1,
       heading2,
       heading3,
-      caption
-    ]
+      heading4
+    ],
+    label: 'Headings'
   },
   bold,
   italic,
   underline,
   strikethrough,
   quotes,
-  bullet,
-  ordered,
+  bulletList,
+  orderedList,
   table,
-  image,
+  link,
   embed
 };

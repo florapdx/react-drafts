@@ -1,0 +1,35 @@
+.csfd-editor-toolbar {
+  width: 100%;
+}
+
+.csfd-editor-toolbar__controls {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #acacac;
+}
+
+.csfd-editor__toolbar-control-btn {
+  width: 100%;
+  background-color: #FFF;
+  color: #3c3c3c;
+  font-family: Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 2em;
+  text-align: center;
+  border: 0;
+}
+.csfd-editor__toolbar-control-btn {
+  border-left: 1px solid #acacac;
+}
+
+.csfd-editor-toolbar button.active {
+  background-color: #efefef;
+}
+
+.csfd-editor__toolbar-control {
+  min-width: 60px;
+}
+

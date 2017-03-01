@@ -5,8 +5,6 @@ import {
   RichUtils,
 } from 'draft-js';
 import Toolbar from '../Toolbar';
-import '../../../node_modules/draft-js/dist/Draft.css';
-import styles from './styles.css';
 
 class ContentEditor extends Component {
   constructor(props) {

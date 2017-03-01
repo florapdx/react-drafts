@@ -1,12 +1,12 @@
 var webpack = require('webpack');
 var path = require('path');
-var ExtractTextPlugin = require('extract-text-webpack-plugin?sourceMap');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, '../dist'),
-    filename: 'content-editor.js',
+    path: path.resolve(__dirname, '../dist/'),
+    filename: 'csfd-content-editor.js',
     libraryTarget: 'umd',
     library: 'ContentEditor'
   },
@@ -40,7 +40,10 @@ module.exports = {
             }
           ]
         }),
-        include: path.resolve(__dirname, '../src')
+        include: [
+          path.resolve(__dirname, '../node_modules'),
+          path.resolve(__dirname, '../src'),
+        ]
       }
     ]
   },

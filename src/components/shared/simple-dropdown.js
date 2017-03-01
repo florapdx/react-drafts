@@ -21,21 +21,28 @@ class SimpleDropdown extends Component {
       currentSelection,
       onSelectOption
     } = this.props;
+    const { menuOpen } = this.state;
 
     return (
       <div className="simple-menu">
-        <div className="simple-menu selection">
-          <button onClick={this.handleToggleMenu}>
+        <div className="simple-menu__selection">
+          <button className="simple-menu__label" onClick={this.handleToggleMenu}>
             {currentSelection}
-            <span className={menuOpen ? 'fa fa-angle-down' : 'fa fa-angle-up'}>
+            <span className={menuOpen ? 'fa fa-angle-up' : 'fa fa-angle-down'} />
           </button>
         </div>
         {
-          options.map(option => (
-            <div className="simple-menu option">
-              <button onClick={() => onSelectOption(menuFor, option)}>{option}</button>
-            </div>
-          ))
+          menuOpen && (
+            <ul className="simple-menu__dropdown">
+              {
+                options.map(({ id, label }) => (
+                  <li key={id} className="simple-menu__option">
+                    <button onClick={() => onSelectOption(menuFor, id)}>{label}</button>
+                  </li>
+                ))
+              }
+            </ul>
+          )
         }
       </div>
     );
@@ -44,7 +51,7 @@ class SimpleDropdown extends Component {
 
 SimpleDropdown.propTypes = {
   menuFor: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.string),
+  options: PropTypes.arrayOf(PropTypes.shape({})),
   currentSelection: PropTypes.string,
   onSelectOption: PropTypes.func
 };
