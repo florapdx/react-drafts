@@ -87,20 +87,6 @@ const strikethrough = {
   label: 'Strikethrough'
 };
 
-const bulletList = {
-  id: 'unordered-list-item',
-  type: TYPE_BLOCK,
-  icon: 'list',
-  label: 'Bullet list'
-};
-
-const orderedList = {
-  id: 'ordered-list-item',
-  type: TYPE_BLOCK,
-  icon: 'list',
-  label: 'Ordered list',
-};
-
 const quotes = {
   id: 'blockquote',
   type: TYPE_BLOCK,
@@ -108,12 +94,47 @@ const quotes = {
   label: 'Block quote'
 };
 
-const table = {
-  id: 'table',
-  type: TYPE_CUSTOM_BLOCK,
-  icon: 'table',
-  label: 'Table'
+const bulletList = {
+  id: 'unordered-list-item',
+  type: TYPE_BLOCK,
+  icon: 'list-ul',
+  label: 'Bullet list'
 };
+
+const orderedList = {
+  id: 'ordered-list-item',
+  type: TYPE_BLOCK,
+  icon: 'list-ol',
+  label: 'Ordered list',
+};
+
+const alignLeft = {
+  id: 'align-left',
+  type: TYPE_CUSTOM_INLINE,
+  icon: 'align-left',
+  label: 'Align left'
+};
+
+const alignCenter = {
+  id: 'align-center',
+  type: TYPE_CUSTOM_INLINE,
+  icon: 'align-center',
+  label: 'Align center'
+};
+
+const alignRight = {
+  id: 'align-right',
+  type: TYPE_CUSTOM_INLINE,
+  icon: 'align-right',
+  label: 'Align right'
+};
+
+// const table = {
+//   id: 'table',
+//   type: TYPE_CUSTOM_BLOCK,
+//   icon: 'table',
+//   label: 'Table'
+// };
 
 const link = {
   id: 'LINK',
@@ -127,7 +148,7 @@ const embed = {
   id: 'embed',
   type: TYPE_CUSTOM_BLOCK,
   icon: null,
-  label: 'Embed media'
+  label: 'embed'
 };
 
 export const TOOLBAR_DEFAULTS = {
@@ -149,7 +170,9 @@ export const TOOLBAR_DEFAULTS = {
   quotes,
   bulletList,
   orderedList,
-  table,
+  alignLeft,
+  alignCenter,
+  alignRight,
   link,
   embed
 };

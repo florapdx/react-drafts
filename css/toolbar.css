@@ -4,15 +4,16 @@
 
 .csfd-editor-toolbar__controls {
   display: flex;
+  width: 100%;
   list-style-type: none;
   margin: 0;
   padding: 0;
-  border: 1px solid #acacac;
+  border: 1px solid #ccc;
 }
 
-.csfd-editor__toolbar-control-btn {
+.csfd-editor__toolbar-btn {
   width: 100%;
-  background-color: #FFF;
+  background-color: #fff;
   color: #3c3c3c;
   font-family: Helvetica, sans-serif;
   font-size: 18px;
@@ -20,9 +21,10 @@
   line-height: 2em;
   text-align: center;
   border: 0;
+  outline: none;
 }
-.csfd-editor__toolbar-control-btn {
-  border-left: 1px solid #acacac;
+.csfd-editor__toolbar-btn {
+  border-left: 1px solid #ccc;
 }
 
 .csfd-editor-toolbar button.active {
@@ -30,6 +32,9 @@
 }
 
 .csfd-editor__toolbar-control {
-  min-width: 60px;
+  flex: 1 auto;
+}
+.csfd-editor__toolbar-control.embed {
+
 }
 

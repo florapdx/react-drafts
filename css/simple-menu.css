@@ -14,6 +14,7 @@
   line-height: 2em;
   text-align: center;
   border: 0;
+  outline: none;
 }
 
 .simple-menu__label,

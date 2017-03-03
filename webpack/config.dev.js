@@ -6,6 +6,7 @@ var autoprefixer = require('autoprefixer');
 module.exports = {
   entry: [
     'react-hot-loader/patch',
+    'webpack/hot/only-dev-server',
     './demo/index.js',
   ],
   output: {
@@ -16,7 +17,7 @@ module.exports = {
   devServer: {
     contentBase: path.resolve(__dirname, '../demo/'),
     publicPath: path.resolve(__dirname, '/build/'),
-    hotOnly: true,
+    hot: true,
     inline: true,
     port: 3000
   },

@@ -3,16 +3,29 @@ import {
   Editor,
   EditorState,
   RichUtils,
+  Modifier
 } from 'draft-js';
+import {
+  getCurrentSelection,
+  getSelectionInlineStyles
+} from '../../utils/selection';
 import Toolbar from '../Toolbar';
 
 class ContentEditor extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { editorState: EditorState.createEmpty() };
+    this.state = {
+      editorState: EditorState.createEmpty()
+    };
+
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
+
+    this.handleToggleStyle = this.handleToggleStyle.bind(this);
+    this.handleToggleCustomStyle = this.handleToggleCustomStyle.bind(this);
+    this.handleToggleBlockType = this.handleToggleBlockType.bind(this);
+    this.handleToggleCustomBlockType = this.handleToggleCustomBlockType.bind(this);
   }
 
   handleChange(editorState) {
@@ -26,17 +39,49 @@ class ContentEditor extends Component {
 
     if (nextState) {
       this.handleChange(nextState);
-      return 'handled';
+      return 'handled'; // true
     }
 
-    return 'not handled';
+    return 'not handled'; // false
+  }
+
+  handleToggleStyle(style) {
+    this.handleChange(
+      RichUtils.toggleInlineStyle(
+        this.state.editorState,
+        style
+      )
+    );
+  }
+
+  handleToggleCustomStyle(style) {
+
+  }
+
+  handleToggleBlockType(blockType) {
+    this.handleChange(
+      RichUtils.toggleBlockType(
+        this.state.editorState,
+        blockType
+      )
+    );
+  }
+
+  handleToggleCustomBlockType(blockType) {
+
   }
 
   render() {
     const { editorState } = this.state;
     return (
       <div className="csfd-editor-root">
-        <Toolbar />
+        <Toolbar
+          editorState={editorState}
+          onToggleStyle={this.handleToggleStyle}
+          onToggleCustomStyle={this.handleToggleCustomStyle}
+          onToggleBlockType={this.handleToggleBlockType}
+          onToggleCustomBlockType={this.handleToggleCustomBlockType}
+        />
         <Editor
           editorState={editorState}
           onChange={this.handleChange}

@@ -1,75 +1,96 @@
 import React, { PropTypes, Component } from 'react';
-import values from 'lodash.values';
+import { getSelectionStartKey } from '../../utils/selection';
 import {
-  CONTEXT_MENU,
-  TOOLBAR_DEFAULTS
+  getControls,
+  isMenuContext,
+  isBlockType
+} from '../../utils/toolbar';
+import {
+  TYPE_INLINE,
+  TYPE_BLOCK,
+  TYPE_CUSTOM_INLINE,
+  TYPE_CUSTOM_BLOCK
 } from '../../constants/toolbar';
 import SimpleDropdown from '../shared/simple-dropdown';
+import Control from './Control';
 
-class Toolbar extends Component {
-  constructor(props) {
-    super(props);
+function Toolbar(props) {
+  function buildControls(controls) {
+    return controls.map(control => {
+      const {
+        id,
+        context,
+        type,
+        icon,
+        label,
+        options
+      } = control;
 
-    this.controls = { ...TOOLBAR_DEFAULTS, ...props.toolbarControls };
+      const isMenu = isMenuContext(control);
+      const isBlock = isBlockType(control);
 
-    this.state = {
-      activeBlockControl: '',
-      activeInlineControls: []
-    };
+      if (isMenu) {
+        return (
+          <SimpleDropdown
+            key={id}
+            menuFor={id}
+          >
+            {buildControls(control.options)}
+          </SimpleDropdown>
+        );
+      }
 
-    this.handleMenuSelection = this.handleMenuSelection.bind(this);
-    this.handleButtonSelection = this.handleButtonSelection.bind(this);
-  }
+      const { editorState } = props;
+      let isActive;
+      let onToggle;
 
-  handleMenuSelection(menuFor, id) {
-    this.setState({
-      activeBlockControl: id
+      if (isBlock) {
+        const blockStartKey = getSelectionStartKey(editorState);
+        const blockType = editorState
+          .getCurrentContent()
+          .getBlockForKey(blockStartKey)
+          .getType();
+
+        isActive = id === blockType;
+        onToggle = type === TYPE_CUSTOM_BLOCK ?
+          props.onToggleCustomBlockType : props.onToggleBlockType;
+      } else {
+        const currentStyle = editorState.getCurrentInlineStyle();
+
+        isActive = currentStyle.has(id);
+        onToggle = type === TYPE_CUSTOM_INLINE ?
+          props.onToggleCustomStyle : props.onToggleStyle;
+      }
+
+      return (
+        <Control
+          key={id}
+          id={id}
+          icon={icon}
+          label={label}
+          isActive={isActive}
+          onToggle={onToggle}
+        />
+      );
     });
   }
 
-  handleButtonSelection() {
-
-  }
-
-  render() {
-    const { activeBlockControl, activeInlineControls } = this.state;
-    const { controls } = this;
-
-    return (
-      <div className="csfd-editor-toolbar">
-        <ul className="csfd-editor-toolbar__controls">
-          {
-            values(controls).map(({ id, context, type, options, icon, label }) =>
-              (context && context === CONTEXT_MENU) ? (
-                <SimpleDropdown
-                  key={id}
-                  menuFor={id}
-                  options={options}
-                  currentSelection={options.indexOf(activeBlockControl) >= 0 ? activeBlockControl : label}
-                  onSelectOption={this.handleMenuSelection}
-                />
-              ) : (
-                <li key={id} className={`csfd-editor__toolbar-control ${id}`}>
-                  <button
-                    className={`csfd-editor__toolbar-control-btn ${(activeBlockControl === id || activeInlineControls.indexOf(id) >= 0) && 'active'}`}
-                    onClick={() => this.handleButtonSelection(id)}
-                  >
-                    <span className={icon ? `btn-inner fa fa-${icon}` : 'btn-inner'} title={label}>
-                      {icon ? null : label}
-                    </span>
-                  </button>
-                </li>
-              )
-            )
-          }
-        </ul>
-      </div>
-    );
-  }
+  const controlsList = getControls(props.toolbarControls);
+  return (
+    <div className="csfd-editor-toolbar" onMouseDown={this.handleMouseDown}>
+      <ul className="csfd-editor-toolbar__controls">
+        {buildControls(controlsList)}
+      </ul>
+    </div>
+  );
 }
 
 Toolbar.propTypes = {
-  toolbarControls: PropTypes.shape({})
+  toolbarControls: PropTypes.shape({}),
+  onToggleStyle: PropTypes.func.isRequired,
+  onToggleCustomStyle: PropTypes.func.isRequired,
+  onToggleBlockType:PropTypes.func.isRequired,
+  onToggleCustomBlockType: PropTypes.func.isRequired
 };
 
 export default Toolbar;
