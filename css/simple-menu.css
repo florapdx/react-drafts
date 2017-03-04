@@ -4,6 +4,16 @@
   z-index: 100;
 }
 
+.simple-menu__click-off {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: 101;
+}
+
 .simple-menu button {
   width: 100%;
   background-color: #FFF;
@@ -22,6 +32,7 @@
   border: 0;
 }
 
+.simple-menu__deselect,
 .simple-menu__option button,
 .simple-menu__label button {
   width: 100%;
@@ -32,9 +43,14 @@
   margin-left: 12px;
 }
 
+.simple-menu .simple-menu__deselect,
 .simple-menu__option button {
   font-size: 16px;
   font-weight: normal;
+}
+
+.simple-menu__deselect {
+  height: 2em;
 }
 
 .simple-menu__dropdown {
@@ -46,4 +62,5 @@
   padding: 0;
   border: 1px solid #acacac;
   border-top: 0;
+  z-index: 102;
 }

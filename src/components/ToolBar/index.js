@@ -1,20 +1,21 @@
 import React, { PropTypes, Component } from 'react';
 import { getSelectionStartKey } from '../../utils/selection';
 import {
-  getControls,
   isMenuContext,
   isBlockType
 } from '../../utils/toolbar';
-import {
-  TYPE_INLINE,
-  TYPE_BLOCK,
-  TYPE_CUSTOM_INLINE,
-  TYPE_CUSTOM_BLOCK
-} from '../../constants/toolbar';
+import { TYPE_CUSTOM_BLOCK } from '../../constants/toolbar';
 import SimpleDropdown from '../shared/simple-dropdown';
 import Control from './Control';
 
+/*
+ * Toolbar component.
+ * Takes array of control objects and editor state, and iterates
+ * through, handling both button controls and nested in-menu control
+ * rendering.
+ */
 function Toolbar(props) {
+  const { editorState, toolbarControls } = props;
   function buildControls(controls) {
     return controls.map(control => {
       const {
@@ -40,7 +41,6 @@ function Toolbar(props) {
         );
       }
 
-      const { editorState } = props;
       let isActive;
       let onToggle;
 
@@ -58,8 +58,7 @@ function Toolbar(props) {
         const currentStyle = editorState.getCurrentInlineStyle();
 
         isActive = currentStyle.has(id);
-        onToggle = type === TYPE_CUSTOM_INLINE ?
-          props.onToggleCustomStyle : props.onToggleStyle;
+        onToggle = props.onToggleStyle;
       }
 
       return (
@@ -75,20 +74,19 @@ function Toolbar(props) {
     });
   }
 
-  const controlsList = getControls(props.toolbarControls);
   return (
     <div className="csfd-editor-toolbar" onMouseDown={this.handleMouseDown}>
       <ul className="csfd-editor-toolbar__controls">
-        {buildControls(controlsList)}
+        {buildControls(toolbarControls)}
       </ul>
     </div>
   );
 }
 
 Toolbar.propTypes = {
-  toolbarControls: PropTypes.shape({}),
+  editorState: PropTypes.shape({}),
+  toolbarControls: PropTypes.arrayOf(PropTypes.shape({})),
   onToggleStyle: PropTypes.func.isRequired,
-  onToggleCustomStyle: PropTypes.func.isRequired,
   onToggleBlockType:PropTypes.func.isRequired,
   onToggleCustomBlockType: PropTypes.func.isRequired
 };
