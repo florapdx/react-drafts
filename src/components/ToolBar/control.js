@@ -35,7 +35,7 @@ class Control extends Component {
     const { classes } = this;
 
     return (
-      <li key={id} className={classes.li}>
+      <li className={classes.li}>
         <button
           className={`${classes.button} ${isActive && 'active'}`}
           onMouseDown={this.handleToggle}

@@ -8,9 +8,28 @@ import {
   TOOLBAR_DEFAULTS
 } from '../constants/toolbar';
 
+/*
+ * Toolbar utilities.
+ * When adding utilities, make sure to operate on the result of `getControls`
+ * versus TOOLBAR_DEFAULTS so that any custom controls will be counted.
+ */
+
 export function getControls(customControls) {
   customControls = customControls || {};
-  return values({ ...TOOLBAR_DEFAULTS, ...customControls });
+  let defaults = { ...TOOLBAR_DEFAULTS };
+  if (customControls.embedOptions) {
+    defaults = {
+      ...defaults,
+      embed: {
+        ...defaults.embed,
+        options: [
+          ...defaults.embed.options,
+          ...customControls.embedOptions
+        ]
+      }
+    };
+  }
+  return values({ ...defaults, ...customControls });
 }
 
 export function isMenuContext(ctrl) {
@@ -25,7 +44,7 @@ export function isBlockType(ctrl) {
   return ctrl.type === TYPE_BLOCK || ctrl.type === TYPE_CUSTOM_BLOCK;
 }
 
-export function getInlineStyleControlsMap() {
+export function getInlineStyleControlsMap(toolbarControls) {
   const styles = {};
 
   function keyObjects(controls) {
@@ -38,11 +57,11 @@ export function getInlineStyleControlsMap() {
     });
   }
 
-  keyObjects(TOOLBAR_DEFAULTS);
+  keyObjects(toolbarControls);
   return styles;
 }
 
-export function getBlockControlsMap() {
+export function getBlockControlsMap(toolbarControls) {
   const blocks = {};
 
   function keyObjects(controls) {
@@ -55,6 +74,17 @@ export function getBlockControlsMap() {
     });
   }
 
-  keyObjects(TOOLBAR_DEFAULTS);
+  keyObjects(toolbarControls);
   return blocks;
 }
+
+export function getCustomStylesMap(toolbarControls) {
+  const map = {};
+  values(toolbarControls).forEach(ctrl => {
+    if (ctrl.type === TYPE_CUSTOM_INLINE) {
+      map[ctrl.id] = ctrl.styles;
+    }
+  });
+  return map;
+}
+

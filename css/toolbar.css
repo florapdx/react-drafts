@@ -13,7 +13,7 @@
 
 .csfd-editor__toolbar-btn {
   width: 100%;
-  background-color: #fff;
+  background-color: #fefefe;
   color: #3c3c3c;
   font-family: Helvetica, sans-serif;
   font-size: 18px;
@@ -23,8 +23,22 @@
   border: 0;
   outline: none;
 }
+.simple-menu button {
+  background-color: #fefefe;
+}
+
+.embed,
 .csfd-editor__toolbar-btn {
   border-left: 1px solid #ccc;
+}
+
+.simple-menu .csfd-editor__toolbar-btn {
+  font-weight: normal;
+  font-size: 0.9em;
+}
+
+.csfd-editor-toolbar button:hover {
+  background-color: #fefefe;
 }
 
 .csfd-editor-toolbar button.active {
@@ -34,7 +48,5 @@
 .csfd-editor__toolbar-control {
   flex: 1 auto;
 }
-.csfd-editor__toolbar-control.embed {
 
-}
 

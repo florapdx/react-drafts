@@ -33,7 +33,7 @@ const heading1 = {
   id: 'header-one',
   type: TYPE_BLOCK,
   icon: null,
-  label: 'Title/Heading 1'
+  label: 'Title'
 };
 
 const heading2 = {
@@ -112,21 +112,33 @@ const alignLeft = {
   id: 'align-left',
   type: TYPE_CUSTOM_INLINE,
   icon: 'align-left',
-  label: 'Align left'
+  label: 'Align left',
+  styles: {
+    display: 'block',
+    textAlign: 'left'
+  }
 };
 
 const alignCenter = {
   id: 'align-center',
   type: TYPE_CUSTOM_INLINE,
   icon: 'align-center',
-  label: 'Align center'
+  label: 'Align center',
+  styles: {
+    display: 'block',
+    textAlign: 'center'
+  }
 };
 
 const alignRight = {
   id: 'align-right',
   type: TYPE_CUSTOM_INLINE,
   icon: 'align-right',
-  label: 'Align right'
+  label: 'Align right',
+  styles: {
+    display: 'block',
+    textAlign: 'right'
+  }
 };
 
 // const table = {
@@ -144,11 +156,18 @@ const link = {
   handler: ''
 };
 
-const embed = {
-  id: 'embed',
+const photo = {
+  id: 'photo',
   type: TYPE_CUSTOM_BLOCK,
   icon: null,
-  label: 'embed'
+  label: 'photo'
+};
+
+const video = {
+  id: 'video',
+  type: TYPE_CUSTOM_BLOCK,
+  icon: null,
+  label: 'video'
 };
 
 export const TOOLBAR_DEFAULTS = {
@@ -174,5 +193,13 @@ export const TOOLBAR_DEFAULTS = {
   alignCenter,
   alignRight,
   link,
-  embed
+  embed: {
+    id: 'embed',
+    context: CONTEXT_MENU,
+    options: [
+      photo,
+      video
+    ],
+    label: 'embed'
+  }
 };
