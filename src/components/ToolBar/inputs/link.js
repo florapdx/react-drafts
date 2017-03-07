@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import Modal from '../shared/modal';
+import Modal from '../../shared/modal';
 
 class LinkInput extends Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class LinkInput extends Component {
   }
 
   handleConfirm() {
-    this.props.onAddLink(this.state.value);
+    this.props.onAddLink({ url: this.state.value });
   }
 
   handleCancel() {

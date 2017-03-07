@@ -8,6 +8,7 @@ import {
   Modifier,
   DefaultDraftBlockRenderMap
 } from 'draft-js';
+
 import blockRenderer from '../../renderer';
 import {
   getNewStateWithEntity,
@@ -22,10 +23,12 @@ import {
   getCustomStylesMap,
   TOOLBAR_DEFAULTS
 } from '../../utils/toolbar';
+
 import Toolbar from '../ToolBar';
-import LinkInput from '../ToolBar/link-input';
-import PhotoInput from '../ToolBar/photo-input';
-import VideoInput from '../ToolBar/video-input';
+import LinkInput from '../ToolBar/inputs/link';
+import PhotoInput from '../ToolBar/inputs/photo';
+import VideoInput from '../ToolBar/inputs/video';
+import DocumentInput from '../Toolbar/inputs/document';
 
 /*
  * ContentEditor.
@@ -41,7 +44,8 @@ class ContentEditor extends Component {
       editorState: EditorState.createEmpty(),
       showLinkInput: false,
       showPhotoInput: false,
-      showVideoInput: false
+      showVideoInput: false,
+      showFileInput: false
     };
 
     this.toolbarControls = getControls(this.props.customControls);
@@ -81,10 +85,10 @@ class ContentEditor extends Component {
 
     if (nextState) {
       this.handleChange(nextState);
-      return 'handled'; // true
+      return 'handled';
     }
 
-    return 'not handled'; // false
+    return 'not handled';
   }
 
   handleToggleStyle(style) {
@@ -105,18 +109,34 @@ class ContentEditor extends Component {
     );
   }
 
+  /*
+   * Show active embed input.
+   * Ensures only one can be active at a time.
+   * @TODO: It might be nice to find a more succinct way
+   * to do this re: separate state for each input type,
+   * particularly if we add any more. In fact, we might
+   * have to rethink this a little for customControlProps.
+   */
   handleToggleCustomBlockType(blockType) {
-    let nextState;
+    const nextState = {
+      showLinkInput: false,
+      showPhotoInput: false,
+      showVideoInput: false,
+      showFileInput: false
+    };
 
     switch(blockType) {
       case 'LINK':
-        nextState = { showLinkInput: true };
+        nextState.showLinkInput = true;
         break;
       case 'photo':
-        nextState = { showPhotoInput: true };
+        nextState.showPhotoInput = true;
         break;
       case 'video':
-        nextState = { showVideoInput: true };
+        nextState.showVideoInput = true;
+        break;
+      case 'document':
+        nextState.showFileInput = true;
         break;
       default:
         return;
@@ -156,7 +176,8 @@ class ContentEditor extends Component {
         ' '
       ),
       showPhotoInput: false,
-      showVideoInput: false
+      showVideoInput: false,
+      showFileInput: false
     });
   }
 
@@ -164,7 +185,8 @@ class ContentEditor extends Component {
     this.setState({
       showLinkInput: false,
       showPhotoInput: false,
-      showVideoInput: false
+      showVideoInput: false,
+      showFileInput: false
     });
   }
 
@@ -183,12 +205,16 @@ class ContentEditor extends Component {
       editorState,
       showLinkInput,
       showPhotoInput,
-      showVideoInput
+      showVideoInput,
+      showFileInput
     } = this.state;
 
+    // @TODO: Unsure about the element -- is this required?
+    // Should this be 'figure'?
     const extendedRenderMap = DefaultDraftBlockRenderMap.merge(Immutable.Map({
       'photo': { element: 'div' },
-      'video': { element: 'div' }
+      'video': { element: 'div' },
+      'document': { element: 'div' }
     }));
 
     // Hide placeholder if editor is content-free
@@ -220,6 +246,7 @@ class ContentEditor extends Component {
         {showLinkInput && <LinkInput onAddLink={this.handleAddLink} onCloseClick={this.handleModalClose} />}
         {showPhotoInput && <PhotoInput onAddPhoto={this.handleEmbedMedia} onCloseClick={this.handleModalClose} />}
         {showVideoInput && <VideoInput onAddVideo={this.handleEmbedMedia} onCloseClick={this.handleModalClose} />}
+        {showFileInput && <DocumentInput onAddDocument={this.handleEmbedMedia} onCloseClick={this.handleModalClose} />}
       </div>
     );
   }

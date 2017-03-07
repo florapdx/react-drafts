@@ -152,22 +152,28 @@ const link = {
   id: 'LINK',
   type: TYPE_CUSTOM_BLOCK,
   icon: 'link',
-  label: null,
-  handler: ''
+  label: 'link'
 };
 
 const photo = {
   id: 'photo',
   type: TYPE_CUSTOM_BLOCK,
-  icon: null,
+  icon: 'camera',
   label: 'photo'
 };
 
 const video = {
   id: 'video',
   type: TYPE_CUSTOM_BLOCK,
-  icon: null,
+  icon: 'video-camera',
   label: 'video'
+};
+
+const file = {
+  id: 'document',
+  type: TYPE_CUSTOM_BLOCK,
+  icon: 'file-text',
+  label: 'upload document'
 };
 
 export const TOOLBAR_DEFAULTS = {
@@ -177,8 +183,7 @@ export const TOOLBAR_DEFAULTS = {
     options: [
       heading1,
       heading2,
-      heading3,
-      heading4
+      heading3
     ],
     label: 'Headings'
   },
@@ -193,13 +198,7 @@ export const TOOLBAR_DEFAULTS = {
   alignCenter,
   alignRight,
   link,
-  embed: {
-    id: 'embed',
-    context: CONTEXT_MENU,
-    options: [
-      photo,
-      video
-    ],
-    label: 'embed'
-  }
+  photo,
+  video,
+  file
 };

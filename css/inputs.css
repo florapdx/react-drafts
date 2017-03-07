@@ -1,6 +1,4 @@
-.csfd-content-editor__input input {
-  margin-bottom: 20px;
-}
+.csfd-content-editor__input input {}
 
 .csfd-content-editor__input-dropzone {
   width: 100%;
@@ -9,6 +7,20 @@
   border: 2px dashed #ccc;
   border-radius: 4px;
   padding: 1em 0;
+}
+
+.csfd-content-editor__input-preview {
+  margin-bottom: 1em;
+}
+
+.video .csfd-content-editor__input-preview {
+  position: relative;
+  height: 0;
+  padding-bottom: 56.25%;
+}
+.csfd-content-editor__input-preview iframe {
+  position: absolute;
+  height: 100%;
 }
 
 .csfd-content-editor__input-preview img,
@@ -38,4 +50,9 @@
 
 .cancel {
   background-color: #ccc;
+}
+
+.separator {
+  color: #ccc;
+  text-align: center;
 }
