@@ -41,6 +41,7 @@
   background-color: #fefefe;
 }
 
+.csfd-editor-toolbar button:hover,
 .csfd-editor-toolbar button.active {
   background-color: #efefef;
 }

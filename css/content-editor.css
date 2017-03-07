@@ -1,12 +1,43 @@
-.csfd-editor-root {
-  width: 960px;
-  margin: 4em auto;
-  color: #494949;
-  font-family: Verdana, serif;
-  font-size: 16px;
-  line-height: 28px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* button reset */
+button {
+  background: none repeat scroll 0 0 transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  font-weight: normal;
+  overflow: visible;
+  text-transform: none;
+  vertical-align: middle;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+button:hover,
+button:active {
+  outline: none;
+}
+
+/* input reset */
+input {
+  width: 100%;
+  color: #3c3c3c;
+  font-size: 14px;
+  line-height: 2.2em;
+  text-indent: 1em;
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+input:focus {
+  outline: none;
+}
+
+.public-DraftEditorPlaceholder-root {
+  color: #efefef;
+  font-size: 2em;
+  padding: 20px 40px;
 }
 
 .DraftEditor-editorContainer {
