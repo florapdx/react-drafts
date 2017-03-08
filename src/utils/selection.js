@@ -13,17 +13,17 @@ import { getInlineStyleControlsMap } from './toolbar';
  *
  */
 
-export function getCurrentSelection(editorState) {
+export function getSelectionState(editorState) {
   return editorState.getSelection();
 }
 
 export function getSelectionAnchorKey(editorState) {
-  const currentSelection = getCurrentSelection(editorState);
+  const currentSelection = getSelectionState(editorState);
   return currentSelection.getAnchorKey();
 }
 
 export function getSelectionStartKey(editorState) {
-  const currentSelection = getCurrentSelection(editorState);
+  const currentSelection = getSelectionState(editorState);
   return currentSelection.getStartKey();
 }
 
@@ -39,7 +39,7 @@ export function getSelectedBlockText(editorState) {
 }
 
 export function getSelectedText(editorState) {
-  const currentSelection = getCurrentSelection(editorState);
+  const currentSelection = getSelectionState(editorState);
   const start = currentSelection.getStartOffset();
   const end = currentSelection.getEndOffset();
 

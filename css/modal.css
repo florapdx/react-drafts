@@ -1,6 +1,6 @@
 .csfd-content-editor__modal {
   position: fixed;
-  top: 50%;
+  top: 400px;
   left: 50%;
   min-width: 440px;
   max-width: 660px;

@@ -24,19 +24,40 @@ class DocumentInput extends Component {
     this.handleCancel = this.handleCancel.bind(this);
   }
 
+  /*
+   * Supports single file upload.
+   * If browser supports FileReader, we'll try to show
+   * a preview by reading the file to data url.
+   * Otherwise, we'll just show the file name.
+   */
   handleDrop(acceptedFiles, rejectedFiles) {
     if (rejectedFiles && rejectedFiles.length) {
       this.setState({
         error: "We're sorry, there was an upload error. Please try again."
       });
     } else {
-      // Only allow single file
-      this.setState({ file: acceptedFiles[0] });
+      const file = acceptedFiles[0];
+      const reader = new FileReader();
+
+      if (reader && reader.readAsDataURL) {
+        reader.addEventListener('load', () => {
+          file.src = reader.result;
+          this.setState({ file });
+        }, false);
+        reader.readAsDataURL(file);
+      } else {
+        this.setState({ file });
+      }
     }
   }
 
   handleConfirm() {
-    this.props.onAddDocument({ file: this.state.file });
+    const { blockType, onFileUpload, onAddDocument } = this.props;
+    const { file } = this.state;
+
+    onFileUpload(file).then(resp => {
+      onAddDocument(blockType, { file });
+    });
   }
 
   handleCancel() {
@@ -52,7 +73,16 @@ class DocumentInput extends Component {
           {
             file ? ([
               <div key="preview" className="csfd-content-editor__input-preview">
-                <img src={file.preview} alt={file.name} />
+                {
+                  file.src &&
+                    <iframe
+                      src={file.src}
+                      width="440px"
+                      height="570px"
+                      frameBorder="0"
+                      allowFullScreen={false}
+                    />
+                }
                 <p>{file.name}</p>
               </div>,
               <div key="controls" className="csfd-content-editor__input-controls">
@@ -81,6 +111,8 @@ class DocumentInput extends Component {
 }
 
 DocumentInput.propTypes = {
+  blockType: PropTypes.string,
+  onFileUpload: PropTypes.func,
   onAddDocument: PropTypes.func,
   onCloseClick: PropTypes.func
 };

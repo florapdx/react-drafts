@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import values from 'lodash.values';
 import { getSelectionStartKey } from '../../utils/selection';
 import {
   isMenuContext,
@@ -17,7 +18,7 @@ import Control from './Control';
 function Toolbar(props) {
   const { editorState, toolbarControls } = props;
   function buildControls(controls) {
-    return controls.map(control => {
+    return values(controls).map(control => {
       const {
         id,
         context,
@@ -85,7 +86,7 @@ function Toolbar(props) {
 
 Toolbar.propTypes = {
   editorState: PropTypes.shape({}),
-  toolbarControls: PropTypes.arrayOf(PropTypes.shape({})),
+  toolbarControls: PropTypes.shape({}),
   onToggleStyle: PropTypes.func.isRequired,
   onToggleBlockType:PropTypes.func.isRequired,
   onToggleCustomBlockType: PropTypes.func.isRequired

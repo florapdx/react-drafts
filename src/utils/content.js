@@ -5,7 +5,7 @@ import { EditorState } from 'draft-js';
  */
 
 export function getContentState(editorState) {
-  return editorState.getContentState();
+  return editorState.getCurrentContent();
 }
 
 /*
@@ -39,8 +39,17 @@ export function getNewStateWithEntity(editorState, blockType, isMutable, options
   };
 }
 
-export function getEntityDataFromBlock(block, contentState) {
+export function getEntityFromBlock(block, contentState) {
   const entityKey = block.getEntityAt(0);
   return entityKey ? contentState.getEntity(entityKey) : null;
 }
 
+export function getEntityType(block, contentState) {
+  const entity = getEntityFromBlock(block, contentState);
+  return entity ? entity.getType() : null;
+}
+
+export function getEntityData(block, contentState) {
+  const entity = getEntityFromBlock(block, contentState);
+  return entity ? entity.getData() : null;
+}

@@ -32,9 +32,8 @@ class VideoInput extends Component {
   }
 
   handleConfirm() {
-    // Need to parse out info we need from embed html
     const { src } = this.state;
-    this.props.onAddVideo({ src });
+    this.props.onAddVideo(this.props.blockType, { src });
   }
 
   handleCancel() {
@@ -77,6 +76,7 @@ class VideoInput extends Component {
 }
 
 VideoInput.propTypes = {
+  blockType: PropTypes.string,
   onAddVideo: PropTypes.func,
   onCloseClick: PropTypes.func
 };

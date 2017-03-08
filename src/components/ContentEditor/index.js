@@ -9,19 +9,21 @@ import {
   DefaultDraftBlockRenderMap
 } from 'draft-js';
 
-import blockRenderer from '../../renderer';
+import { blockRenderer } from '../../renderer';
 import {
+  getContentState,
   getNewStateWithEntity,
-  getEntityDataFromBlock
+  getEntityType,
+  getEntityData
 } from '../../utils/content';
 import {
-  getCurrentSelection,
+  getSelectionState,
+  getSelectedBlock,
   getSelectionInlineStyles
 } from '../../utils/selection';
 import {
   getControls,
-  getCustomStylesMap,
-  TOOLBAR_DEFAULTS
+  getCustomStylesMap
 } from '../../utils/toolbar';
 
 import Toolbar from '../ToolBar';
@@ -29,6 +31,24 @@ import LinkInput from '../ToolBar/inputs/link';
 import PhotoInput from '../ToolBar/inputs/photo';
 import VideoInput from '../ToolBar/inputs/video';
 import DocumentInput from '../Toolbar/inputs/document';
+
+// const findLinkEntities = (contentBlock, callback, contentState) => {
+//   contentBlock.findEntityRanges(
+//     (character) => {
+//       const entityKey = character.getEntity();
+//       return entityKey !== null &&
+//         contentState.getEntity(entityKey).getType() === 'LINK';
+//     },
+//     callback
+//   );
+// };
+
+// const decorator = new CompositeDecorator([
+//     {
+//       strategy: findLinkEntities,
+//       component: Link,
+//     },
+// ]);
 
 /*
  * ContentEditor.
@@ -125,17 +145,18 @@ class ContentEditor extends Component {
       showFileInput: false
     };
 
+    const { link, photo, video, file } = this.toolbarControls;
     switch(blockType) {
-      case 'LINK':
+      case link.id:
         nextState.showLinkInput = true;
         break;
-      case 'photo':
+      case photo.id:
         nextState.showPhotoInput = true;
         break;
-      case 'video':
+      case video.id:
         nextState.showVideoInput = true;
         break;
-      case 'document':
+      case file.id:
         nextState.showFileInput = true;
         break;
       default:
@@ -145,26 +166,30 @@ class ContentEditor extends Component {
     this.setState(nextState);
   }
 
-  handleAddLink(link) {
+  handleAddLink(blockType, link) {
     const { editorState } = this.state;
-    const newEditorState = getNewStateWithEntity(
+    const newState = getNewStateWithEntity(
       editorState,
-      TOOLBAR_DEFAULTS.link.id,
+      blockType,
       true,
       link
     );
 
     this.setState({
-      editorState: RichUtils.toggleLink(...newEditorState),
+      editorState: RichUtils.toggleLink(
+        editorState,
+        getSelectionState(editorState),
+        newState.entityKey
+      ),
       showLinkInput: false
-    }, this.focusEditor);
+    });
   }
 
   handleEmbedMedia(blockType, media) {
     const { editorState } = this.state;
-    const newEditorState = getNewStateWithEntity(
+    const newState = getNewStateWithEntity(
       editorState,
-      TOOLBAR_DEFAULTS[blockType].id,
+      blockType,
       false,
       media
     );
@@ -172,7 +197,7 @@ class ContentEditor extends Component {
     this.setState({
       editorState: AtomicBlockUtils.insertAtomicBlock(
         editorState,
-        newEditorState.entityKey,
+        newState.entityKey,
         ' '
       ),
       showPhotoInput: false,
@@ -194,10 +219,15 @@ class ContentEditor extends Component {
     const { editorState } = this.state;
 
     if (block.getType() === 'atomic') {
-      const contentState = editorState.getCurrentContent();
-      const entityData = getEntityDataFromBlock(block, contentState);
-      blockRenderer(entityData);
+      const contentState = getContentState(editorState);
+
+      return blockRenderer(
+        this.toolbarControls,
+        getEntityType(block, contentState),
+        getEntityData(block, contentState)
+      );
     }
+    return null;
   }
 
   render() {
@@ -208,17 +238,11 @@ class ContentEditor extends Component {
       showVideoInput,
       showFileInput
     } = this.state;
-
-    // @TODO: Unsure about the element -- is this required?
-    // Should this be 'figure'?
-    const extendedRenderMap = DefaultDraftBlockRenderMap.merge(Immutable.Map({
-      'photo': { element: 'div' },
-      'video': { element: 'div' },
-      'document': { element: 'div' }
-    }));
+    const { onFileUpload } = this.props;
+    const { toolbarControls } = this;
 
     // Hide placeholder if editor is content-free
-    const contentState = editorState.getCurrentContent();
+    const contentState = getContentState(editorState);
     const rootClassName = !contentState.hasText() &&
       contentState.getBlockMap().first().getType() !== 'unstyled' ?
       'csfd-editor-root no-placeholder' : 'csfd-editor-root';
@@ -227,7 +251,7 @@ class ContentEditor extends Component {
       <div className={rootClassName}>
         <Toolbar
           editorState={editorState}
-          toolbarControls={this.toolbarControls}
+          toolbarControls={toolbarControls}
           onToggleStyle={this.handleToggleStyle}
           onToggleBlockType={this.handleToggleBlockType}
           onToggleCustomBlockType={this.handleToggleCustomBlockType}
@@ -237,24 +261,58 @@ class ContentEditor extends Component {
           editorState={editorState}
           placeholder={this.props.placeholder || 'Enter text here...'}
           customStyleMap={this.customStyles}
-          blockRenderMap={extendedRenderMap}
           blockRendererFn={this.renderBlock}
           onChange={this.handleChange}
           handleKeyCommand={this.handleKeyCommand}
           spellCheck={true}
         />
-        {showLinkInput && <LinkInput onAddLink={this.handleAddLink} onCloseClick={this.handleModalClose} />}
-        {showPhotoInput && <PhotoInput onAddPhoto={this.handleEmbedMedia} onCloseClick={this.handleModalClose} />}
-        {showVideoInput && <VideoInput onAddVideo={this.handleEmbedMedia} onCloseClick={this.handleModalClose} />}
-        {showFileInput && <DocumentInput onAddDocument={this.handleEmbedMedia} onCloseClick={this.handleModalClose} />}
+        {
+          showLinkInput &&
+            <LinkInput
+              blockType={toolbarControls.link.id}
+              onAddLink={this.handleAddLink}
+              onCloseClick={this.handleModalClose}
+            />
+        }
+        {
+          showPhotoInput &&
+            <PhotoInput
+              blockType={toolbarControls.photo.id}
+              onFileUpload={onFileUpload}
+              onAddPhoto={this.handleEmbedMedia}
+              onCloseClick={this.handleModalClose}
+            />
+        }
+        {
+          showVideoInput &&
+            <VideoInput
+              blockType={toolbarControls.video.id}
+              onAddVideo={this.handleEmbedMedia}
+              onCloseClick={this.handleModalClose}
+            />
+        }
+        {
+          showFileInput &&
+            <DocumentInput
+              blockType={toolbarControls.file.id}
+              onFileUpload={onFileUpload}
+              onAddDocument={this.handleEmbedMedia}
+              onCloseClick={this.handleModalClose}
+            />
+        }
       </div>
     );
   }
 }
 
+ContentEditor.defaultProps = {
+  onFileUpload: file => Promise.resolve({ src: file.preview }) // for demo only
+}
+
 ContentEditor.propTypes = {
   placeholder: PropTypes.string,
-  customControls: PropTypes.shape({})
+  customControls: PropTypes.shape({}),
+  onFileUpload: PropTypes.func.isRequired // must return a promise that responds with the url
 };
 
 export default ContentEditor;

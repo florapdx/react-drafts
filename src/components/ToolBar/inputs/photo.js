@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import ReactDropzone from 'react-dropzone';
+import { TOOLBAR_DEFAULTS } from '../../../utils/toolbar';
 import Modal from '../../shared/modal';
 
 /*
@@ -28,20 +29,21 @@ class PhotoInput extends Component {
   }
 
   handlePasteLink(event) {
-    // Only allow single image
     this.setState({
       srcValue: event.target.value,
       file: null
     });
   }
 
+  /*
+   * Supports single image upload.
+   */
   handleDrop(acceptedFiles, rejectedFiles) {
     if (rejectedFiles && rejectedFiles.length) {
       this.setState({
         error: "We're sorry, there was an upload error. Please try again."
       });
     } else {
-      // Only allow single image
       this.setState({
         file: acceptedFiles[0],
         srcValue: ''
@@ -50,10 +52,18 @@ class PhotoInput extends Component {
   }
 
   handleConfirm() {
-    this.props.onAddPhoto({
-      file: this.state.file,
-      src: this.state.srcValue
-    });
+    const { blockType, onFileUpload, onAddPhoto } = this.props;
+    const { file, src } = this.state;
+
+    if (file) {
+      // @TODO: verify approach
+      // Get the stored file source
+      onFileUpload(file).then(resp => {
+        onAddPhoto(blockType, { src: resp.src });
+      });
+    } else {
+      onAddPhoto(blockType, { src: srcValue });
+    }
   }
 
   handleCancel() {
@@ -121,6 +131,8 @@ class PhotoInput extends Component {
 }
 
 PhotoInput.propTypes = {
+  blockType: PropTypes.string,
+  onFileUpload: PropTypes.func,
   onAddPhoto: PropTypes.func,
   onCloseClick: PropTypes.func
 };

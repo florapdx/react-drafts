@@ -13,12 +13,16 @@
   margin-bottom: 1em;
 }
 
+.link.csfd-content-editor__input input {
+  margin-bottom: 12px;
+}
+
 .video .csfd-content-editor__input-preview {
   position: relative;
   height: 0;
   padding-bottom: 56.25%;
 }
-.csfd-content-editor__input-preview iframe {
+.video .csfd-content-editor__input-preview iframe {
   position: absolute;
   height: 100%;
 }

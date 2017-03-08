@@ -16,7 +16,7 @@ class LinkInput extends Component {
   }
 
   handleConfirm() {
-    this.props.onAddLink({ url: this.state.value });
+    this.props.onAddLink(this.props.blockType, { url: this.state.value });
   }
 
   handleCancel() {
@@ -43,6 +43,7 @@ class LinkInput extends Component {
 }
 
 LinkInput.propTypes = {
+  blockType: PropTypes.string,
   onAddLink: PropTypes.func,
   onCloseClick: PropTypes.func
 };

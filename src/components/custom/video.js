@@ -1,14 +1,24 @@
 import React, { PropTypes } from 'react';
 
 function Video(props) {
+  const { src, caption } = props.blockProps || props;
   return (
-    <figure className="atomic-photo">
-      <iframe src='' />
-      <figcaption></figcaption>
+    <figure className="custom-block photo">
+      <iframe src={src} frameBorder="0" allowFullScreen />
+      {
+        caption && <figcaption>{caption}</figcaption>
+      }
     </figure>
   );
 }
 
-Video.propTypes = {};
+Video.propTypes = {
+  props: PropTypes.shape({
+    blockProps: PropTypes.shape({
+      src: PropTypes.string,
+      caption: PropTypes.string
+    })
+  })
+};
 
 export default Video;
