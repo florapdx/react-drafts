@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import ReactDropzone from 'react-dropzone';
+import { SUPPORTED_DOCUMENT_TYPES } from '../../../constants/file';
 import Modal from '../../shared/modal';
+import InputControls from './controls';
 
 /*
  * Document upload/embed input.
@@ -16,10 +18,12 @@ class DocumentInput extends Component {
 
     this.state = {
       file: null,
+      captionValue: '',
       error: null
     };
 
     this.handleDrop = this.handleDrop.bind(this);
+    this.handleCaptionChange = this.handleCaptionChange.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -37,35 +41,41 @@ class DocumentInput extends Component {
       });
     } else {
       const file = acceptedFiles[0];
-      const reader = new FileReader();
 
-      if (reader && reader.readAsDataURL) {
+      if (window.FileReader) {
+        const reader = new FileReader();
+
         reader.addEventListener('load', () => {
           file.src = reader.result;
           this.setState({ file });
         }, false);
+
         reader.readAsDataURL(file);
       } else {
-        this.setState({ file });
+
       }
     }
   }
 
+  handleCaptionChange(event) {
+    this.setState({ captionValue: event.target.value });
+  }
+
   handleConfirm() {
     const { blockType, onFileUpload, onAddDocument } = this.props;
-    const { file } = this.state;
+    const { file, captionValue } = this.state;
 
     onFileUpload(file).then(resp => {
-      onAddDocument(blockType, { file });
+      onAddDocument(blockType, { file, caption: captionValue });
     });
   }
 
   handleCancel() {
-    this.setState({ file: null });
+    this.setState({ file: null, captionValue: '' });
   }
 
   render() {
-    const { file, error } = this.state;
+    const { file, captionValue, error } = this.state;
 
     return (
       <Modal onCloseClick={this.props.onCloseClick}>
@@ -73,31 +83,31 @@ class DocumentInput extends Component {
           {
             file ? ([
               <div key="preview" className="csfd-content-editor__input-preview">
-                {
-                  file.src &&
-                    <iframe
-                      src={file.src}
-                      width="440px"
-                      height="570px"
-                      frameBorder="0"
-                      allowFullScreen={false}
-                    />
-                }
-                <p>{file.name}</p>
+                <a className="upload-name" href={file.src}>{file.name}</a>
+                <textarea
+                  className="add-caption"
+                  value={captionValue}
+                  placeholder="Add a caption (optional)"
+                  onChange={this.handleCaptionChange}
+                  maxLength={1000}
+                />
               </div>,
-              <div key="controls" className="csfd-content-editor__input-controls">
-                <button className="cancel" onClick={this.handleCancel}>Cancel</button>
-                <button className="confirm" onClick={this.handleConfirm}>Add File</button>
-              </div>
+              <InputControls
+                key="controls"
+                confirmText="Add File"
+                onConfirm={this.handleConfirm}
+                onCancel={this.onCancel}
+              />
             ]) : (
               <div className="csfd-content-editor__input-ui">
                 <ReactDropzone
                   className="dropzone"
                   multiple={false}
+                  accept={SUPPORTED_DOCUMENT_TYPES}
                   onDrop={this.handleDrop}
                 >
                   <div className="csfd-content-editor__input-dropzone">
-                    <span>Drag file or click to upload</span>
+                    <span>Drag file or click to upload (pdf, docx, xls, txt)</span>
                   </div>
                 </ReactDropzone>
                 { error && <p className="input-error">{error}</p> }

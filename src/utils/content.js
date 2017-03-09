@@ -8,6 +8,10 @@ export function getContentState(editorState) {
   return editorState.getCurrentContent();
 }
 
+export function getCurrentInlineStyle(editorState) {
+  return editorState.getCurrentInlineStyle();
+}
+
 /*
  * Takes care of multi-step process for creating new content
  * state when adding a new entity (custom block, etc).
@@ -19,7 +23,7 @@ export function getContentState(editorState) {
  *   createNewEntity(editorState, 'LINK', true, { url: 'www.foo.com' });
  */
 
-export function getNewStateWithEntity(editorState, blockType, isMutable, options) {
+export function getNewEntityKey(editorState, blockType, isMutable, options) {
   const contentState = getContentState(editorState);
   const contentWithEntity = contentState.createEntity(
     blockType,
@@ -27,16 +31,15 @@ export function getNewStateWithEntity(editorState, blockType, isMutable, options
     options
   );
 
-  const newEditorState = EditorState.set(
-    editorState,
-    { currentContent: contentWithEntity }
-  );
+  return contentWithEntity.getLastCreatedEntityKey();
+}
 
-  return {
-    editorState: newEditorState,
-    selection: newEditorState.getSelection(),
-    entityKey: contentWithEntity.getLastCreatedEntityKey()
-  };
+export function getEntityType(contentState, entityKey) {
+  return contentState.getEntity(entityKey).getType();
+}
+
+export function getEntityData(contentState, entityKey) {
+  return contentState.getEntity(entityKey).getData();
 }
 
 export function getEntityFromBlock(block, contentState) {
@@ -44,12 +47,12 @@ export function getEntityFromBlock(block, contentState) {
   return entityKey ? contentState.getEntity(entityKey) : null;
 }
 
-export function getEntityType(block, contentState) {
+export function getEntityTypeFromBlock(block, contentState) {
   const entity = getEntityFromBlock(block, contentState);
   return entity ? entity.getType() : null;
 }
 
-export function getEntityData(block, contentState) {
+export function getEntityDataFromBlock(block, contentState) {
   const entity = getEntityFromBlock(block, contentState);
   return entity ? entity.getData() : null;
 }

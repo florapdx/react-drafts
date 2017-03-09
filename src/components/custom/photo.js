@@ -6,7 +6,11 @@ function Photo(props) {
     <div className="custom-block photo">
       <img src={src || file.preview} />
       {
-        caption && <figcaption>{caption}</figcaption>
+        caption && (
+          <figcaption className="custom-block__caption">
+            {caption}
+          </figcaption>
+        )
       }
     </div>
   );

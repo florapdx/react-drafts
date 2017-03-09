@@ -1,7 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import ReactDropzone from 'react-dropzone';
-import { TOOLBAR_DEFAULTS } from '../../../utils/toolbar';
+import { SUPPORTED_PHOTO_TYPES } from '../../../constants/file';
 import Modal from '../../shared/modal';
+import InputControls from './controls';
 
 /*
  * Photo upload/embed input.
@@ -19,6 +20,7 @@ class PhotoInput extends Component {
     this.state = {
       file: null,
       srcValue: '',
+      captionValue: '',
       error: null
     };
 
@@ -51,51 +53,67 @@ class PhotoInput extends Component {
     }
   }
 
+  handleCaptionChange(event) {
+    this.setState({ captionValue: event.target.value });
+  }
+
   handleConfirm() {
     const { blockType, onFileUpload, onAddPhoto } = this.props;
-    const { file, src } = this.state;
+    const { file, srcValue, captionValue } = this.state;
 
     if (file) {
       // @TODO: verify approach
       // Get the stored file source
-      onFileUpload(file).then(resp => {
-        onAddPhoto(blockType, { src: resp.src });
-      });
+      onFileUpload(file)
+        .then(resp => {
+          onAddPhoto(blockType, {
+            src: resp.src,
+            caption: captionValue
+          });
+        })
+        .catch(err => {
+          this.setState({
+            error: "We're sorry, there was a problem with the upload. Please try again."
+          });
+        });
     } else {
-      onAddPhoto(blockType, { src: srcValue });
+      onAddPhoto(blockType, {
+        src: srcValue,
+        caption: captionValue
+      });
     }
   }
 
   handleCancel() {
     this.setState({
       file: null,
-      srcValue: ''
+      srcValue: '',
+      captionValue: '',
+      error: ''
     });
   }
 
   render() {
-    const { file, srcValue, error } = this.state;
+    const { file, srcValue, captionValue, error } = this.state;
 
     // Render preview for file upload or pasted link
     const preview = (file || srcValue) && ([
       <div key="preview" className="csfd-content-editor__input-preview">
-        {
-          file ? (
-            <div>
-              <img src={file.preview} alt={file.name} />
-              <p>{file.name}</p>
-            </div>
-          ) : (
-            <div>
-              <img src={srcValue} />
-            </div>
-          )
-        }
+        <img src={file ? file.preview : srcValue} alt={file ? file.name : ''} />
+        <textarea
+          className="add-caption"
+          value={captionValue}
+          placeholder="Add a caption (optional)"
+          onChange={this.handleCaptionChange}
+          maxLength={1000}
+        />
       </div>,
-      <div key="controls" className="csfd-content-editor__input-controls">
-        <button className="cancel" onClick={this.handleCancel}>Cancel</button>
-        <button className="confirm" onClick={this.handleConfirm}>Add Photo</button>
-      </div>
+      <InputControls
+        key="controls"
+        confirmText="Add Photo"
+        onConfirm={this.handleConfirm}
+        onCancel={this.onCancel}
+      />
     ]);
 
     return (

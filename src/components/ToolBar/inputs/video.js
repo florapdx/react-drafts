@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import Modal from '../../shared/modal';
+import InputControls from './controls';
 
 class VideoInput extends Component {
   constructor(props) {
@@ -7,10 +8,12 @@ class VideoInput extends Component {
 
     this.state = {
       src: '',
+      captionValue: '',
       error: null
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleCaptionChange = this.handleCaptionChange.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -31,20 +34,28 @@ class VideoInput extends Component {
     });
   }
 
+  handleCaptionChange(event) {
+    this.setState({ captionValue: event.target.value });
+  }
+
   handleConfirm() {
-    const { src } = this.state;
-    this.props.onAddVideo(this.props.blockType, { src });
+    const { src, captionValue } = this.state;
+    this.props.onAddVideo(this.props.blockType, {
+      src,
+      caption: captionValue
+    });
   }
 
   handleCancel() {
     this.setState({
       src: '',
+      captionValue: '',
       error: null
     });
   }
 
   render() {
-    const { src, error } = this.state;
+    const { src, captionValue, error } = this.state;
 
     return (
       <Modal onCloseClick={this.props.onCloseClick}>
@@ -53,11 +64,20 @@ class VideoInput extends Component {
             src ? ([
               <div key="preview" className="csfd-content-editor__input-preview">
                 <iframe src={src} frameBorder="0" allowFullScreen={false} />
+                <textarea
+                  className="add-caption"
+                  value={captionValue}
+                  placeholder="Add a caption (optional)"
+                  onChange={this.handleCaptionChange}
+                  maxLength={1000}
+                />
               </div>,
-              <div key="controls" className="csfd-content-editor__input-controls">
-                <button className="cancel" onClick={this.handleCancel}>Cancel</button>
-                <button className="confirm" onClick={this.handleConfirm}>Add video</button>
-              </div>
+              <InputControls
+                key="controls"
+                confirmText="Add Video"
+                onConfirm={this.handleConfirm}
+                onCancel={this.onCancel}
+              />
             ]) : (
               <div>
                 <input

@@ -7,18 +7,20 @@ import {
   AtomicBlockUtils,
   Modifier,
   DefaultDraftBlockRenderMap
-} from 'draft-js';
+} from 'draft-js'
 
-import { blockRenderer } from '../../renderer';
 import {
   getContentState,
-  getNewStateWithEntity,
-  getEntityType,
-  getEntityData
+  getCurrentInlineStyle,
+  getNewEntityKey,
+  getEntityTypeFromBlock,
+  getEntityDataFromBlock
 } from '../../utils/content';
 import {
   getSelectionState,
+  getSelectedText,
   getSelectedBlock,
+  getSelectedBlockType,
   getSelectionInlineStyles
 } from '../../utils/selection';
 import {
@@ -26,29 +28,16 @@ import {
   getCustomStylesMap
 } from '../../utils/toolbar';
 
+import { TAB_SPACES } from '../../constants/keyboard';
+
+import { blockRenderer } from '../../renderer';
+import decorators from '../decorators';
+
 import Toolbar from '../ToolBar';
 import LinkInput from '../ToolBar/inputs/link';
 import PhotoInput from '../ToolBar/inputs/photo';
 import VideoInput from '../ToolBar/inputs/video';
-import DocumentInput from '../Toolbar/inputs/document';
-
-// const findLinkEntities = (contentBlock, callback, contentState) => {
-//   contentBlock.findEntityRanges(
-//     (character) => {
-//       const entityKey = character.getEntity();
-//       return entityKey !== null &&
-//         contentState.getEntity(entityKey).getType() === 'LINK';
-//     },
-//     callback
-//   );
-// };
-
-// const decorator = new CompositeDecorator([
-//     {
-//       strategy: findLinkEntities,
-//       component: Link,
-//     },
-// ]);
+import DocumentInput from '../ToolBar/inputs/document';
 
 /*
  * ContentEditor.
@@ -61,7 +50,7 @@ class ContentEditor extends Component {
     super(props);
 
     this.state = {
-      editorState: EditorState.createEmpty(),
+      editorState: EditorState.createEmpty(decorators),
       showLinkInput: false,
       showPhotoInput: false,
       showVideoInput: false,
@@ -73,13 +62,16 @@ class ContentEditor extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
+    this.handleTab = this.handleTab.bind(this);
     this.focusEditor = this.focusEditor.bind(this);
+    this.insertSpaceAfter = this.insertSpaceAfter.bind(this);
 
     this.handleToggleStyle = this.handleToggleStyle.bind(this);
     this.handleToggleBlockType = this.handleToggleBlockType.bind(this);
     this.handleToggleCustomBlockType = this.handleToggleCustomBlockType.bind(this);
 
     this.handleAddLink = this.handleAddLink.bind(this);
+    this.insertCollapsedLink = this.insertCollapsedLink.bind(this);
     this.handleEmbedMedia = this.handleEmbedMedia.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
 
@@ -99,6 +91,7 @@ class ContentEditor extends Component {
   }
 
   // https://facebook.github.io/draft-js/docs/advanced-topics-key-bindings.html
+  // https://draftjs.org/docs/api-reference-editor.html#cancelable-handlers-optional
   handleKeyCommand(commandName) {
     const { editorState } = this.state;
     const nextState = RichUtils.handleKeyCommand(editorState, commandName);
@@ -109,6 +102,44 @@ class ContentEditor extends Component {
     }
 
     return 'not handled';
+  }
+
+  handleTab(event) {
+    this.handleChange(
+      RichUtils.onTab(
+        event,
+        this.state.editorState,
+        TAB_SPACES
+      )
+    );
+  }
+
+  insertSpaceAfter() {
+    const { editorState } = this.state;
+    const selection = getSelectionState(editorState);
+
+    let newEditorState = EditorState.forceSelection(
+      editorState,
+      selection.merge({
+        anchorOffset: selection.getEndOffset(),
+        focusOffset: selection.getEndOffset()
+      })
+    );
+
+    const newContentState = Modifier.insertText(
+      getContentState(newEditorState),
+      selection,
+      ' ',
+      getCurrentInlineStyle(newEditorState)
+    );
+
+    this.handleChange(
+      EditorState.push(
+        newEditorState,
+        newContentState,
+        'insert-characters'
+      )
+    );
   }
 
   handleToggleStyle(style) {
@@ -144,8 +175,28 @@ class ContentEditor extends Component {
       showVideoInput: false,
       showFileInput: false
     };
-
     const { link, photo, video, file } = this.toolbarControls;
+
+    // If user is toggling link, we don't want to show the link input,
+    // we just want to toggle the selection to un-linkify it.
+    if (blockType === link.id) {
+      const { editorState } = this.state;
+      const selection = getSelectionState(editorState);
+      if (
+        RichUtils.currentBlockContainsLink(editorState) &&
+        !selection.isCollapsed()
+      ) {
+        this.handleChange(
+          RichUtils.toggleLink(
+            editorState,
+            selection,
+            null
+          )
+        );
+        return;
+      }
+    }
+
     switch(blockType) {
       case link.id:
         nextState.showLinkInput = true;
@@ -168,26 +219,68 @@ class ContentEditor extends Component {
 
   handleAddLink(blockType, link) {
     const { editorState } = this.state;
-    const newState = getNewStateWithEntity(
+    const entityKey = getNewEntityKey(
       editorState,
       blockType,
       true,
       link
     );
 
+    const selection = getSelectionState(editorState);
+    if (selection.isCollapsed()) {
+      // If is inserting a link, rather than linkifying selected text,
+      // insert the text into the content state.
+      this.insertCollapsedLink(
+        editorState,
+        selection,
+        entityKey,
+        link.text
+      );
+      return;
+    }
+
     this.setState({
       editorState: RichUtils.toggleLink(
         editorState,
-        getSelectionState(editorState),
-        newState.entityKey
+        selection,
+        entityKey
       ),
       showLinkInput: false
     });
   }
 
+  /*
+   * Insert collapsed link, and add a space after so that link
+   * does not continue when user begins typing back in the editor.
+   */
+  insertCollapsedLink(editorState, selection, entityKey, linkText) {
+    const newContentState = Modifier.insertText(
+      getContentState(editorState),
+      selection,
+      linkText,
+      getCurrentInlineStyle(editorState),
+      entityKey
+    );
+
+    const newEditorState = EditorState.push(
+      editorState,
+      newContentState,
+      'insert-characters'
+    );
+
+    this.setState({
+      editorState: RichUtils.toggleLink(
+        newEditorState,
+        getSelectionState(newEditorState),
+        entityKey
+      ),
+      showLinkInput: false
+    }, () => this.insertSpaceAfter());
+  }
+
   handleEmbedMedia(blockType, media) {
     const { editorState } = this.state;
-    const newState = getNewStateWithEntity(
+    const entityKey = getNewEntityKey(
       editorState,
       blockType,
       false,
@@ -197,7 +290,7 @@ class ContentEditor extends Component {
     this.setState({
       editorState: AtomicBlockUtils.insertAtomicBlock(
         editorState,
-        newState.entityKey,
+        entityKey,
         ' '
       ),
       showPhotoInput: false,
@@ -223,8 +316,8 @@ class ContentEditor extends Component {
 
       return blockRenderer(
         this.toolbarControls,
-        getEntityType(block, contentState),
-        getEntityData(block, contentState)
+        getEntityTypeFromBlock(block, contentState),
+        getEntityDataFromBlock(block, contentState)
       );
     }
     return null;
@@ -263,6 +356,7 @@ class ContentEditor extends Component {
           customStyleMap={this.customStyles}
           blockRendererFn={this.renderBlock}
           onChange={this.handleChange}
+          onTab={this.handleTab}
           handleKeyCommand={this.handleKeyCommand}
           spellCheck={true}
         />
@@ -270,6 +364,7 @@ class ContentEditor extends Component {
           showLinkInput &&
             <LinkInput
               blockType={toolbarControls.link.id}
+              linkText={getSelectedText(editorState)}
               onAddLink={this.handleAddLink}
               onCloseClick={this.handleModalClose}
             />

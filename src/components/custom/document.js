@@ -4,18 +4,20 @@ function Document(props) {
   const { file, caption } = props.blockProps || props;
   return (
     <figure className="custom-block document">
+      <a
+        className="file-name"
+        href={file.src}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => () => window.open(file.src, 'blank')}
+      >{file.name}</a>
       {
-        file.src &&
-          <iframe
-            src={file.src}
-            width="440px"
-            height="570px"
-            frameBorder="0"
-            allowFullScreen={false}
-          />
+        caption && (
+          <figcaption className="custom-block__caption">
+            {caption}
+          </figcaption>
+        )
       }
-      <a>{file.name}</a>
-      <figcaption>{caption}</figcaption>
     </figure>
   );
 }

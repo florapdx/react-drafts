@@ -33,6 +33,11 @@ export function getSelectedBlock(editorState) {
   return currentContent.getBlockForKey(anchorKey);
 }
 
+export function getSelectedBlockType(editorState) {
+  const block = getSelectedBlock(editorState);
+  return block.getType();
+}
+
 export function getSelectedBlockText(editorState) {
   const block = getSelectedBlock(editorState);
   return block.getText();
@@ -43,8 +48,8 @@ export function getSelectedText(editorState) {
   const start = currentSelection.getStartOffset();
   const end = currentSelection.getEndOffset();
 
-  const blockText = getSelectedBlock(editorState);
-  return blockText.slice(start, end);
+  const block = getSelectedBlock(editorState);
+  return block.getText().slice(start, end);
 }
 
 export function getSelectionInlineStyles(editorState) {

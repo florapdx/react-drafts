@@ -15,12 +15,21 @@ button {
   cursor: pointer;
 }
 button:hover,
+button:focus,
 button:active {
   outline: none;
 }
 
+a {
+  cursor: pointer;
+  color: #00b2ee;
+  font-weight: bold;
+  text-decoration: none;
+}
+
 /* input reset */
-input {
+input,
+textarea {
   width: 100%;
   color: #3c3c3c;
   font-size: 14px;
@@ -33,9 +42,36 @@ input {
 input:focus {
   outline: none;
 }
+textarea {
+  font-size: 12px;
+  line-height: 1.2em;
+  text-indent: 0;
+  padding: 8px;
+  box-sizing: border-box;
+}
 
-img {
+figure img,
+figure iframe {
   max-width: 440px;
+  box-sizing: border-box;
+}
+
+figure.document {
+  max-width: 220px;
+}
+figure.document a {
+  font-size: 13px;
+}
+
+figcaption {
+  width: 100%;
+  color: #7c7c7c;
+  font-size: 12px;
+  line-height: 1.4em;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
 }
 
 .public-DraftEditorPlaceholder-root {
@@ -54,5 +90,6 @@ img {
 
 .public-DraftEditor-content {
   height: calc(100% - 3em);
+  min-height: 440px;
   margin: 1.5em;
 }

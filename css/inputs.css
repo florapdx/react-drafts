@@ -1,5 +1,3 @@
-.csfd-content-editor__input input {}
-
 .csfd-content-editor__input-dropzone {
   width: 100%;
   color: #ccc;
@@ -11,10 +9,6 @@
 
 .csfd-content-editor__input-preview {
   margin-bottom: 1em;
-}
-
-.link.csfd-content-editor__input input {
-  margin-bottom: 12px;
 }
 
 .video .csfd-content-editor__input-preview {
@@ -38,14 +32,27 @@
   width: 100%;
 }
 
+.link .csfd-content-editor__input-controls {
+  margin-top: 12px;
+}
+
 .csfd-content-editor__input-controls button {
   width: 100px;
   color: #fff;
   font-size: 13px;
   font-weight: bold;
   text-align: center;
-  padding: 4px 0;
+  padding: 3px 0;
   border-radius: 4px;
+}
+
+.upload-name {
+  font-size: 12px;
+}
+
+.add-caption {
+  min-height: 60px;
+  margin: 10px 0;
 }
 
 .confirm {
@@ -53,10 +60,16 @@
 }
 
 .cancel {
-  background-color: #ccc;
+  background-color: rgba(0, 0, 0, 0.24);
 }
 
 .separator {
   color: #ccc;
+  text-align: center;
+}
+
+.input-error {
+  color: #ff3333;
+  font-size: 12px;
   text-align: center;
 }

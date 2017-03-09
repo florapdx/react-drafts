@@ -21,7 +21,7 @@ export function blockRenderer(toolbarControls, entityType, entityData) {
 
     return {
       component,
-      editable: true,
+      editable: false,
       props: entityData
     };
   }

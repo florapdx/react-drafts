@@ -6,7 +6,11 @@ function Video(props) {
     <figure className="custom-block photo">
       <iframe src={src} frameBorder="0" allowFullScreen />
       {
-        caption && <figcaption>{caption}</figcaption>
+        caption && (
+          <figcaption className="custom-block__caption">
+            {caption}
+          </figcaption>
+        )
       }
     </figure>
   );
