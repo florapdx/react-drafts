@@ -50,28 +50,51 @@ textarea {
   box-sizing: border-box;
 }
 
-figure img,
-figure iframe {
-  max-width: 440px;
-  box-sizing: border-box;
-}
-
-figure.document {
-  max-width: 220px;
-}
-figure.document a {
-  font-size: 13px;
-}
+figure { display: inline-block; }
+figure.video,
+figure.photo,
+figure.document { margin: 0; }
 
 figcaption {
-  width: 100%;
+  width: 320px;
   color: #7c7c7c;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.4em;
   padding: 4px 8px;
   border: 1px solid #ccc;
   border-radius: 3px;
   box-sizing: border-box;
+}
+
+figure.document {
+  width: 220px;
+  padding: 0 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+figure.document a { font-size: 13px; }
+figure.document figcaption {
+  width: 220px;
+  margin-left: -8px;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+figure img,
+figure iframe {
+  width: 320px;
+  box-sizing: border-box;
+}
+figure.video iframe {
+  position: absolute;
+  height: 100%;
+}
+
+.video .video-wrapper {
+  position: relative;
+  height: 0;
+  padding-bottom: 56.25%;
+  margin-bottom: 8px;
 }
 
 .public-DraftEditorPlaceholder-root {

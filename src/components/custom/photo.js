@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 function Photo(props) {
   const { src, file, caption } = props.blockProps || props;
   return (
-    <div className="custom-block photo">
+    <figure className="custom-block photo">
       <img src={src || file.preview} />
       {
         caption && (
@@ -12,7 +12,7 @@ function Photo(props) {
           </figcaption>
         )
       }
-    </div>
+    </figure>
   );
 }
 

@@ -63,7 +63,9 @@ class VideoInput extends Component {
           {
             src ? ([
               <div key="preview" className="csfd-content-editor__input-preview">
-                <iframe src={src} frameBorder="0" allowFullScreen={false} />
+                <div className="video-wrapper">
+                  <iframe src={src} frameBorder="0" allowFullScreen={false} />
+                </div>
                 <textarea
                   className="add-caption"
                   value={captionValue}

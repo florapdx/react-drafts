@@ -2,14 +2,16 @@ import React, { PropTypes, Component } from 'react';
 
 function Document(props) {
   const { file, caption } = props.blockProps || props;
+  let blockClass = 'custom-block document';
+  if (caption) {
+    blockClass += ' with-caption';
+  }
   return (
-    <figure className="custom-block document">
+    <figure className={blockClass}>
       <a
         className="file-name"
         href={file.src}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={() => () => window.open(file.src, 'blank')}
+        download={file.name}
       >{file.name}</a>
       {
         caption && (

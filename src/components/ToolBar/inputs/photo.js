@@ -26,6 +26,7 @@ class PhotoInput extends Component {
 
     this.handlePasteLink = this.handlePasteLink.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
+    this.handleCaptionChange = this.handleCaptionChange.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
