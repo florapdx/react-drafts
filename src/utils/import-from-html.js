@@ -2,7 +2,7 @@ import { convertFromHTML as convert } from 'draft-convert';
 import { getNewEntityKey } from './content';
 
 function getCaptionData(node) {
-  const captionNode = node.parentElement.children[1];
+  const captionNode = node.parentNode.children[1];
   if (captionNode) {
     return captionNode.innerText || '';
   }
@@ -16,9 +16,10 @@ function getPhotoData(node) {
 }
 
 function getVideoData(node) {
+  // pass parentNode due to wrapper div
   return {
     src: node.src,
-    caption: getCaptionData(node)
+    caption: getCaptionData(node.parentNode)
   };
 }
 
@@ -38,17 +39,18 @@ function convertToEntity(nodeName, node, contentState, configs) {
   let data;
 
   switch (nodeName) {
-    case 'a' && node.className === 'file-name':
-      // Document
-      type = configs.file.id;
-      mutability = 'IMMUTABLE';
-      data = getDocumentData(node);
-      break;
     case 'a':
-      // regular link
-      type = configs.link.id;
-      mutability = 'MUTABLE';
-      data = { url: node.href };
+      if (node.className === 'file-name') {
+        // Document
+        type = configs.file.id;
+        mutability = 'IMMUTABLE';
+        data = getDocumentData(node);
+      } else {
+        // regular link
+        type = configs.link.id;
+        mutability = 'MUTABLE';
+        data = { url: node.href, text: node.alt };
+      }
       break;
     case 'img':
       type = configs.photo.id;

@@ -1,38 +1,52 @@
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { stateToHTML } from 'draft-js-export-html';
+// import { stateToHTML } from 'draft-js-export-html';
+import { convertToHTML as convert } from 'draft-convert';
 import {
   getContentState,
   getEntityFromBlock
 } from './content';
 
+import Link from '../components/custom/link';
 import Document from '../components/custom/document';
 import Photo from '../components/custom/photo';
 import Video from '../components/custom/video';
 
-export function convertToHTML(editorState, toolbarConfigs) {
-  const contentState = getContentState(editorState);
-  const renderer = {
-    blockRenderers: {
-      atomic: block => {
-        const entity = getEntityFromBlock(block, contentState);
-        const data = entity.getData();
+function convertInline(style) {}
 
-        if (data) {
-          switch (data.type) {
-            case toolbarConfigs.file.id:
-              return renderToStaticMarkup(<Document {...data} />);
-            case toolbarConfigs.photo.id:
-              return renderToStaticMarkup(<Photo {...data} />);
-            case toolbarConfigs.video.id:
-              return renderToStaticMarkup(<Video {...data} />);
-            default:
-              return null;
-          }
-        }
-      }
+function convertBlock(block) {
+  const type = block.type;
+  if (type === 'atomic') {
+    return {
+      start: '<figure>',
+      end: '</figure>'
+    };
+  }
+}
+
+function convertEntity(entity, text, toolbarConfigs) {
+  const { data, type } = entity;
+
+  if (data) {
+    switch (type) {
+      case toolbarConfigs.link.id:
+        return renderToStaticMarkup(<Link {...data} />);
+      case toolbarConfigs.file.id:
+        return renderToStaticMarkup(<Document {...data} />);
+      case toolbarConfigs.photo.id:
+        return renderToStaticMarkup(<Photo {...data} />);
+      case toolbarConfigs.video.id:
+        return renderToStaticMarkup(<Video {...data} />);
+      default:
+        return null;
     }
-  };
+  }
+}
 
-  return stateToHTML(contentState, renderer);
+export function convertToHTML(contentState, toolbarConfigs) {
+  return convert({
+    styleToHTML: convertInline,
+    blockToHTML: convertBlock,
+    entityToHTML: (entity, text) => convertEntity(entity, text, toolbarConfigs)
+  })(contentState);
 }

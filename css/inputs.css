@@ -31,6 +31,15 @@
   margin-top: 12px;
 }
 
+.upload-name {
+  font-size: 12px;
+}
+
+.add-caption {
+  min-height: 60px;
+  margin: 10px 0;
+}
+
 .csfd-content-editor__input-controls button {
   width: 100px;
   color: #fff;
@@ -41,22 +50,11 @@
   border-radius: 4px;
 }
 
-.upload-name {
-  font-size: 12px;
-}
+.confirm { background-color: #00b2ee; }
+.confirm:hover { background-color: #00a7df; }
 
-.add-caption {
-  min-height: 60px;
-  margin: 10px 0;
-}
-
-.confirm {
-  background-color: #00b2ee;
-}
-
-.cancel {
-  background-color: rgba(0, 0, 0, 0.24);
-}
+.cancel { background-color: #c6c6c6; }
+.cancel:hover { background-color: #bebebe; }
 
 .separator {
   color: #ccc;

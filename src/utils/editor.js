@@ -5,7 +5,7 @@ import {
 import decorators from '../components/decorators';
 import { convertFromHTML } from './import-from-html';
 
-export function setNewEditorState(props, toolbarConfigs) {
+export function setNewEditorState(props={}, toolbarConfigs) {
   const { contentHTML } = props;
 
   let newContent;
