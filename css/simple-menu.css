@@ -28,12 +28,12 @@
 }
 
 .simple-menu__label,
-.simple-menu__option {
+.simple-menu .csfd-editor__toolbar-control {
   border: 0;
 }
 
 .simple-menu__deselect,
-.simple-menu__option button,
+.simple-menu .csfd-editor__toolbar-control button,
 .simple-menu__label button {
   width: 100%;
 }
@@ -44,7 +44,7 @@
 }
 
 .simple-menu .simple-menu__deselect,
-.simple-menu__option button {
+.simple-menu .csfd-editor__toolbar-control button {
   font-size: 16px;
   font-weight: normal;
 }
@@ -60,7 +60,7 @@
   list-style-type: none;
   margin: 0 0 0 -1px;
   padding: 0;
-  border: 1px solid #acacac;
+  border: 1px solid #ccc;
   border-top: 0;
   z-index: 102;
 }

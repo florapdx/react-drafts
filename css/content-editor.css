@@ -1,12 +1,106 @@
-.csfd-editor-root {
-  width: 960px;
-  margin: 4em auto;
-  color: #494949;
-  font-family: Verdana, serif;
-  font-size: 16px;
-  line-height: 28px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* button reset */
+button {
+  background: none repeat scroll 0 0 transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  font-weight: normal;
+  overflow: visible;
+  text-transform: none;
+  vertical-align: middle;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+button:hover,
+button:focus,
+button:active {
+  outline: none;
+}
+
+a {
+  cursor: pointer;
+  color: #00b2ee;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* input reset */
+input,
+textarea {
+  width: 100%;
+  color: #3c3c3c;
+  font-size: 14px;
+  line-height: 2.2em;
+  text-indent: 1em;
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+input:focus {
+  outline: none;
+}
+textarea {
+  font-size: 12px;
+  line-height: 1.2em;
+  text-indent: 0;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+figure { display: inline-block; }
+figure.video,
+figure.photo,
+figure.document { margin: 0; }
+
+figcaption {
+  width: 320px;
+  color: #7c7c7c;
+  font-size: 11px;
+  line-height: 1.4em;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+figure.document {
+  width: 220px;
+  padding: 0 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+figure.document a { font-size: 13px; }
+figure.document figcaption {
+  width: 220px;
+  margin-left: -8px;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+figure img,
+figure iframe {
+  width: 320px;
+  box-sizing: border-box;
+}
+figure.video iframe {
+  position: absolute;
+  height: 100%;
+}
+
+.video .video-wrapper {
+  position: relative;
+  height: 0;
+  padding-bottom: 56.25%;
+  margin-bottom: 8px;
+}
+
+.public-DraftEditorPlaceholder-root {
+  color: #efefef;
+  font-size: 2em;
+  padding: 20px 40px;
 }
 
 .DraftEditor-editorContainer {
@@ -19,5 +113,6 @@
 
 .public-DraftEditor-content {
   height: calc(100% - 3em);
+  min-height: 440px;
   margin: 1.5em;
 }

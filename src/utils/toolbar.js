@@ -17,6 +17,8 @@ import {
 export function getControls(customControls) {
   customControls = customControls || {};
   let defaults = { ...TOOLBAR_DEFAULTS };
+
+  // Merge deep
   if (customControls.embedOptions) {
     defaults = {
       ...defaults,
@@ -29,7 +31,7 @@ export function getControls(customControls) {
       }
     };
   }
-  return values({ ...defaults, ...customControls });
+  return { ...defaults, ...customControls };
 }
 
 export function isMenuContext(ctrl) {

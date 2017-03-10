@@ -1,19 +1,43 @@
 import React, { PropTypes, Component } from 'react';
+import Immutable from 'immutable';
 import {
   Editor,
   EditorState,
   RichUtils,
-  Modifier
-} from 'draft-js';
+  AtomicBlockUtils,
+  Modifier,
+  DefaultDraftBlockRenderMap
+} from 'draft-js'
+
 import {
-  getCurrentSelection,
+  getContentState,
+  getCurrentInlineStyle,
+  getNewEntityKey,
+  getEntityTypeFromBlock,
+  getEntityDataFromBlock
+} from '../../utils/content';
+import {
+  getSelectionState,
+  getSelectedText,
+  getSelectedBlock,
+  getSelectedBlockType,
   getSelectionInlineStyles
 } from '../../utils/selection';
 import {
   getControls,
   getCustomStylesMap
 } from '../../utils/toolbar';
-import Toolbar from '../Toolbar';
+
+import { TAB_SPACES } from '../../constants/keyboard';
+
+import { blockRenderer } from '../../renderer';
+import decorators from '../decorators';
+
+import Toolbar from '../ToolBar';
+import LinkInput from '../ToolBar/inputs/link';
+import PhotoInput from '../ToolBar/inputs/photo';
+import VideoInput from '../ToolBar/inputs/video';
+import DocumentInput from '../ToolBar/inputs/document';
 
 /*
  * ContentEditor.
@@ -26,7 +50,11 @@ class ContentEditor extends Component {
     super(props);
 
     this.state = {
-      editorState: EditorState.createEmpty()
+      editorState: EditorState.createEmpty(decorators),
+      showLinkInput: false,
+      showPhotoInput: false,
+      showVideoInput: false,
+      showFileInput: false
     };
 
     this.toolbarControls = getControls(this.props.customControls);
@@ -34,10 +62,28 @@ class ContentEditor extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
+    this.handleTab = this.handleTab.bind(this);
+    this.focusEditor = this.focusEditor.bind(this);
+    this.insertSpaceAfter = this.insertSpaceAfter.bind(this);
 
     this.handleToggleStyle = this.handleToggleStyle.bind(this);
     this.handleToggleBlockType = this.handleToggleBlockType.bind(this);
     this.handleToggleCustomBlockType = this.handleToggleCustomBlockType.bind(this);
+
+    this.handleAddLink = this.handleAddLink.bind(this);
+    this.insertCollapsedLink = this.insertCollapsedLink.bind(this);
+    this.handleEmbedMedia = this.handleEmbedMedia.bind(this);
+    this.handleModalClose = this.handleModalClose.bind(this);
+
+    this.renderBlock = this.renderBlock.bind(this);
+  }
+
+  /*
+   * The setTimeout w/0 value looks odd, but this is a DraftJS convention.
+   * See https://draftjs.org/docs/advanced-topics-issues-and-pitfalls.html#delayed-state-updates
+   */
+  focusEditor() {
+    setTimeout(() => this.refs.editor.focus(), 0);
   }
 
   handleChange(editorState) {
@@ -45,16 +91,55 @@ class ContentEditor extends Component {
   }
 
   // https://facebook.github.io/draft-js/docs/advanced-topics-key-bindings.html
+  // https://draftjs.org/docs/api-reference-editor.html#cancelable-handlers-optional
   handleKeyCommand(commandName) {
     const { editorState } = this.state;
     const nextState = RichUtils.handleKeyCommand(editorState, commandName);
 
     if (nextState) {
       this.handleChange(nextState);
-      return 'handled'; // true
+      return 'handled';
     }
 
-    return 'not handled'; // false
+    return 'not handled';
+  }
+
+  handleTab(event) {
+    this.handleChange(
+      RichUtils.onTab(
+        event,
+        this.state.editorState,
+        TAB_SPACES
+      )
+    );
+  }
+
+  insertSpaceAfter() {
+    const { editorState } = this.state;
+    const selection = getSelectionState(editorState);
+
+    let newEditorState = EditorState.forceSelection(
+      editorState,
+      selection.merge({
+        anchorOffset: selection.getEndOffset(),
+        focusOffset: selection.getEndOffset()
+      })
+    );
+
+    const newContentState = Modifier.insertText(
+      getContentState(newEditorState),
+      selection,
+      ' ',
+      getCurrentInlineStyle(newEditorState)
+    );
+
+    this.handleChange(
+      EditorState.push(
+        newEditorState,
+        newContentState,
+        'insert-characters'
+      )
+    );
   }
 
   handleToggleStyle(style) {
@@ -75,34 +160,254 @@ class ContentEditor extends Component {
     );
   }
 
+  /*
+   * Show active embed input.
+   * Ensures only one can be active at a time.
+   * @TODO: It might be nice to find a more succinct way
+   * to do this re: separate state for each input type,
+   * particularly if we add any more. In fact, we might
+   * have to rethink this a little for customControlProps.
+   */
   handleToggleCustomBlockType(blockType) {
+    const nextState = {
+      showLinkInput: false,
+      showPhotoInput: false,
+      showVideoInput: false,
+      showFileInput: false
+    };
+    const { link, photo, video, file } = this.toolbarControls;
 
+    // If user is toggling link, we don't want to show the link input,
+    // we just want to toggle the selection to un-linkify it.
+    if (blockType === link.id) {
+      const { editorState } = this.state;
+      const selection = getSelectionState(editorState);
+      if (
+        RichUtils.currentBlockContainsLink(editorState) &&
+        !selection.isCollapsed()
+      ) {
+        this.handleChange(
+          RichUtils.toggleLink(
+            editorState,
+            selection,
+            null
+          )
+        );
+        return;
+      }
+    }
+
+    switch(blockType) {
+      case link.id:
+        nextState.showLinkInput = true;
+        break;
+      case photo.id:
+        nextState.showPhotoInput = true;
+        break;
+      case video.id:
+        nextState.showVideoInput = true;
+        break;
+      case file.id:
+        nextState.showFileInput = true;
+        break;
+      default:
+        return;
+    }
+
+    this.setState(nextState);
+  }
+
+  handleAddLink(blockType, link) {
+    const { editorState } = this.state;
+    const entityKey = getNewEntityKey(
+      editorState,
+      blockType,
+      true,
+      link
+    );
+
+    const selection = getSelectionState(editorState);
+    if (selection.isCollapsed()) {
+      // If is inserting a link, rather than linkifying selected text,
+      // insert the text into the content state.
+      this.insertCollapsedLink(
+        editorState,
+        selection,
+        entityKey,
+        link.text
+      );
+      return;
+    }
+
+    this.setState({
+      editorState: RichUtils.toggleLink(
+        editorState,
+        selection,
+        entityKey
+      ),
+      showLinkInput: false
+    });
+  }
+
+  /*
+   * Insert collapsed link, and add a space after so that link
+   * does not continue when user begins typing back in the editor.
+   */
+  insertCollapsedLink(editorState, selection, entityKey, linkText) {
+    const newContentState = Modifier.insertText(
+      getContentState(editorState),
+      selection,
+      linkText,
+      getCurrentInlineStyle(editorState),
+      entityKey
+    );
+
+    const newEditorState = EditorState.push(
+      editorState,
+      newContentState,
+      'insert-characters'
+    );
+
+    this.setState({
+      editorState: RichUtils.toggleLink(
+        newEditorState,
+        getSelectionState(newEditorState),
+        entityKey
+      ),
+      showLinkInput: false
+    }, () => this.insertSpaceAfter());
+  }
+
+  handleEmbedMedia(blockType, media) {
+    const { editorState } = this.state;
+    const entityKey = getNewEntityKey(
+      editorState,
+      blockType,
+      false,
+      media
+    );
+
+    this.setState({
+      editorState: AtomicBlockUtils.insertAtomicBlock(
+        editorState,
+        entityKey,
+        ' '
+      ),
+      showPhotoInput: false,
+      showVideoInput: false,
+      showFileInput: false
+    });
+  }
+
+  handleModalClose() {
+    this.setState({
+      showLinkInput: false,
+      showPhotoInput: false,
+      showVideoInput: false,
+      showFileInput: false
+    });
+  }
+
+  renderBlock(block) {
+    const { editorState } = this.state;
+
+    if (block.getType() === 'atomic') {
+      const contentState = getContentState(editorState);
+
+      return blockRenderer(
+        this.toolbarControls,
+        getEntityTypeFromBlock(block, contentState),
+        getEntityDataFromBlock(block, contentState)
+      );
+    }
+    return null;
   }
 
   render() {
-    const { editorState } = this.state;
+    const {
+      editorState,
+      showLinkInput,
+      showPhotoInput,
+      showVideoInput,
+      showFileInput
+    } = this.state;
+    const { onFileUpload } = this.props;
+    const { toolbarControls } = this;
+
+    // Hide placeholder if editor is content-free
+    const contentState = getContentState(editorState);
+    const rootClassName = !contentState.hasText() &&
+      contentState.getBlockMap().first().getType() !== 'unstyled' ?
+      'csfd-editor-root no-placeholder' : 'csfd-editor-root';
+
     return (
-      <div className="csfd-editor-root">
+      <div className={rootClassName}>
         <Toolbar
           editorState={editorState}
-          toolbarControls={this.toolbarControls}
+          toolbarControls={toolbarControls}
           onToggleStyle={this.handleToggleStyle}
           onToggleBlockType={this.handleToggleBlockType}
           onToggleCustomBlockType={this.handleToggleCustomBlockType}
         />
         <Editor
+          refs={editor => this.editor = editor}
           editorState={editorState}
+          placeholder={this.props.placeholder || 'Enter text here...'}
           customStyleMap={this.customStyles}
+          blockRendererFn={this.renderBlock}
           onChange={this.handleChange}
+          onTab={this.handleTab}
           handleKeyCommand={this.handleKeyCommand}
+          spellCheck={true}
         />
+        {
+          showLinkInput &&
+            <LinkInput
+              blockType={toolbarControls.link.id}
+              linkText={getSelectedText(editorState)}
+              onAddLink={this.handleAddLink}
+              onCloseClick={this.handleModalClose}
+            />
+        }
+        {
+          showPhotoInput &&
+            <PhotoInput
+              blockType={toolbarControls.photo.id}
+              onFileUpload={onFileUpload}
+              onAddPhoto={this.handleEmbedMedia}
+              onCloseClick={this.handleModalClose}
+            />
+        }
+        {
+          showVideoInput &&
+            <VideoInput
+              blockType={toolbarControls.video.id}
+              onAddVideo={this.handleEmbedMedia}
+              onCloseClick={this.handleModalClose}
+            />
+        }
+        {
+          showFileInput &&
+            <DocumentInput
+              blockType={toolbarControls.file.id}
+              onFileUpload={onFileUpload}
+              onAddDocument={this.handleEmbedMedia}
+              onCloseClick={this.handleModalClose}
+            />
+        }
       </div>
     );
   }
 }
 
+ContentEditor.defaultProps = {
+  onFileUpload: file => Promise.resolve({ src: file.preview }) // for demo only
+}
+
 ContentEditor.propTypes = {
-  customControls: PropTypes.shape({})
+  placeholder: PropTypes.string,
+  customControls: PropTypes.shape({}),
+  onFileUpload: PropTypes.func.isRequired // must return a promise that responds with the url
 };
 
 export default ContentEditor;

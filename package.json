@@ -64,6 +64,8 @@
     "webpack-node-externals": "^1.5.4"
   },
   "dependencies": {
-    "lodash.values": "^4.3.0"
+    "immutable": "^3.8.1",
+    "lodash.values": "^4.3.0",
+    "react-dropzone": "^3.11.0"
   }
 }

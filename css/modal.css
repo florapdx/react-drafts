@@ -1,0 +1,25 @@
+.csfd-content-editor__modal {
+  position: fixed;
+  top: 35%;
+  left: 50%;
+  min-width: 440px;
+  max-width: 660px;
+  background-color: #fefefe;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  transform: translate(-50%, -35%);
+  z-index: 200;
+}
+
+.csfd-content-editor__modal .close {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  color: #ccc;
+  font-size: 18px;
+}
+
+.csfd-content-editor__modal-wrapper {
+  padding: 4px 0;
+}
