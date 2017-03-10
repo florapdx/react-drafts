@@ -7,8 +7,11 @@ import {
   AtomicBlockUtils,
   Modifier,
   DefaultDraftBlockRenderMap
-} from 'draft-js'
+} from 'draft-js';
 
+import {
+  setNewEditorState
+} from '../../utils/editor';
 import {
   getContentState,
   getCurrentInlineStyle,
@@ -27,11 +30,9 @@ import {
   getControls,
   getCustomStylesMap
 } from '../../utils/toolbar';
-
 import { TAB_SPACES } from '../../constants/keyboard';
 
 import { blockRenderer } from '../../renderer';
-import decorators from '../decorators';
 
 import Toolbar from '../ToolBar';
 import LinkInput from '../ToolBar/inputs/link';
@@ -49,16 +50,15 @@ class ContentEditor extends Component {
   constructor(props) {
     super(props);
 
+    this.toolbarControls = getControls(this.props.customControls);
+    this.customStyles = getCustomStylesMap(this.toolbarControls);
     this.state = {
-      editorState: EditorState.createEmpty(decorators),
+      editorState: setNewEditorState(props, this.toolbarControls),
       showLinkInput: false,
       showPhotoInput: false,
       showVideoInput: false,
       showFileInput: false
     };
-
-    this.toolbarControls = getControls(this.props.customControls);
-    this.customStyles = getCustomStylesMap(this.toolbarControls);
 
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
@@ -76,6 +76,14 @@ class ContentEditor extends Component {
     this.handleModalClose = this.handleModalClose.bind(this);
 
     this.renderBlock = this.renderBlock.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.contentHTML !== this.props.contentHTML) {
+      this.handleChange(
+        setNewEditorState(this.props, this.toolbarControls)
+      );
+    }
   }
 
   /*
@@ -405,6 +413,7 @@ ContentEditor.defaultProps = {
 }
 
 ContentEditor.propTypes = {
+  contentHTML: PropTypes.string,
   placeholder: PropTypes.string,
   customControls: PropTypes.shape({}),
   onFileUpload: PropTypes.func.isRequired // must return a promise that responds with the url

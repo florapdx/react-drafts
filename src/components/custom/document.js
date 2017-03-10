@@ -1,11 +1,13 @@
 import React, { PropTypes, Component } from 'react';
 
 function Document(props) {
-  const { file, caption } = props.blockProps || props;
+  const { file, src, name, caption } = props.blockProps || props;
+
   let blockClass = 'custom-block document';
   if (caption) {
     blockClass += ' with-caption';
   }
+
   return (
     <figure className={blockClass}>
       <a
