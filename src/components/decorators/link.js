@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { getEntityData, getEntityType } from '../../utils/content';
+import Link from '../custom/link';
 
 /* Strategy */
 function findLinkEntities(contentBlock, callback, contentState) {
@@ -13,23 +14,19 @@ function findLinkEntities(contentBlock, callback, contentState) {
   );
 };
 
-/* Component */
+/* Component renderer */
 // Clicking a link in the editor will not trigger a navigation
 // event in the browser without the `onClick` handler.
-function Link({ contentState, children, entityKey }) {
+function LinkRenderer({ contentState, children, entityKey }) {
   const { url, text } = getEntityData(contentState, entityKey);
   return (
-    <a
-      href={url}
-      alt={text}
-      onClick={() => window.open(url, 'blank')}
-    >
-      {children || text}
-    </a>
+    <Link url={url} text={text}>
+      {children}
+    </Link>
   );
 }
 
 export default {
   strategy: findLinkEntities,
-  component: Link
+  component: LinkRenderer
 };

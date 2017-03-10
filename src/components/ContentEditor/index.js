@@ -7,8 +7,14 @@ import {
   AtomicBlockUtils,
   Modifier,
   DefaultDraftBlockRenderMap
-} from 'draft-js'
+} from 'draft-js';
 
+import {
+  setNewEditorState
+} from '../../utils/editor';
+import {
+  convertToHTML
+} from '../../utils/export-to-html';
 import {
   getContentState,
   getCurrentInlineStyle,
@@ -27,11 +33,9 @@ import {
   getControls,
   getCustomStylesMap
 } from '../../utils/toolbar';
-
 import { TAB_SPACES } from '../../constants/keyboard';
 
 import { blockRenderer } from '../../renderer';
-import decorators from '../decorators';
 
 import Toolbar from '../ToolBar';
 import LinkInput from '../ToolBar/inputs/link';
@@ -49,18 +53,21 @@ class ContentEditor extends Component {
   constructor(props) {
     super(props);
 
+    this.toolbarControls = getControls(this.props.customControls);
+    this.customStyles = getCustomStylesMap(this.toolbarControls);
     this.state = {
-      editorState: EditorState.createEmpty(decorators),
+      editorState: setNewEditorState(props, this.toolbarControls),
       showLinkInput: false,
       showPhotoInput: false,
       showVideoInput: false,
-      showFileInput: false
+      showFileInput: false,
+      isSaving: false
     };
 
-    this.toolbarControls = getControls(this.props.customControls);
-    this.customStyles = getCustomStylesMap(this.toolbarControls);
-
     this.handleChange = this.handleChange.bind(this);
+    this.handleSave = this.handleSave.bind(this);
+    this.handleClear = this.handleClear.bind(this);
+
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
     this.handleTab = this.handleTab.bind(this);
     this.focusEditor = this.focusEditor.bind(this);
@@ -79,6 +86,18 @@ class ContentEditor extends Component {
   }
 
   /*
+   * Reset editor state with any new content that might be coming in
+   * from server.
+   */
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.contentHTML !== this.props.contentHTML) {
+      this.handleChange(
+        setNewEditorState(this.props, this.toolbarControls)
+      );
+    }
+  }
+
+  /*
    * The setTimeout w/0 value looks odd, but this is a DraftJS convention.
    * See https://draftjs.org/docs/advanced-topics-issues-and-pitfalls.html#delayed-state-updates
    */
@@ -88,6 +107,38 @@ class ContentEditor extends Component {
 
   handleChange(editorState) {
     this.setState({ editorState });
+  }
+
+  /*
+   * Convert editor state to html and call `onSave` prop with result.
+   */
+  handleSave() {
+    this.setState({
+      isSaving: true
+    }, () => {
+      const contentState = getContentState(this.state.editorState);
+      const html = convertToHTML(contentState, this.toolbarControls);
+      this.props.onSave(html).then(() => this.setState({ isSaving: false }));
+    });
+  }
+
+  /*
+   * Clear the editor and reset state.
+   */
+  handleClear() {
+    this.setState({
+      editorState: setNewEditorState(),
+      showLinkInput: false,
+      showPhotoInput: false,
+      showVideoInput: false,
+      showFileInput: false,
+      isSaving: false
+    });
+
+    const { onClear } = this.props;
+    if (onClear) {
+      onClear();
+    }
   }
 
   // https://facebook.github.io/draft-js/docs/advanced-topics-key-bindings.html
@@ -329,9 +380,13 @@ class ContentEditor extends Component {
       showLinkInput,
       showPhotoInput,
       showVideoInput,
-      showFileInput
+      showFileInput,
+      isSaving
     } = this.state;
-    const { onFileUpload } = this.props;
+    const {
+      placeholder,
+      onFileUpload
+    } = this.props;
     const { toolbarControls } = this;
 
     // Hide placeholder if editor is content-free
@@ -342,6 +397,12 @@ class ContentEditor extends Component {
 
     return (
       <div className={rootClassName}>
+        <div className="csfd-editor__controls">
+          <button className="csfd-editor__control clear" onClick={this.handleClear}>Clear</button>
+          <button className="csfd-editor__control save" onClick={this.handleSave}>
+            { isSaving ? 'Saving' : 'Save' }
+          </button>
+        </div>
         <Toolbar
           editorState={editorState}
           toolbarControls={toolbarControls}
@@ -352,7 +413,7 @@ class ContentEditor extends Component {
         <Editor
           refs={editor => this.editor = editor}
           editorState={editorState}
-          placeholder={this.props.placeholder || 'Enter text here...'}
+          placeholder={placeholder}
           customStyleMap={this.customStyles}
           blockRendererFn={this.renderBlock}
           onChange={this.handleChange}
@@ -401,13 +462,16 @@ class ContentEditor extends Component {
 }
 
 ContentEditor.defaultProps = {
-  onFileUpload: file => Promise.resolve({ src: file.preview }) // for demo only
-}
+  placeholder: 'Enter text here...'
+};
 
 ContentEditor.propTypes = {
+  contentHTML: PropTypes.string,
   placeholder: PropTypes.string,
   customControls: PropTypes.shape({}),
-  onFileUpload: PropTypes.func.isRequired // must return a promise that responds with the url
+  onFileUpload: PropTypes.func.isRequired, // must return a promise that responds with the url
+  onSave: PropTypes.func.isRequired, // must return a promise for save verification
+  onClear: PropTypes.func // convenience hook in case want to respond to clear event
 };
 
 export default ContentEditor;
