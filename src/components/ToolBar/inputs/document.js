@@ -96,7 +96,7 @@ class DocumentInput extends Component {
                 key="controls"
                 confirmText="Add File"
                 onConfirm={this.handleConfirm}
-                onCancel={this.onCancel}
+                onCancel={this.handleCancel}
               />
             ]) : (
               <div className="csfd-content-editor__input-ui">

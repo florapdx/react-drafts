@@ -113,7 +113,7 @@ class PhotoInput extends Component {
         key="controls"
         confirmText="Add Photo"
         onConfirm={this.handleConfirm}
-        onCancel={this.onCancel}
+        onCancel={this.handleCancel}
       />
     ]);
 

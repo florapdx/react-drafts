@@ -10,7 +10,7 @@
   "scripts": {
     "start": "webpack-dev-server --config webpack/config.dev.js",
     "clean": "rimraf ./dist",
-    "build": "webpack --config webpack/config.dist.js",
+    "build": "NODE_ENV=production webpack --config webpack/config.dist.js",
     "watch": "webpack -w --config webpack/config.dev.js",
     "prepublish": "NODE_ENV=production npm run clean && npm run build",
     "test": "mocha-webpack --opts config/webpack/test.config.opts",
@@ -28,7 +28,6 @@
   "author": "Team Crossfield",
   "license": "MIT",
   "devDependencies": {
-    "autoprefixer": "^6.7.2",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
     "babel-plugin-transform-object-assign": "^6.22.0",
@@ -48,10 +47,10 @@
     "eslint-plugin-react": "^6.9.0",
     "extract-text-webpack-plugin": "^2.0.0-rc.3",
     "font-awesome": "^4.7.0",
+    "html-webpack-plugin": "^2.28.0",
     "jsdom": "^9.10.0",
     "mocha": "^3.2.0",
     "mocha-webpack": "^0.7.0",
-    "postcss-loader": "^1.2.2",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-hot-loader": "^3.0.0-beta.6",
@@ -64,15 +63,15 @@
     "webpack-node-externals": "^1.5.4"
   },
   "dependencies": {
-    "immutable": "^3.8.1",
-    "lodash.values": "^4.3.0"
-  },
-  "peerDependencies": {
     "draft-convert": "^1.4.2",
     "draft-js": "^0.10.0",
     "font-awesome": "^4.7.0",
-    "react": "15.x.x",
-    "react-dom": "15.x.x",
+    "immutable": "^3.8.1",
+    "lodash.values": "^4.3.0",
     "react-dropzone": "^3.11.0"
+  },
+  "peerDependencies": {
+    "react": "15.x.x",
+    "react-dom": "15.x.x"
   }
 }

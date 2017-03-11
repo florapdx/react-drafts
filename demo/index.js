@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ContentEditor from '../src';
+import { ContentEditor } from '../src';
 
 function loadSavedContent() {
   const saved = localStorage.getItem('myContent');

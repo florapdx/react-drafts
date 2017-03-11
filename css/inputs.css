@@ -8,7 +8,9 @@
 }
 
 .csfd-content-editor__input-preview {
+  max-height: 600px;
   margin-bottom: 1em;
+  overflow: auto;
 }
 
 .video .csfd-content-editor__input-preview iframe {

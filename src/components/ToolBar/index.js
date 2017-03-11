@@ -76,7 +76,7 @@ function Toolbar(props) {
   }
 
   return (
-    <div className="csfd-editor-toolbar" onMouseDown={this.handleMouseDown}>
+    <div className="csfd-editor-toolbar">
       <ul className="csfd-editor-toolbar__controls">
         {buildControls(toolbarControls)}
       </ul>

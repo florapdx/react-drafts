@@ -6,12 +6,12 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, '../dist/'),
-    filename: 'csfd-content-editor.js',
+    filename: 'csfd-editor.js',
     libraryTarget: 'umd',
     library: 'ContentEditor'
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         loader: 'babel-loader',
@@ -21,38 +21,21 @@ module.exports = {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                sourceMap: true
-              }
-            },
-            {
-              loader: 'postcss-loader',
-              options: {
-                plugins: function() {
-                  return [
-                    require('autoprefixer')
-                  ];
-                }
-              }
-            }
-          ]
-        }),
-        include: [
-          path.resolve(__dirname, '../node_modules'),
-          path.resolve(__dirname, '../src'),
-        ]
+          use: 'css-loader'
+        })
+      },
+      {
+        test: /\.(eot|svg|ttf|woff(2)?)(\?v=\d+\.\d+\.\d+)?/,
+        use: 'url-loader'
       }
     ]
   },
   resolve: {
-    extensions: [' ', '.js']
+    extensions: [' ', '.js', '.css']
   },
   externals: {
-    'react': 'react',
-    'react-dom': "react-dom"
+    'react': 'React',
+    'react-dom': 'ReactDOM'
   },
   plugins: [
     new ExtractTextPlugin('csfd-editor-styles.css')

@@ -1,7 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var autoprefixer = require('autoprefixer');
+var HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry: [
@@ -11,12 +10,10 @@ module.exports = {
   ],
   output: {
     path: path.resolve(__dirname, '../build/'),
-    publicPath: path.resolve(__dirname, '/build/'),
+    publicPath: '/',
     filename: 'bundle.js'
   },
   devServer: {
-    contentBase: path.resolve(__dirname, '../demo/'),
-    publicPath: path.resolve(__dirname, '/build/'),
     hot: true,
     inline: true,
     port: 3000
@@ -47,8 +44,7 @@ module.exports = {
         ],
         include: [
           path.resolve(__dirname, '../node_modules'),
-          path.resolve(__dirname, '../css'),
-          path.resolve(__dirname, '../demo'),
+          path.resolve(__dirname, '../css')
         ]
       },
       {
@@ -62,6 +58,9 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin()
+    new webpack.NamedModulesPlugin(),
+    new HtmlWebpackPlugin({
+      template: 'demo/index.html'
+    })
   ]
 }

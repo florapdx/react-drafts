@@ -78,7 +78,7 @@ class VideoInput extends Component {
                 key="controls"
                 confirmText="Add Video"
                 onConfirm={this.handleConfirm}
-                onCancel={this.onCancel}
+                onCancel={this.handleCancel}
               />
             ]) : (
               <div>
