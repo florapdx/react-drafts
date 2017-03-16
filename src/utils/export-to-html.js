@@ -1,6 +1,5 @@
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-// import { stateToHTML } from 'draft-js-export-html';
 import { convertToHTML as convert } from 'draft-convert';
 import {
   getContentState,
@@ -24,7 +23,7 @@ function convertBlock(block) {
   }
 }
 
-function convertEntity(entity, text, toolbarConfigs) {
+function convertEntity(entity, toolbarConfigs) {
   const { data, type } = entity;
 
   if (data) {
@@ -47,6 +46,6 @@ export function convertToHTML(contentState, toolbarConfigs) {
   return convert({
     styleToHTML: convertInline,
     blockToHTML: convertBlock,
-    entityToHTML: (entity, text) => convertEntity(entity, text, toolbarConfigs)
+    entityToHTML: entity => convertEntity(entity, toolbarConfigs)
   })(contentState);
 }

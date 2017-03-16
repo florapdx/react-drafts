@@ -169,7 +169,7 @@ class ContentEditor extends Component {
     const { editorState } = this.state;
     const selection = getSelectionState(editorState);
 
-    let newEditorState = EditorState.forceSelection(
+    const newEditorState = EditorState.forceSelection(
       editorState,
       selection.merge({
         anchorOffset: selection.getEndOffset(),
@@ -411,7 +411,7 @@ class ContentEditor extends Component {
           onToggleCustomBlockType={this.handleToggleCustomBlockType}
         />
         <Editor
-          refs={editor => this.editor = editor}
+          ref={editor => this.editor = editor}
           editorState={editorState}
           placeholder={placeholder}
           customStyleMap={this.customStyles}
