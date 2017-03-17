@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 
 function Photo(props) {
-  const { src, file, caption } = props.blockProps || props;
+  const { src, caption } = props.blockProps || props;
   return (
     <figure className="custom-block photo">
-      <img src={src || file.preview} />
+      <img src={src} />
       {
         caption && (
           <figcaption className="custom-block__caption">
@@ -20,7 +20,6 @@ Photo.propTypes = {
   props: PropTypes.shape({
     blockProps: PropTypes.shape({
       src: PropTypes.string,
-      file: PropTypes.shape({}),
       caption: PropTypes.caption
     })
   })

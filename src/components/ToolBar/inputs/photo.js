@@ -63,7 +63,6 @@ class PhotoInput extends Component {
     const { file, srcValue, captionValue } = this.state;
 
     if (file) {
-      // @TODO: verify approach
       // Get the stored file source
       onFileUpload(file)
         .then(resp => {

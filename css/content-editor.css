@@ -25,21 +25,26 @@ button:active {
   outline: none;
 }
 
+/* optional css classes for matching controls */
 .csfd-editor__controls {
   display: flex;
   justify-content: flex-end;
-  margin: 10px 0;
+  width: 960px;
+  margin: 10px auto;
 }
 
 .csfd-editor__control {
   width: 60px;
   color: #fff;
+  font-family: Verdana, serif;
   font-size: 12px;
   font-weight: bold;
+  line-height: 2em;
   text-align: center;
   padding: 1px 0;
   border-radius: 4px;
   margin-left: 6px;
+  -webkit-font-smoothing: antialiased;
 }
 
 .csfd-editor__control.save { background-color: #00b2ee; }

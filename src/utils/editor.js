@@ -1,21 +1,24 @@
 import {
   EditorState,
-  ContentState
+  ContentState,
+  convertFromRaw
 } from 'draft-js';
 import decorators from '../components/decorators';
 import { convertFromHTML } from './import-from-html';
 
-export function setNewEditorState(props={}, toolbarConfigs) {
-  const { contentHTML } = props;
+export function setNewEditorState(props, toolbarConfigs) {
+  const { content, exportTo } = props;
+  const contentState = new ContentState();
 
   let newContent;
-  if (contentHTML) {
-    const contentState = new ContentState();
+  if (content && exportTo === 'html') {
     newContent = convertFromHTML(
       contentState,
-      contentHTML,
+      content,
       toolbarConfigs
     );
+  } else if (content && exportTo === 'raw') {
+    newContent = convertFromRaw(JSON.parse(content));
   }
 
   return newContent ?

@@ -6,15 +6,13 @@ import {
   RichUtils,
   AtomicBlockUtils,
   Modifier,
-  DefaultDraftBlockRenderMap
+  DefaultDraftBlockRenderMap,
+  convertToRaw
 } from 'draft-js';
 
-import {
-  setNewEditorState
-} from '../../utils/editor';
-import {
-  convertToHTML
-} from '../../utils/export-to-html';
+import { setNewEditorState } from '../../utils/editor';
+import { convertToHTML } from '../../utils/export-to-html';
+
 import {
   getContentState,
   getCurrentInlineStyle,
@@ -37,11 +35,11 @@ import { TAB_SPACES } from '../../constants/keyboard';
 
 import { blockRenderer } from '../../renderer';
 
-import Toolbar from '../ToolBar';
-import LinkInput from '../ToolBar/inputs/link';
-import PhotoInput from '../ToolBar/inputs/photo';
-import VideoInput from '../ToolBar/inputs/video';
-import DocumentInput from '../ToolBar/inputs/document';
+import Toolbar from '../Toolbar';
+import LinkInput from '../Toolbar/inputs/link';
+import PhotoInput from '../Toolbar/inputs/photo';
+import VideoInput from '../Toolbar/inputs/video';
+import DocumentInput from '../Toolbar/inputs/document';
 
 /*
  * ContentEditor.
@@ -61,28 +59,52 @@ class ContentEditor extends Component {
       showPhotoInput: false,
       showVideoInput: false,
       showFileInput: false,
+      detachToolbar: false,
       isSaving: false
     };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSave = this.handleSave.bind(this);
-    this.handleClear = this.handleClear.bind(this);
+    // public methods
+    this.focus = this.focus.bind(this);
+    this.blur = this.blur.bind(this);
+    this.save = this.save.bind(this);
+    this.clear = this.clear.bind(this);
 
-    this.handleKeyCommand = this.handleKeyCommand.bind(this);
-    this.handleTab = this.handleTab.bind(this);
-    this.focusEditor = this.focusEditor.bind(this);
-    this.insertSpaceAfter = this.insertSpaceAfter.bind(this);
+    this.handleChange = this._handleChange.bind(this);
+    this.handleKeyCommand = this._handleKeyCommand.bind(this);
+    this.handleTab = this._handleTab.bind(this);
 
-    this.handleToggleStyle = this.handleToggleStyle.bind(this);
-    this.handleToggleBlockType = this.handleToggleBlockType.bind(this);
-    this.handleToggleCustomBlockType = this.handleToggleCustomBlockType.bind(this);
+    this.toolbarInitialTop = 0;
+    this.handleToolbarDetach = this._handleToolbarDetach.bind(this);
 
-    this.handleAddLink = this.handleAddLink.bind(this);
-    this.insertCollapsedLink = this.insertCollapsedLink.bind(this);
-    this.handleEmbedMedia = this.handleEmbedMedia.bind(this);
-    this.handleModalClose = this.handleModalClose.bind(this);
+    this.insertSpaceAfter = this._insertSpaceAfter.bind(this);
 
-    this.renderBlock = this.renderBlock.bind(this);
+    this.handleToggleStyle = this._handleToggleStyle.bind(this);
+    this.handleToggleBlockType = this._handleToggleBlockType.bind(this);
+    this.handleToggleCustomBlockType = this._handleToggleCustomBlockType.bind(this);
+
+    this.handleAddLink = this._handleAddLink.bind(this);
+    this.insertCollapsedLink = this._insertCollapsedLink.bind(this);
+    this.handleEmbedMedia = this._handleEmbedMedia.bind(this);
+    this.handleModalClose = this._handleModalClose.bind(this);
+
+    this.renderBlock = this._renderBlock.bind(this);
+  }
+
+  componentDidMount() {
+    window.scrollTo(0, 0);
+    if (this.props.detachToolbarOnScroll) {
+      this.toolbarInitialTop = document
+        .querySelector('.csfd-editor-toolbar')
+        .getBoundingClientRect()
+        .top;
+      window.addEventListener('scroll', this.handleToolbarDetach);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.props.detachToolbarOnScroll) {
+      window.removeEventListener('scroll', this.handleToolbarDetach);
+    }
   }
 
   /*
@@ -90,60 +112,97 @@ class ContentEditor extends Component {
    * from server.
    */
   componentWillReceiveProps(nextProps) {
-    if (nextProps.contentHTML !== this.props.contentHTML) {
+    if (nextProps.content !== this.props.content) {
       this.handleChange(
-        setNewEditorState(this.props, this.toolbarControls)
+        setNewEditorState(
+          {
+            ...this.props,
+            ...nextProps
+          },
+          this.toolbarControls
+        )
       );
     }
   }
 
   /*
+   ** Public method.
+   ** Returns promise.
    * The setTimeout w/0 value looks odd, but this is a DraftJS convention.
    * See https://draftjs.org/docs/advanced-topics-issues-and-pitfalls.html#delayed-state-updates
    */
-  focusEditor() {
-    setTimeout(() => this.refs.editor.focus(), 0);
+  focus() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => this.refs.editor.focus(), 0);
+      resolve();
+    });
   }
 
-  handleChange(editorState) {
-    this.setState({ editorState });
-  }
-
-  /*
-   * Convert editor state to html and call `onSave` prop with result.
-   */
-  handleSave() {
-    this.setState({
-      isSaving: true
-    }, () => {
-      const contentState = getContentState(this.state.editorState);
-      const html = convertToHTML(contentState, this.toolbarControls);
-      this.props.onSave(html).then(() => this.setState({ isSaving: false }));
+  blur() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => this.refs.editor.blur(), 0);
+      resolve();
     });
   }
 
   /*
+   ** Public method.
+   ** Returns promise.
+   * Convert editor state to specified format.
+   * Resolves with content or rejects with error message.
+   */
+  save() {
+    const { exportTo } = this.props;
+    const { editorState } = this.state;
+    const contentState = getContentState(editorState);
+
+    return new Promise((resolve, reject) => {
+      let content;
+      let errorMsg = 'There was an error parsing editor content to';
+
+      if (exportTo === 'html') {
+        content = convertToHTML(contentState, this.toolbarControls);
+        errorMsg = `${errorMsg} html.`;
+      } else {
+        content = JSON.stringify(convertToRaw(contentState));
+        errorMsg = `${errorMsg} raw.`;
+      }
+
+      if (content) {
+        resolve(content);
+      } else {
+        reject(errorMsg);
+      }
+    });
+  }
+
+  /*
+   ** Public method.
+   ** Returns promise.
    * Clear the editor and reset state.
    */
-  handleClear() {
-    this.setState({
-      editorState: setNewEditorState(),
-      showLinkInput: false,
-      showPhotoInput: false,
-      showVideoInput: false,
-      showFileInput: false,
-      isSaving: false
+  clear() {
+    return new Promise((resolve, reject) => {
+      this.setState({
+        editorState: setNewEditorState({}, this.toolbarControls),
+        showLinkInput: false,
+        showPhotoInput: false,
+        showVideoInput: false,
+        showFileInput: false,
+        isSaving: false
+      }, () => {
+        resolve();
+      });
     });
+  }
 
-    const { onClear } = this.props;
-    if (onClear) {
-      onClear();
-    }
+  _handleChange(editorState) {
+    this.setState({ editorState });
   }
 
   // https://facebook.github.io/draft-js/docs/advanced-topics-key-bindings.html
   // https://draftjs.org/docs/api-reference-editor.html#cancelable-handlers-optional
-  handleKeyCommand(commandName) {
+  _handleKeyCommand(commandName) {
     const { editorState } = this.state;
     const nextState = RichUtils.handleKeyCommand(editorState, commandName);
 
@@ -155,7 +214,7 @@ class ContentEditor extends Component {
     return 'not handled';
   }
 
-  handleTab(event) {
+  _handleTab(event) {
     this.handleChange(
       RichUtils.onTab(
         event,
@@ -165,11 +224,22 @@ class ContentEditor extends Component {
     );
   }
 
-  insertSpaceAfter() {
+  _handleToolbarDetach() {
+    const { detachToolbar } = this.state;
+    const top = document.body.scrollTop;
+
+    if (!detachToolbar && top > this.toolbarInitialTop) {
+      this.setState({ detachToolbar: true });
+    } else if (detachToolbar && top < this.toolbarInitialTop) {
+      this.setState({ detachToolbar: false });
+    }
+  }
+
+  _insertSpaceAfter() {
     const { editorState } = this.state;
     const selection = getSelectionState(editorState);
 
-    let newEditorState = EditorState.forceSelection(
+    const newEditorState = EditorState.forceSelection(
       editorState,
       selection.merge({
         anchorOffset: selection.getEndOffset(),
@@ -193,7 +263,7 @@ class ContentEditor extends Component {
     );
   }
 
-  handleToggleStyle(style) {
+  _handleToggleStyle(style) {
     this.handleChange(
       RichUtils.toggleInlineStyle(
         this.state.editorState,
@@ -202,7 +272,7 @@ class ContentEditor extends Component {
     );
   }
 
-  handleToggleBlockType(blockType) {
+  _handleToggleBlockType(blockType) {
     this.handleChange(
       RichUtils.toggleBlockType(
         this.state.editorState,
@@ -219,7 +289,7 @@ class ContentEditor extends Component {
    * particularly if we add any more. In fact, we might
    * have to rethink this a little for customControlProps.
    */
-  handleToggleCustomBlockType(blockType) {
+  _handleToggleCustomBlockType(blockType) {
     const nextState = {
       showLinkInput: false,
       showPhotoInput: false,
@@ -268,7 +338,7 @@ class ContentEditor extends Component {
     this.setState(nextState);
   }
 
-  handleAddLink(blockType, link) {
+  _handleAddLink(blockType, link) {
     const { editorState } = this.state;
     const entityKey = getNewEntityKey(
       editorState,
@@ -304,7 +374,7 @@ class ContentEditor extends Component {
    * Insert collapsed link, and add a space after so that link
    * does not continue when user begins typing back in the editor.
    */
-  insertCollapsedLink(editorState, selection, entityKey, linkText) {
+  _insertCollapsedLink(editorState, selection, entityKey, linkText) {
     const newContentState = Modifier.insertText(
       getContentState(editorState),
       selection,
@@ -329,7 +399,7 @@ class ContentEditor extends Component {
     }, () => this.insertSpaceAfter());
   }
 
-  handleEmbedMedia(blockType, media) {
+  _handleEmbedMedia(blockType, media) {
     const { editorState } = this.state;
     const entityKey = getNewEntityKey(
       editorState,
@@ -350,7 +420,7 @@ class ContentEditor extends Component {
     });
   }
 
-  handleModalClose() {
+  _handleModalClose() {
     this.setState({
       showLinkInput: false,
       showPhotoInput: false,
@@ -359,7 +429,7 @@ class ContentEditor extends Component {
     });
   }
 
-  renderBlock(block) {
+  _renderBlock(block) {
     const { editorState } = this.state;
 
     if (block.getType() === 'atomic') {
@@ -381,11 +451,14 @@ class ContentEditor extends Component {
       showPhotoInput,
       showVideoInput,
       showFileInput,
-      isSaving
+      detachToolbar
     } = this.state;
     const {
       placeholder,
-      onFileUpload
+      onFileUpload,
+      onFocus,
+      onBlur,
+      spellcheckEnabled
     } = this.props;
     const { toolbarControls } = this;
 
@@ -396,22 +469,17 @@ class ContentEditor extends Component {
       'csfd-editor-root no-placeholder' : 'csfd-editor-root';
 
     return (
-      <div className={rootClassName}>
-        <div className="csfd-editor__controls">
-          <button className="csfd-editor__control clear" onClick={this.handleClear}>Clear</button>
-          <button className="csfd-editor__control save" onClick={this.handleSave}>
-            { isSaving ? 'Saving' : 'Save' }
-          </button>
-        </div>
+      <div className={rootClassName} onFocus={onFocus} onBlur={onBlur}>
         <Toolbar
           editorState={editorState}
           toolbarControls={toolbarControls}
           onToggleStyle={this.handleToggleStyle}
           onToggleBlockType={this.handleToggleBlockType}
           onToggleCustomBlockType={this.handleToggleCustomBlockType}
+          detachToolbar={detachToolbar}
         />
         <Editor
-          refs={editor => this.editor = editor}
+          ref={editor => this.editor = editor}
           editorState={editorState}
           placeholder={placeholder}
           customStyleMap={this.customStyles}
@@ -419,7 +487,7 @@ class ContentEditor extends Component {
           onChange={this.handleChange}
           onTab={this.handleTab}
           handleKeyCommand={this.handleKeyCommand}
-          spellCheck={true}
+          spellCheck={spellcheckEnabled}
         />
         {
           showLinkInput &&
@@ -462,16 +530,23 @@ class ContentEditor extends Component {
 }
 
 ContentEditor.defaultProps = {
-  placeholder: 'Enter text here...'
+  placeholder: 'Enter text here...',
+  spellcheckEnabled: true,
+  detachToolbarOnScroll: true,
+  onFocus: () => {},
+  onBlur: () => {}
 };
 
 ContentEditor.propTypes = {
-  contentHTML: PropTypes.string,
+  content: PropTypes.string,
   placeholder: PropTypes.string,
+  spellcheckEnabled: PropTypes.bool,
   customControls: PropTypes.shape({}),
-  onFileUpload: PropTypes.func.isRequired, // must return a promise that responds with the url
-  onSave: PropTypes.func.isRequired, // must return a promise for save verification
-  onClear: PropTypes.func // convenience hook in case want to respond to clear event
+  detachToolbarOnScroll: PropTypes.bool,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+  onFileUpload: PropTypes.func.isRequired,
+  exportTo: PropTypes.oneOf(['html', 'raw']).isRequired
 };
 
 export default ContentEditor;

@@ -16,7 +16,8 @@ import Control from './Control';
  * rendering.
  */
 function Toolbar(props) {
-  const { editorState, toolbarControls } = props;
+  const { editorState, toolbarControls, detachToolbar } = props;
+
   function buildControls(controls) {
     return values(controls).map(control => {
       const {
@@ -76,7 +77,8 @@ function Toolbar(props) {
   }
 
   return (
-    <div className="csfd-editor-toolbar">
+    <div className={`csfd-editor-toolbar ${detachToolbar && 'detached'}`}>
+      <div className="phantom-detached" />
       <ul className="csfd-editor-toolbar__controls">
         {buildControls(toolbarControls)}
       </ul>
@@ -89,7 +91,8 @@ Toolbar.propTypes = {
   toolbarControls: PropTypes.shape({}),
   onToggleStyle: PropTypes.func.isRequired,
   onToggleBlockType:PropTypes.func.isRequired,
-  onToggleCustomBlockType: PropTypes.func.isRequired
+  onToggleCustomBlockType: PropTypes.func.isRequired,
+  detachToolbar: PropTypes.bool
 };
 
 export default Toolbar;
