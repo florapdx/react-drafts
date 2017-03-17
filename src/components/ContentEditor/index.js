@@ -35,11 +35,11 @@ import { TAB_SPACES } from '../../constants/keyboard';
 
 import { blockRenderer } from '../../renderer';
 
-import Toolbar from '../ToolBar';
-import LinkInput from '../ToolBar/inputs/link';
-import PhotoInput from '../ToolBar/inputs/photo';
-import VideoInput from '../ToolBar/inputs/video';
-import DocumentInput from '../ToolBar/inputs/document';
+import Toolbar from '../Toolbar';
+import LinkInput from '../Toolbar/inputs/link';
+import PhotoInput from '../Toolbar/inputs/photo';
+import VideoInput from '../Toolbar/inputs/video';
+import DocumentInput from '../Toolbar/inputs/document';
 
 /*
  * ContentEditor.
@@ -59,9 +59,11 @@ class ContentEditor extends Component {
       showPhotoInput: false,
       showVideoInput: false,
       showFileInput: false,
+      detachToolbar: false,
       isSaving: false
     };
 
+    // public methods
     this.focus = this.focus.bind(this);
     this.blur = this.blur.bind(this);
     this.save = this.save.bind(this);
@@ -70,6 +72,9 @@ class ContentEditor extends Component {
     this.handleChange = this._handleChange.bind(this);
     this.handleKeyCommand = this._handleKeyCommand.bind(this);
     this.handleTab = this._handleTab.bind(this);
+
+    this.toolbarInitialTop = 0;
+    this.handleToolbarDetach = this._handleToolbarDetach.bind(this);
 
     this.insertSpaceAfter = this._insertSpaceAfter.bind(this);
 
@@ -85,13 +90,29 @@ class ContentEditor extends Component {
     this.renderBlock = this._renderBlock.bind(this);
   }
 
+  componentDidMount() {
+    window.scrollTo(0, 0);
+    if (this.props.detachToolbarOnScroll) {
+      this.toolbarInitialTop = document
+        .querySelector('.csfd-editor-toolbar')
+        .getBoundingClientRect()
+        .top;
+      window.addEventListener('scroll', this.handleToolbarDetach);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.props.detachToolbarOnScroll) {
+      window.removeEventListener('scroll', this.handleToolbarDetach);
+    }
+  }
+
   /*
    * Reset editor state with any new content that might be coming in
    * from server.
    */
   componentWillReceiveProps(nextProps) {
-    const { content } = nextProps;
-    if (content && content !== this.props.content) {
+    if (nextProps.content !== this.props.content) {
       this.handleChange(
         setNewEditorState(
           {
@@ -143,7 +164,7 @@ class ContentEditor extends Component {
         content = convertToHTML(contentState, this.toolbarControls);
         errorMsg = `${errorMsg} html.`;
       } else {
-        content = convertToRaw(contentState);
+        content = JSON.stringify(convertToRaw(contentState));
         errorMsg = `${errorMsg} raw.`;
       }
 
@@ -163,7 +184,7 @@ class ContentEditor extends Component {
   clear() {
     return new Promise((resolve, reject) => {
       this.setState({
-        editorState: setNewEditorState(),
+        editorState: setNewEditorState({}, this.toolbarControls),
         showLinkInput: false,
         showPhotoInput: false,
         showVideoInput: false,
@@ -201,6 +222,17 @@ class ContentEditor extends Component {
         TAB_SPACES
       )
     );
+  }
+
+  _handleToolbarDetach() {
+    const { detachToolbar } = this.state;
+    const top = document.body.scrollTop;
+
+    if (!detachToolbar && top > this.toolbarInitialTop) {
+      this.setState({ detachToolbar: true });
+    } else if (detachToolbar && top < this.toolbarInitialTop) {
+      this.setState({ detachToolbar: false });
+    }
   }
 
   _insertSpaceAfter() {
@@ -418,7 +450,8 @@ class ContentEditor extends Component {
       showLinkInput,
       showPhotoInput,
       showVideoInput,
-      showFileInput
+      showFileInput,
+      detachToolbar
     } = this.state;
     const {
       placeholder,
@@ -443,6 +476,7 @@ class ContentEditor extends Component {
           onToggleStyle={this.handleToggleStyle}
           onToggleBlockType={this.handleToggleBlockType}
           onToggleCustomBlockType={this.handleToggleCustomBlockType}
+          detachToolbar={detachToolbar}
         />
         <Editor
           ref={editor => this.editor = editor}
@@ -498,6 +532,7 @@ class ContentEditor extends Component {
 ContentEditor.defaultProps = {
   placeholder: 'Enter text here...',
   spellcheckEnabled: true,
+  detachToolbarOnScroll: true,
   onFocus: () => {},
   onBlur: () => {}
 };
@@ -507,6 +542,7 @@ ContentEditor.propTypes = {
   placeholder: PropTypes.string,
   spellcheckEnabled: PropTypes.bool,
   customControls: PropTypes.shape({}),
+  detachToolbarOnScroll: PropTypes.bool,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   onFileUpload: PropTypes.func.isRequired,

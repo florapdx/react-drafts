@@ -11,14 +11,14 @@ export function setNewEditorState(props, toolbarConfigs) {
   const contentState = new ContentState();
 
   let newContent;
-  if (exportTo === 'html') {
+  if (content && exportTo === 'html') {
     newContent = convertFromHTML(
       contentState,
       content,
       toolbarConfigs
     );
-  } else {
-    newContent = convertFromRaw(content);
+  } else if (content && exportTo === 'raw') {
+    newContent = convertFromRaw(JSON.parse(content));
   }
 
   return newContent ?

@@ -35,17 +35,19 @@ class DemoEditor extends Component {
       this.contentEditor.save().then(content => {
         localStorage.setItem('myContent', content);
         const date = new Date();
-        this.setState({
-          isSaving: false,
-          lastSavedAt: date.toLocaleString()
-        });
+        setTimeout(() => {
+          this.setState({
+            isSaving: false,
+            lastSavedAt: date.toLocaleString()
+          });
+        }, 1000);
       });
     });
   }
 
   handleClear() {
     localStorage.removeItem('myContent');
-    this.contentEditor.handleClear();
+    this.contentEditor.clear();
   }
 
   render() {
@@ -54,7 +56,9 @@ class DemoEditor extends Component {
 
     return (
       <div className="demo-editor">
-        { lastSavedAt && <p>{lastSavedAt}</p> }
+        <p style={{position: 'absolute', top: '16px', right: '10%', color: '#bebebe'}}>
+          {lastSavedAt && `Last saved: ${lastSavedAt || ''}`}
+        </p>
         <div className="csfd-editor__controls">
           <button className="csfd-editor__control clear" onClick={this.handleClear}>Clear</button>
           <button className="csfd-editor__control save" onClick={this.handleSave}>
@@ -65,7 +69,7 @@ class DemoEditor extends Component {
           ref={contentEditor => this.contentEditor = contentEditor}
           content={storedContent}
           onFileUpload={this.handleFileUpload}
-          exportTo="raw"
+          exportTo="html"
         />
       </div>
     );
