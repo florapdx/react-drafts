@@ -1,8 +1,8 @@
 {
   "name": "@florapdx/content-editor",
-  "version": "0.1.0",
-  "description": "A React-based content editor",
-  "main": "src/index.js",
+  "version": "0.2.0",
+  "description": "A React-based WYSIWYG editor",
+  "main": "lib/index.js",
   "repository": "https://github.com/crossfield/toolkit-content-editor",
   "directories": {
     "test": "test"
@@ -10,10 +10,11 @@
   "scripts": {
     "start": "webpack-dev-server --config webpack/config.dev.js",
     "clean": "rimraf ./dist",
-    "build-cjs": "NODE_ENV=production babel ./src",
-    "build-umd": "NODE_ENV=production webpack --config webpack/config.dist.js",
+    "build": "NODE_ENV=production npm run build:cjs && npm run build:umd",
+    "build:cjs": "BABEL_ENV=commonjs babel ./src --out-dir lib",
+    "build:umd": "webpack --config webpack/config.dist.js ./src/index.js ./dist/content-editor.js",
     "watch": "webpack -w --config webpack/config.dev.js",
-    "prepublish": "npm run clean && npm run build-cjs && npm run build-umd",
+    "prepublish": "npm run clean && npm run build",
     "now-build": "npm run prepublish",
     "test": "mocha-webpack --opts config/webpack/test.config.opts",
     "watch:test": "npm run test -- -w"
