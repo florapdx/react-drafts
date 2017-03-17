@@ -1,8 +1,8 @@
 {
-  "name": "@crossfield/content-editor",
-  "version": "0.9.0",
+  "name": "@florapdx/content-editor",
+  "version": "0.1.0",
   "description": "A React-based content editor",
-  "main": "dist/index.js",
+  "main": "dist/csfd-editor.js",
   "repository": "https://github.com/crossfield/toolkit-content-editor",
   "directories": {
     "test": "test"
@@ -12,7 +12,7 @@
     "clean": "rimraf ./dist",
     "build": "NODE_ENV=production webpack --config webpack/config.dist.js",
     "watch": "webpack -w --config webpack/config.dev.js",
-    "prepublish": "NODE_ENV=production npm run clean && npm run build",
+    "prepublish": "npm run clean && npm run build",
     "now-build": "npm run prepublish",
     "test": "mocha-webpack --opts config/webpack/test.config.opts",
     "watch:test": "npm run test -- -w"
