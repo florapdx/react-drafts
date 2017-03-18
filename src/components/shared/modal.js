@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react';
 
 function Modal({ children, onCloseClick }) {
   return (
-    <div className="csfd-content-editor__modal">
-      <button className="fa fa-times-circle close" onClick={onCloseClick} />
-      <div className="csfd-content-editor__modal-wrapper">
+    <div className="content-editor__modal">
+      <button className="fa fa-times-circle" onClick={onCloseClick} />
+      <div className="wrapper">
         {children}
       </div>
     </div>

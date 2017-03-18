@@ -1,4 +1,4 @@
-.csfd-content-editor__input-dropzone {
+.content-editor__input .dropzone {
   width: 100%;
   color: #ccc;
   text-align: center;
@@ -7,42 +7,42 @@
   padding: 1em 0;
 }
 
-.csfd-content-editor__input-preview {
+.content-editor__input .preview {
   max-height: 600px;
   margin-bottom: 1em;
   overflow: auto;
 }
 
-.video .csfd-content-editor__input-preview iframe {
+.content-editor__input.video .preview iframe {
   position: absolute;
   height: 100%;
 }
 
-.csfd-content-editor__input-preview img,
-.csfd-content-editor__input-preview iframe {
+.content-editor__input .preview img,
+.content-editor__input .preview iframe {
   width: 100%;
 }
 
-.csfd-content-editor__input-controls {
+.content-editor__input .controls {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
 
-.link .csfd-content-editor__input-controls {
+.content-editor__input.link .controls {
   margin-top: 12px;
 }
 
-.upload-name {
+.content-editor__input .upload-name {
   font-size: 12px;
 }
 
-.add-caption {
+.content-editor__input .add-caption {
   min-height: 60px;
   margin: 10px 0;
 }
 
-.csfd-content-editor__input-controls button {
+.content-editor__input .controls button {
   width: 100px;
   color: #fff;
   font-size: 13px;
@@ -52,18 +52,18 @@
   border-radius: 4px;
 }
 
-.confirm { background-color: #00b2ee; }
-.confirm:hover { background-color: #00a7df; }
+.content-editor__input .confirm { background-color: #00b2ee; }
+.content-editor__input .confirm:hover { background-color: #00a7df; }
 
-.cancel { background-color: #c6c6c6; }
-.cancel:hover { background-color: #bebebe; }
+.content-editor__input .cancel { background-color: #c6c6c6; }
+.content-editor__input .cancel:hover { background-color: #bebebe; }
 
-.separator {
+.content-editor__input .separator {
   color: #ccc;
   text-align: center;
 }
 
-.input-error {
+.content-editor__input .input-error {
   color: #ff3333;
   font-size: 12px;
   text-align: center;

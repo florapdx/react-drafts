@@ -6,7 +6,7 @@ module.exports = {
   entry: [
     'react-hot-loader/patch',
     'webpack/hot/only-dev-server',
-    './demo/index.js',
+    './demo/index.js'
   ],
   output: {
     path: path.resolve(__dirname, '../build/'),
@@ -44,7 +44,8 @@ module.exports = {
         ],
         include: [
           path.resolve(__dirname, '../node_modules'),
-          path.resolve(__dirname, '../css')
+          path.resolve(__dirname, '../css'),
+          path.resolve(__dirname, '../demo')
         ]
       },
       {

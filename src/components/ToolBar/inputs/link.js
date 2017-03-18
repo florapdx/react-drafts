@@ -45,7 +45,7 @@ class LinkInput extends Component {
 
     return (
       <Modal onCloseClick={this.props.onCloseClick}>
-        <div className="csfd-content-editor__input link">
+        <div className="content-editor__input link">
           <input
             value={linkValue}
             placeholder="Paste or type link"

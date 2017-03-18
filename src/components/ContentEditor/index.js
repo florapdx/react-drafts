@@ -93,8 +93,7 @@ class ContentEditor extends Component {
   componentDidMount() {
     window.scrollTo(0, 0);
     if (this.props.detachToolbarOnScroll) {
-      this.toolbarInitialTop = document
-        .querySelector('.csfd-editor-toolbar')
+      this.toolbarInitialTop = document.querySelector('.content-editor__toolbar')
         .getBoundingClientRect()
         .top;
       window.addEventListener('scroll', this.handleToolbarDetach);
@@ -466,7 +465,7 @@ class ContentEditor extends Component {
     const contentState = getContentState(editorState);
     const rootClassName = !contentState.hasText() &&
       contentState.getBlockMap().first().getType() !== 'unstyled' ?
-      'csfd-editor-root no-placeholder' : 'csfd-editor-root';
+      'content-editor no-placeholder' : 'content-editor';
 
     return (
       <div className={rootClassName} onFocus={onFocus} onBlur={onBlur}>

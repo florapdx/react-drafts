@@ -98,7 +98,7 @@ class PhotoInput extends Component {
 
     // Render preview for file upload or pasted link
     const preview = (file || srcValue) && ([
-      <div key="preview" className="csfd-content-editor__input-preview">
+      <div key="preview" className="preview">
         <img src={file ? file.preview : srcValue} alt={file ? file.name : ''} />
         <textarea
           className="add-caption"
@@ -118,10 +118,10 @@ class PhotoInput extends Component {
 
     return (
       <Modal onCloseClick={this.props.onCloseClick}>
-        <div className="csfd-content-editor__input photo">
+        <div className="content-editor__input photo">
           {
             preview ? preview : (
-              <div className="csfd-content-editor__input-ui">
+              <div className="add">
                 <input
                   className="paste-image-link"
                   value={srcValue}
@@ -130,11 +130,11 @@ class PhotoInput extends Component {
                 />
                 <div className="separator">or</div>
                 <ReactDropzone
-                  className="dropzone"
+                  className="react-dropzone"
                   multiple={false}
                   onDrop={this.handleDrop}
                 >
-                  <div className="csfd-content-editor__input-dropzone">
+                  <div className="dropzone">
                     <span>Drag file or click to upload</span>
                   </div>
                 </ReactDropzone>

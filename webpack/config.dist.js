@@ -3,10 +3,7 @@ var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-  entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, '../dist/'),
-    filename: 'csfd-editor.js',
     libraryTarget: 'umd',
     library: 'ContentEditor'
   },
@@ -21,7 +18,19 @@ module.exports = {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: 'css-loader'
+          use: [
+            'css-loader',
+            {
+              loader: 'postcss-loader?sourceMap=inline',
+              options: {
+                plugins: function() {
+                  return [
+                    require('autoprefixer')
+                  ];
+                }
+              }
+            }
+          ]
         })
       },
       {
@@ -34,10 +43,20 @@ module.exports = {
     extensions: [' ', '.js', '.css']
   },
   externals: {
-    'react': 'React',
-    'react-dom': 'ReactDOM'
+    react: {
+      root: 'React',
+      commonjs2: 'react',
+      commonjs: 'react',
+      amd: 'react'
+    },
+    'react-dom': {
+      root: 'ReactDOM',
+      commonjs2: 'react-dom',
+      commonjs: 'react-dom',
+      amd: 'react-dom'
+    }
   },
   plugins: [
-    new ExtractTextPlugin('csfd-editor-styles.css')
+    new ExtractTextPlugin('content-editor-styles.css')
   ]
 }

@@ -8,14 +8,6 @@ import React, { PropTypes, Component } from 'react';
 class Control extends Component {
   constructor(props) {
     super(props);
-
-    const { id, icon } = this.props;
-    this.classes = {
-      li: `csfd-editor__toolbar-control ${id}`,
-      button: 'csfd-editor__toolbar-btn',
-      span: icon ? `btn-inner fa fa-${icon}` : 'btn-inner'
-    };
-
     this.handleToggle = this.handleToggle.bind(this);
   }
 
@@ -32,15 +24,17 @@ class Control extends Component {
 
   render() {
     const { id, label, icon, isActive } = this.props;
-    const { classes } = this;
 
     return (
-      <li className={classes.li}>
+      <li className={`control ${id}`}>
         <button
-          className={`${classes.button} ${isActive && 'active'}`}
+          className={`btn ${isActive && 'active'}`}
           onMouseDown={this.handleToggle}
         >
-          <span className={classes.span} title={label}>
+          <span
+            className={icon ? `btn-inner fa fa-${icon}` : 'btn-inner'}
+            title={label}
+          >
             {icon ? null : label}
           </span>
         </button>
