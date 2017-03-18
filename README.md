@@ -3,12 +3,16 @@ React WYSIWYG editor component built using DraftJS.
 
 
 ## Use
-@TODO: update once published to npm
-Packaged per UMD specification.
+This package includes a Common module build at `/lib` and a UMD bundle in `/dist`. Most applications will use the Common build by importing `ContentEditor` as below. To include styles, just import the css file from `/dist`, ie:
+```
+// manifest.css
+@import <path_to>/node_modules/@crossfield/content-editor/dist/content-editor-styles.css
+```
 
 ```
+// editor parent component
 import React, { Component } from 'react';
-import { ContentEditor } from '@crossfield/content-editor';
+import ContentEditor from '@crossfield/content-editor';
 
 class MyEditor extends Component {
   ...
@@ -28,35 +32,35 @@ class MyEditor extends Component {
 }
 ```
 
-See the demo directory for example. Demo contains a sample editor parent container that instantiates the `ContentEditor` component and passes in props.
+See the demo directory for a more complete example. Demo contains a sample editor parent container that instantiates the `ContentEditor` component and passes in props.
 
 
 ## Public methods
-_focus_: Focus the editor.
+__focus__: Focus the editor.
 
-_save_: Save content to whatever format is specified in the `exportTo` prop (see below). Returns a promise, and resolves with content or error message if an error is thrown.
+__save__: Save content to whatever format is specified in the `exportTo` prop (see below). Returns a promise, and resolves with content or error message if an error is thrown.
 
-_clear_: Clear content from the editor. Returns a promise.
+__clear__: Clear content from the editor. Returns a promise.
 
 
 ## Props
-_content_: { string } :: HTML or raw content
+__content__: { string } :: HTML or raw content
 
-_placeholder_: { string } :: Editor placeholder message
+__placeholder__: { string } :: Editor placeholder message
 
-_spellcheckEnabled_: { bool } :: Enable browser spellcheck (behavior is dependent on user settings)
+__spellcheckEnabled__: { bool } :: Enable browser spellcheck (behavior is dependent on user settings)
 
-_customControls_: { object } :: Custom controls to add to the toolbar. Must adhere to the signature of toolbar constants. Note: this feature is currently experimental, and will likely need additional work to support (particularly anything other than simple inline or block controls).
+__customControls__: { object } :: Custom controls to add to the toolbar. Must adhere to the signature of toolbar constants. Note: this feature is currently experimental, and will likely need additional work to support (particularly anything other than simple inline or block controls).
 
-_detachToolbarOnScroll_: { bool } :: Whether to detach the toolbar on scroll. Fixes to top of viewport for better user experience on longer posts.
+__detachToolbarOnScroll__: { bool } :: Whether to detach the toolbar on scroll. Fixes to top of viewport for better user experience on longer posts.
 
-_onFocus_: { func } :: Respond to editor focus event.
+__onFocus__: { func } :: Respond to editor focus event.
 
-_onBlur_: { func } :: Respond to editor blur event.
+__onBlur__: { func } :: Respond to editor blur event.
 
-_onFileUpload_: { func, required } :: Respond to file upload event. Hook for saving file to server or cloud service.
+__onFileUpload__: { func, required } :: Respond to file upload event. Hook for saving file to server or cloud service.
 
-_exportTo_: { string, oneOf(['html', 'raw']), required } :: Import/Export format. Raw option exports DraftJS raw format, which can be parsed into markdown or other format.
+__exportTo__: { string, oneOf(['html', 'raw']), required } :: Import/Export format. Raw option exports DraftJS raw format, which can be parsed into markdown or other format.
 
 
 ## Developing and testing
@@ -68,7 +72,9 @@ To use, run:
 
 ```
 $ npm start
+// access editor at localhost:3000
 ```
+Editor is currently staged [here](https://stagingeditor-niennloxtd.now.sh/).
 
 
 ## Publishing
