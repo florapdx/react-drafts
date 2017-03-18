@@ -1,10 +1,10 @@
-.simple-menu {
+.content-editor__menu {
   position: relative;
   min-width: 160px;
   z-index: 100;
 }
 
-.simple-menu__click-off {
+.content-editor__menu .click-off {
   position: fixed;
   top: 0;
   left: 0;
@@ -14,9 +14,9 @@
   z-index: 101;
 }
 
-.simple-menu button {
+.content-editor__toolbar .content-editor__menu button {
   width: 100%;
-  background-color: #FFF;
+  background-color: #fefefe;
   color: #3c3c3c;
   font-family: Helvetica, sans-serif;
   font-size: 18px;
@@ -26,34 +26,38 @@
   border: 0;
   outline: none;
 }
+.content-editor__menu .dropdown .btn {
+  font-weight: normal;
+  font-size: 16px;
+}
 
-.simple-menu__label,
-.simple-menu .csfd-editor__toolbar-control {
+.content-editor__menu .label,
+.content-editor__menu .content-editor__toolbar-control {
   border: 0;
 }
 
-.simple-menu__deselect,
-.simple-menu .csfd-editor__toolbar-control button,
-.simple-menu__label button {
+.content-editor__menu .deselect,
+.content-editor__menu .content-editor__toolbar-control button,
+.content-editor__menu .label {
   width: 100%;
 }
 
-.simple-menu__label .fa {
+.content-editor__menu .label .fa {
   display: inline-block;
   margin-left: 12px;
 }
 
-.simple-menu .simple-menu__deselect,
-.simple-menu .csfd-editor__toolbar-control button {
+.content-editor__menu .deselect,
+.content-editor__menu .content-editor__toolbar-control button {
   font-size: 16px;
   font-weight: normal;
 }
 
-.simple-menu__deselect {
+.content-editor__menu .deselect {
   height: 2em;
 }
 
-.simple-menu__dropdown {
+.content-editor__menu .dropdown {
   position: absolute;
   width: 100%;
   background-color: #fff;

@@ -3,11 +3,11 @@ import React, { PropTypes } from 'react';
 function Photo(props) {
   const { src, caption } = props.blockProps || props;
   return (
-    <figure className="custom-block photo">
+    <figure className="content-editor__custom-block photo">
       <img src={src} />
       {
         caption && (
-          <figcaption className="custom-block__caption">
+          <figcaption className="caption">
             {caption}
           </figcaption>
         )

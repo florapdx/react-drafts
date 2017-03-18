@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ContentEditor } from '../src';
+import ContentEditor from '../src';
 
 class DemoEditor extends Component {
   constructor() {
@@ -59,9 +59,17 @@ class DemoEditor extends Component {
         <p style={{position: 'absolute', top: '16px', right: '10%', color: '#bebebe'}}>
           {lastSavedAt && `Last saved: ${lastSavedAt || ''}`}
         </p>
-        <div className="csfd-editor__controls">
-          <button className="csfd-editor__control clear" onClick={this.handleClear}>Clear</button>
-          <button className="csfd-editor__control save" onClick={this.handleSave}>
+        <div className="content-editor__external-controls">
+          <button
+            className="content-editor__external-control clear"
+            onClick={this.handleClear}
+          >
+            Clear
+          </button>
+          <button
+            className="content-editor__external-control save"
+            onClick={this.handleSave}
+          >
             { isSaving ? 'Saving' : 'Save' }
           </button>
         </div>

@@ -79,10 +79,10 @@ class DocumentInput extends Component {
 
     return (
       <Modal onCloseClick={this.props.onCloseClick}>
-        <div className="csfd-content-editor__input document">
+        <div className="content-editor__input document">
           {
             file ? ([
-              <div key="preview" className="csfd-content-editor__input-preview">
+              <div key="preview" className="preview">
                 <a className="upload-name" href={file.src}>{file.name}</a>
                 <textarea
                   className="add-caption"
@@ -99,14 +99,14 @@ class DocumentInput extends Component {
                 onCancel={this.handleCancel}
               />
             ]) : (
-              <div className="csfd-content-editor__input-ui">
+              <div className="add">
                 <ReactDropzone
-                  className="dropzone"
+                  className="react-dropzone"
                   multiple={false}
                   accept={SUPPORTED_DOCUMENT_TYPES}
                   onDrop={this.handleDrop}
                 >
-                  <div className="csfd-content-editor__input-dropzone">
+                  <div className="dropzone">
                     <span>Drag file or click to upload (pdf, docx, xls, txt)</span>
                   </div>
                 </ReactDropzone>

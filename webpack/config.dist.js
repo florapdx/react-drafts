@@ -18,7 +18,19 @@ module.exports = {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: 'css-loader'
+          use: [
+            'css-loader',
+            {
+              loader: 'postcss-loader?sourceMap=inline',
+              options: {
+                plugins: function() {
+                  return [
+                    require('autoprefixer')
+                  ];
+                }
+              }
+            }
+          ]
         })
       },
       {

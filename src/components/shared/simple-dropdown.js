@@ -41,9 +41,9 @@ class SimpleDropdown extends Component {
     const activeOption = this.getActiveOption();
 
     return (
-      <div className={`simple-menu ${menuFor}`}>
-        <div className="simple-menu__selection">
-          <button className="simple-menu__label" onClick={this.handleToggleMenu}>
+      <div className={`content-editor__menu ${menuFor}`}>
+        <div className="selection">
+          <button className="label" onClick={this.handleToggleMenu}>
             {activeOption ? activeOption.props.label : menuFor}
             <span className={menuOpen ? 'fa fa-angle-up' : 'fa fa-angle-down'} />
           </button>
@@ -52,14 +52,14 @@ class SimpleDropdown extends Component {
           menuOpen && ([
             <ul
               key="menu"
-              className="simple-menu__dropdown"
+              className="dropdown"
               onClick={this.handleToggleMenu}
             >
               {
                 activeOption ? [
                     <button
                       key="default"
-                      className="simple-menu__deselect"
+                      className="deselect"
                       onClick={this.handleReset}
                     >--</button>
                   ].concat(children) : children
@@ -67,7 +67,7 @@ class SimpleDropdown extends Component {
             </ul>,
             <div
               key="screen"
-              className="simple-menu__click-off"
+              className="click-off"
               onClick={this.handleToggleMenu}
             ></div>
           ])

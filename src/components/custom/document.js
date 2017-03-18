@@ -3,7 +3,7 @@ import React, { PropTypes, Component } from 'react';
 function Document(props) {
   const { file, src, name, caption } = props.blockProps || props;
 
-  let blockClass = 'custom-block document';
+  let blockClass = 'content-editor__custom-block document';
   if (caption) {
     blockClass += ' with-caption';
   }
@@ -17,7 +17,7 @@ function Document(props) {
       >{file.name}</a>
       {
         caption && (
-          <figcaption className="custom-block__caption">
+          <figcaption className="caption">
             {caption}
           </figcaption>
         )

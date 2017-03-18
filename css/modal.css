@@ -1,4 +1,4 @@
-.csfd-content-editor__modal {
+.content-editor__modal {
   position: fixed;
   top: 35%;
   left: 50%;
@@ -12,7 +12,7 @@
   z-index: 200;
 }
 
-.csfd-content-editor__modal .close {
+.content-editor__modal .fa-times-circle {
   position: absolute;
   top: 4px;
   right: 4px;
@@ -20,6 +20,6 @@
   font-size: 18px;
 }
 
-.csfd-content-editor__modal-wrapper {
+.content-editor__modal .wrapper {
   padding: 4px 0;
 }

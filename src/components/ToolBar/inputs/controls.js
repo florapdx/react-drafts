@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 
 function InputControls({ confirmText, onCancel, onConfirm }) {
   return (
-    <div className="csfd-content-editor__input-controls">
+    <div className="controls">
       <button className="cancel" onClick={onCancel}>Cancel</button>
       <button className="confirm" onClick={onConfirm}>{confirmText}</button>
     </div>

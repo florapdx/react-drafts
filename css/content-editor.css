@@ -1,10 +1,22 @@
-blockquote {
+.content-editor {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  color: #494949;
+  font-family: Verdana, serif;
+  font-size: 16px;
+  line-height: 28px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.content-editor blockquote {
   font-weight: bold;
   font-style: italic;
 }
 
 /* button reset */
-button {
+.content-editor button {
   background: none repeat scroll 0 0 transparent;
   border: none;
   color: inherit;
@@ -19,50 +31,31 @@ button {
   white-space: nowrap;
   cursor: pointer;
 }
-button:hover,
-button:focus,
-button:active {
+.content-editor button:hover,
+.content-editor button:focus,
+.content-editor button:active {
   outline: none;
 }
 
-/* optional css classes for matching controls */
-.csfd-editor__controls {
-  display: flex;
-  justify-content: flex-end;
-  width: 960px;
-  margin: 10px auto;
-}
-
-.csfd-editor__control {
-  width: 60px;
-  color: #fff;
-  font-family: Verdana, serif;
-  font-size: 12px;
-  font-weight: bold;
-  line-height: 2em;
-  text-align: center;
-  padding: 1px 0;
-  border-radius: 4px;
-  margin-left: 6px;
-  -webkit-font-smoothing: antialiased;
-}
-
-.csfd-editor__control.save { background-color: #00b2ee; }
-.csfd-editor__control.save:hover { background-color: #00a7df; }
-.csfd-editor__control.clear { background-color: #c6c6c6; }
-.csfd-editor__control.clear:hover { background-color: #bebebe; }
-.saving { color: #fff; }
-
-a {
+.content-editor a {
   cursor: pointer;
   color: #00b2ee;
   font-weight: bold;
   text-decoration: none;
 }
 
+.content-editor .fa {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 /* input reset */
-input,
-textarea {
+.content-editor input,
+.content-editor textarea {
   width: 100%;
   color: #3c3c3c;
   font-size: 14px;
@@ -72,10 +65,10 @@ textarea {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-input:focus {
+.content-editor input:focus {
   outline: none;
 }
-textarea {
+.content-editor textarea {
   font-size: 12px;
   line-height: 1.2em;
   text-indent: 0;
@@ -83,76 +76,37 @@ textarea {
   box-sizing: border-box;
 }
 
-figure { display: inline-block; }
-
-/* inner figure tags */
-figure.video,
-figure.photo,
-figure.document {
-  width: 320px;
-  margin: 0;
+.content-editor figure {
+  display: inline-block;
 }
 
-figcaption {
-  width: 320px;
-  color: #7c7c7c;
-  font-size: 11px;
-  line-height: 1.4em;
-  padding: 4px 8px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  box-sizing: border-box;
+/* optional css classes for matching external controls */
+.content-editor__external-controls {
+  display: flex;
+  justify-content: flex-end;
+  width: 960px;
+  margin: 10px auto;
 }
 
-figure.document {
-  width: 220px;
-  padding: 0 8px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
-figure.document a { font-size: 13px; }
-figure.document figcaption {
-  width: 220px;
-  margin-left: -8px;
+.content-editor__external-control {
+  cursor: pointer;
+  width: 60px;
+  background: none repeat scroll 0 0 transparent;
+  color: #fff;
+  font-family: Verdana, serif;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 2em;
+  vertical-align: middle;
+  text-align: center;
+  padding: 1px 0;
   border: none;
-  border-top: 1px solid #ccc;
+  border-radius: 4px;
+  margin-left: 6px;
+  -webkit-font-smoothing: antialiased;
 }
 
-figure img,
-figure iframe {
-  width: 320px;
-  box-sizing: border-box;
-}
-figure.video iframe {
-  position: absolute;
-  height: 100%;
-}
-
-.video .video-wrapper {
-  position: relative;
-  width: 100%;
-  height: 0;
-  padding-bottom: 56.25%;
-  margin-bottom: 8px;
-}
-
-.public-DraftEditorPlaceholder-root {
-  color: #efefef;
-  font-size: 2em;
-  padding: 20px 40px;
-}
-
-.DraftEditor-editorContainer {
-  width: 100%;
-  min-height: 440px;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-  overflow-y: auto;
-}
-
-.public-DraftEditor-content {
-  height: calc(100% - 3em);
-  min-height: 440px;
-  margin: 1.5em;
-  padding-bottom: 100px;
-}
+.content-editor__external-control.save { background-color: #00b2ee; }
+.content-editor__external-control.save:hover { background-color: #00a7df; }
+.content-editor__external-control.clear { background-color: #c6c6c6; }
+.content-editor__external-control.clear:hover { background-color: #bebebe; }

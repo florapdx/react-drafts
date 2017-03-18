@@ -59,10 +59,10 @@ class VideoInput extends Component {
 
     return (
       <Modal onCloseClick={this.props.onCloseClick}>
-        <div className="csfd-content-editor__input video">
+        <div className="content-editor__input video">
           {
             src ? ([
-              <div key="preview" className="csfd-content-editor__input-preview">
+              <div key="preview" className="preview">
                 <div className="video-wrapper">
                   <iframe src={src} frameBorder="0" allowFullScreen={false} />
                 </div>
