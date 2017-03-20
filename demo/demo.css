@@ -3,6 +3,7 @@
   margin: 1em auto 4em;
 }
 
-.content-editor__toolbar {
+.content-editor__toolbar,
+.content-editor__toolbar .controls {
   width: 960px;
 }

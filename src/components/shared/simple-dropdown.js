@@ -43,7 +43,11 @@ class SimpleDropdown extends Component {
     return (
       <div className={`content-editor__menu ${menuFor}`}>
         <div className="selection">
-          <button className="label" onClick={this.handleToggleMenu}>
+          <button
+            className="label"
+            type="button"
+            onClick={this.handleToggleMenu}
+          >
             {activeOption ? activeOption.props.label : menuFor}
             <span className={menuOpen ? 'fa fa-angle-up' : 'fa fa-angle-down'} />
           </button>
@@ -60,6 +64,7 @@ class SimpleDropdown extends Component {
                     <button
                       key="default"
                       className="deselect"
+                      type="button"
                       onClick={this.handleReset}
                     >--</button>
                   ].concat(children) : children
@@ -69,7 +74,7 @@ class SimpleDropdown extends Component {
               key="screen"
               className="click-off"
               onClick={this.handleToggleMenu}
-            ></div>
+            />
           ])
         }
       </div>

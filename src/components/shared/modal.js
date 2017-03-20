@@ -3,7 +3,11 @@ import React, { PropTypes } from 'react';
 function Modal({ children, onCloseClick }) {
   return (
     <div className="content-editor__modal">
-      <button className="fa fa-times-circle" onClick={onCloseClick} />
+      <button
+        className="fa fa-times-circle"
+        type="button"
+        onClick={onCloseClick}
+      />
       <div className="wrapper">
         {children}
       </div>

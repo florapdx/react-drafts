@@ -14,7 +14,6 @@ class LinkInput extends Component {
     this.handleLinkChange = this.handleLinkChange.bind(this);
     this.handleLinkTextChange = this.handleLinkTextChange.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
-    this.handleCancel = this.handleCancel.bind(this);
   }
 
   handleLinkChange(event) {
@@ -33,18 +32,12 @@ class LinkInput extends Component {
     });
   }
 
-  handleCancel() {
-    // Don't reset text value b/c may reflect selected text in editor
-    this.setState({
-      linkValue: ''
-    });
-  }
-
   render() {
+    const { onCloseClick } = this.props;
     const { linkValue, textValue } = this.state;
 
     return (
-      <Modal onCloseClick={this.props.onCloseClick}>
+      <Modal onCloseClick={onCloseClick}>
         <div className="content-editor__input link">
           <input
             value={linkValue}
@@ -60,7 +53,7 @@ class LinkInput extends Component {
           <InputControls
             confirmText="Add Link"
             onConfirm={this.handleConfirm}
-            onCancel={this.onCancel}
+            onCancel={onCloseClick}
           />
         </div>
       </Modal>
