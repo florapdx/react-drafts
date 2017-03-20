@@ -29,6 +29,7 @@ class Control extends Component {
       <li className={`control ${id}`}>
         <button
           className={`btn ${isActive && 'active'}`}
+          type="button"
           onMouseDown={this.handleToggle}
         >
           <span

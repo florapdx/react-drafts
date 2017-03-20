@@ -73,10 +73,8 @@ class ContentEditor extends Component {
     this.handleKeyCommand = this._handleKeyCommand.bind(this);
     this.handleTab = this._handleTab.bind(this);
 
-    this.toolbarInitialTop = 0;
+    this.toolbarHeight = 0;
     this.handleToolbarDetach = this._handleToolbarDetach.bind(this);
-
-    this.insertSpaceAfter = this._insertSpaceAfter.bind(this);
 
     this.handleToggleStyle = this._handleToggleStyle.bind(this);
     this.handleToggleBlockType = this._handleToggleBlockType.bind(this);
@@ -84,6 +82,7 @@ class ContentEditor extends Component {
 
     this.handleAddLink = this._handleAddLink.bind(this);
     this.insertCollapsedLink = this._insertCollapsedLink.bind(this);
+    this.insertSpaceAfter = this._insertSpaceAfter.bind(this);
     this.handleEmbedMedia = this._handleEmbedMedia.bind(this);
     this.handleModalClose = this._handleModalClose.bind(this);
 
@@ -93,9 +92,8 @@ class ContentEditor extends Component {
   componentDidMount() {
     window.scrollTo(0, 0);
     if (this.props.detachToolbarOnScroll) {
-      this.toolbarInitialTop = document.querySelector('.content-editor__toolbar')
-        .getBoundingClientRect()
-        .top;
+      this.toolbarHeight = document.querySelector('.content-editor__toolbar')
+        .clientHeight;
       window.addEventListener('scroll', this.handleToolbarDetach);
     }
   }
@@ -225,11 +223,12 @@ class ContentEditor extends Component {
 
   _handleToolbarDetach() {
     const { detachToolbar } = this.state;
-    const top = document.body.scrollTop;
+    const editorRect = document.querySelector('.content-editor')
+      .getBoundingClientRect();
 
-    if (!detachToolbar && top > this.toolbarInitialTop) {
+    if (editorRect.top < 0 && editorRect.bottom > this.toolbarHeight) {
       this.setState({ detachToolbar: true });
-    } else if (detachToolbar && top < this.toolbarInitialTop) {
+    } else if (detachToolbar) {
       this.setState({ detachToolbar: false });
     }
   }

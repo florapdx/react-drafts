@@ -1,5 +1,5 @@
 .content-editor__modal {
-  position: fixed;
+  position: absolute;
   top: 35%;
   left: 50%;
   min-width: 440px;

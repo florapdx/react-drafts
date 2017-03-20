@@ -3,8 +3,20 @@ import React, { PropTypes } from 'react';
 function InputControls({ confirmText, onCancel, onConfirm }) {
   return (
     <div className="controls">
-      <button className="cancel" onClick={onCancel}>Cancel</button>
-      <button className="confirm" onClick={onConfirm}>{confirmText}</button>
+      <button
+        className="cancel"
+        type="button"
+        onClick={onCancel}
+      >
+        Cancel
+      </button>
+      <button
+        className="confirm"
+        type="button"
+        onClick={onConfirm}
+      >
+        {confirmText}
+      </button>
     </div>
   );
 }
