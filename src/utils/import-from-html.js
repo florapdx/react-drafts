@@ -25,10 +25,8 @@ function getVideoData(node) {
 
 function getDocumentData(node) {
   return {
-    file: {
-      src: node.src,
-      name: node.download
-    },
+    src: node.src,
+    name: node.download,
     caption: getCaptionData(node)
   };
 }

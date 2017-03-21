@@ -1,7 +1,7 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 
 function Document(props) {
-  const { file, src, name, caption } = props.blockProps || props;
+  const { src, name, caption } = props.blockProps || props;
 
   let blockClass = 'content-editor__custom-block document';
   if (caption) {
@@ -12,9 +12,11 @@ function Document(props) {
     <figure className={blockClass}>
       <a
         className="file-name"
-        href={file.src}
-        download={file.name}
-      >{file.name}</a>
+        href={src}
+        download={name}
+      >
+        {name}
+      </a>
       {
         caption && (
           <figcaption className="caption">
@@ -29,7 +31,8 @@ function Document(props) {
 Document.propTypes = {
   props: PropTypes.shape({
     blockProps: PropTypes.shape({
-      file: PropTypes.shape({}),
+      src: PropTypes.string,
+      name: PropTypes.string,
       caption: PropTypes.string
     })
   })

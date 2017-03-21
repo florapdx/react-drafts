@@ -4,6 +4,12 @@
 }
 
 .content-editor__toolbar,
-.content-editor__toolbar .controls {
+.content-editor__toolbar .controls,
+.content-editor__toolbar.detached .controls {
   width: 960px;
+}
+
+button:focus,
+button:active {
+  outline: none;
 }

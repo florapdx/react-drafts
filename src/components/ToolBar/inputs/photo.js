@@ -9,10 +9,12 @@ import InputControls from './controls';
  * Has two main user-flow states:
  * 1. user uses one of the inputs to add a photo - either pasting a link,
  *    drag-and-drop image, or upload.
- * 2. views preview and accepts or rejects image.
- * 3. accepting closes inputs; rejecting allows user to continue or close out
- *    via modal close link.
+ * 2. views preview and confirms or cancels image.
+ * 3. confirming uploads and embeds photo, and closes inputs;
+ *    rejecting allows user to continue or quit.
  */
+const ERROR_MSG = "We're sorry, there was an upload error. Please try again.";
+
 class PhotoInput extends Component {
   constructor(props) {
     super(props);
@@ -44,7 +46,7 @@ class PhotoInput extends Component {
   handleDrop(acceptedFiles, rejectedFiles) {
     if (rejectedFiles && rejectedFiles.length) {
       this.setState({
-        error: "We're sorry, there was an upload error. Please try again."
+        error: ERROR_MSG
       });
     } else {
       this.setState({
@@ -55,7 +57,9 @@ class PhotoInput extends Component {
   }
 
   handleCaptionChange(event) {
-    this.setState({ captionValue: event.target.value });
+    this.setState({
+      captionValue: event.target.value
+    });
   }
 
   handleConfirm() {
@@ -73,7 +77,7 @@ class PhotoInput extends Component {
         })
         .catch(err => {
           this.setState({
-            error: "We're sorry, there was a problem with the upload. Please try again."
+            error: ERROR_MSG
           });
         });
     } else {

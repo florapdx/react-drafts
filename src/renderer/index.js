@@ -4,9 +4,9 @@ import Document from '../components/custom/document';
 
 /*
  * BlockRenderer is responsible for rendering custom block types.
- * Returns React component for block type w/props ('atomicData'),
- * accessible via `props.blockProps` in component, and
- * `contentEditable` state (false in all cases).
+ * Returns React component for block type w/entity data as props
+ * (accessible in the component through `props.blockProps`,
+ * and an `editable` state of false (in all cases).
  */
 export function blockRenderer(toolbarControls, entityType, entityData) {
   if (entityType) {

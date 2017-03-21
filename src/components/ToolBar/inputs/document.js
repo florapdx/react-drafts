@@ -8,10 +8,12 @@ import InputControls from './controls';
  * Document upload/embed input.
  * Has two main user-flow states:
  * 1. user uses one of the inputs to add a file via drag-and-drop or upload.
- * 2. views preview and accepts or rejects file.
- * 3. accepting closes inputs; rejecting allows user to continue or close out
- *    via modal close link.
+ * 2. views preview and confirms or cancels file upload.
+ * 3. accepting uploads and embeds file, and closes input;
+ *    rejecting allows user to re-drop or quit.
  */
+const ERROR_MSG = 'We\'re sorry, there was an upload error. Please try again.';
+
 class DocumentInput extends Component {
   constructor(props) {
     super(props);
@@ -37,7 +39,7 @@ class DocumentInput extends Component {
   handleDrop(acceptedFiles, rejectedFiles) {
     if (rejectedFiles && rejectedFiles.length) {
       this.setState({
-        error: "We're sorry, there was an upload error. Please try again."
+        error: ERROR_MSG
       });
     } else {
       const file = acceptedFiles[0];
@@ -52,26 +54,41 @@ class DocumentInput extends Component {
 
         reader.readAsDataURL(file);
       } else {
-
+        this.setState({ file });
       }
     }
   }
 
   handleCaptionChange(event) {
-    this.setState({ captionValue: event.target.value });
+    this.setState({
+      captionValue: event.target.value
+    });
   }
 
   handleConfirm() {
     const { blockType, onFileUpload, onAddDocument } = this.props;
     const { file, captionValue } = this.state;
 
-    onFileUpload(file).then(resp => {
-      onAddDocument(blockType, { file, caption: captionValue });
-    });
+    onFileUpload(file)
+      .then(resp => {
+        onAddDocument(blockType, {
+          src: resp.src,
+          name: resp.name,
+          caption: captionValue
+        });
+      })
+      .catch(err => {
+        this.setState({
+          error: ERROR_MSG
+        });
+      });
   }
 
   handleCancel() {
-    this.setState({ file: null, captionValue: '' });
+    this.setState({
+      file: null,
+      captionValue: ''
+    });
   }
 
   render() {
