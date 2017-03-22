@@ -2,6 +2,19 @@
 React WYSIWYG editor component built using DraftJS.
 
 
+## Installation
+ContentEditor is currently a private package, published under the `@crossfield` scope. As such, you'll need to obtain a crossfield npm token to install the editor in your project, and to build and deploy your project on remote servers. 
+
+To install:
+`$ NPM_TOKEN=xxxxxxxxx npm install @crossfield/content-editor`
+
+In your project, add an `.npmrc` file and copy/paste the following into it (don't replace the NPM_TOKEN w/actual token):
+```
+//registry.npmjs.org/:_authToken=${NPM_TOKEN}
+```
+Then add the `NPM_TOKEN` as an environment variable in your CI and deployment services.
+
+
 ## Use
 This package includes a Common module build at `/lib` and a UMD bundle in `/dist`. Most applications will use the Common build by importing `ContentEditor` as below. To include styles, just import the css file from `/dist`, ie:
 ```
