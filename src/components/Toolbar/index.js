@@ -7,7 +7,7 @@ import {
 } from '../../utils/toolbar';
 import { TYPE_CUSTOM_BLOCK } from '../../constants/toolbar';
 import SimpleDropdown from '../shared/simple-dropdown';
-import Control from './Control';
+import Control from './control';
 
 /*
  * Toolbar component.
