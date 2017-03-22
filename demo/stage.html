@@ -6,11 +6,18 @@
   <title>Crossfield Editor Demo</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link rel="stylesheet" href="../dist/csfd-editor-styles.css" />
+  <link rel="stylesheet" href="./dist/content-editor-styles.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.3/es6-shim.min.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.23.1/babel.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js" type="text/javascript"></script>
+  <style>
+    .content-editor,
+    .content-editor__toolbar .controls,
+    .content-editor__toolbar .controls.detached {
+      width: 960px;
+    }
+  </style>
 </head>
 <body>
   <!--[if lt IE 8]>
@@ -20,33 +27,85 @@
     <h1 style="margin-left: 40px">Crossfield Editor Demo</h1>
     <div id="app"></div>
   </div>
-  <script src="../dist/csfd-editor.js" type="text/javascript"></script>
+  <script src="./dist/content-editor.js" type="text/javascript"></script>
   <script type="text/babel">
-    function loadSavedContent() {
-      const saved = localStorage.getItem('myContent');
-      return saved || '';
-    }
+    class DemoEditor extends React.Component {
+      constructor() {
+        super();
 
-    function handleSave(html) {
-      localStorage.setItem('myContent', html);
-      return Promise.resolve();
-    }
+        this.state = {
+          isSaving: false,
+          lastSavedAt: null
+        };
 
-    function handleClear() {
-      localStorage.removeItem('myContent');
-    }
+        this.handleLoadSavedContent = this.handleLoadSavedContent.bind(this);
+        this.handleFileUpload = this.handleFileUpload.bind(this);
+        this.handleSave = this.handleSave.bind(this);
+        this.handleClear = this.handleClear.bind(this);
+      }
 
-    function handleFileUpload(file) {
-      return Promise.resolve({ src: file.preview, name: file.name });
+      handleLoadSavedContent() {
+        const saved = localStorage.getItem('myContent');
+        return saved || '';
+      }
+
+      handleFileUpload(file) {
+        return Promise.resolve({
+          src: file.preview,
+          name: file.name
+        });
+      }
+
+      handleSave() {
+        this.setState({
+          isSaving: true
+        }, () => {
+          this.contentEditor.save().then(content => {
+            localStorage.setItem('myContent', content);
+            const date = new Date();
+            setTimeout(() => {
+              this.setState({
+                isSaving: false,
+                lastSavedAt: date.toLocaleString()
+              });
+            }, 1000);
+          });
+        });
+      }
+
+      handleClear() {
+        localStorage.removeItem('myContent');
+        this.contentEditor.clear();
+      }
+
+      render() {
+        const { isSaving, lastSavedAt } = this.state;
+        const storedContent = this.handleLoadSavedContent();
+
+        return (
+          <div className="demo-editor">
+            <p style={{position: 'absolute', top: '16px', right: '10%', color: '#bebebe'}}>
+              {lastSavedAt && `Last saved: ${lastSavedAt || ''}`}
+            </p>
+            <div className="content-editor__external-controls">
+              <button className="content-editor__external-control clear" onClick={this.handleClear}>Clear</button>
+              <button className="content-editor__external-control save" onClick={this.handleSave}>
+                { isSaving ? 'Saving' : 'Save' }
+              </button>
+            </div>
+            <ContentEditor
+              ref={contentEditor => this.contentEditor = contentEditor}
+              content={storedContent}
+              onFileUpload={this.handleFileUpload}
+              exportTo="html"
+            />
+          </div>
+        );
+      }
     }
 
     ReactDOM.render(
-      <ContentEditor
-        contentHTML={loadSavedContent()}
-        onFileUpload={handleFileUpload}
-        onSave={handleSave}
-        onClear={handleClear}
-      />,
+      <DemoEditor />,
       document.getElementById('app')
     );
   </script>
