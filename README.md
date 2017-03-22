@@ -87,7 +87,7 @@ To use, run:
 $ npm start
 // access editor at localhost:3000
 ```
-Editor is currently staged [here](https://stagingeditor-niennloxtd.now.sh/).
+Editor is currently staged [here](https://stagingeditor-vqodzcqphq.now.sh/).
 
 
 ## Publishing
