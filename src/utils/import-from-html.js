@@ -10,7 +10,7 @@ function getCaptionData(node) {
 
 function getPhotoData(node) {
   return {
-    src: node.src,
+    src: node.getAttribute('src'),
     caption: getCaptionData(node)
   };
 }
@@ -18,15 +18,15 @@ function getPhotoData(node) {
 function getVideoData(node) {
   // pass parentNode due to wrapper div
   return {
-    src: node.src,
+    src: node.getAttribute('src'),
     caption: getCaptionData(node.parentNode)
   };
 }
 
 function getDocumentData(node) {
   return {
-    src: node.src,
-    name: node.download,
+    src: node.getAttribute('src'),
+    name: node.getAttribute('download'),
     caption: getCaptionData(node)
   };
 }
@@ -47,7 +47,10 @@ function convertToEntity(nodeName, node, contentState, configs) {
         // regular link
         type = configs.link.id;
         mutability = 'MUTABLE';
-        data = { url: node.href, text: node.alt };
+        data = {
+          url: node.getAttribute('href'),
+          text: node.getAttribute('alt')
+        };
       }
       break;
     case 'img':
