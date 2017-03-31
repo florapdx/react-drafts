@@ -176,6 +176,12 @@ const file = {
   label: 'upload document'
 };
 
+export const ALIGN_STYLES = [
+  alignLeft.id,
+  alignCenter.id,
+  alignRight.id
+];
+
 export const TOOLBAR_DEFAULTS = {
   headings: {
     id: 'headings',

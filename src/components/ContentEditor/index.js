@@ -31,6 +31,10 @@ import {
   getControls,
   getCustomStylesMap
 } from '../../utils/toolbar';
+import {
+  isVariableStyle,
+  getCurrentVariableStyle
+} from '../../utils/inline';
 import { TAB_SPACES } from '../../constants/keyboard';
 
 import { blockRenderer } from '../../renderer';
@@ -77,6 +81,7 @@ class ContentEditor extends Component {
     this.handleToolbarDetach = this._handleToolbarDetach.bind(this);
 
     this.handleToggleStyle = this._handleToggleStyle.bind(this);
+    this.handleToggleStyleVariant = this._handleToggleStyleVariant.bind(this);
     this.handleToggleBlockType = this._handleToggleBlockType.bind(this);
     this.handleToggleCustomBlockType = this._handleToggleCustomBlockType.bind(this);
 
@@ -262,10 +267,52 @@ class ContentEditor extends Component {
   }
 
   _handleToggleStyle(style) {
+    const { editorState } = this.state;
+    const currentStyles = getCurrentInlineStyle(editorState);
+    const currentVariableStyle = getCurrentVariableStyle(currentStyles);
+
+    if (currentVariableStyle && isVariableStyle(style)) {
+      this.handleToggleStyleVariant(currentVariableStyle, style);
+    } else {
+      this.handleChange(
+        RichUtils.toggleInlineStyle(
+          this.state.editorState,
+          style
+        )
+      );
+    }
+  }
+
+  /*
+   * This method applies to the only variable style we currently support:
+   * `text-align`. This may change if we decide to add other custom styles
+   * that have more than one supported value option.
+   * Since DraftJS tracks styles via a map of style ids ('BOLD', 'align-right', etc),
+   * it is naive with respect to the style property on nodes and has no
+   * internal mechanism for removing styles from the map that represent
+   * alternative values for the same node. While this doesn't affect the
+   * rendering of nodes themselves, it does affect active states within
+   * the Toolbar, so we'll go ahead and remove pre-existing values here.
+   */
+  _handleToggleStyleVariant(currentStyle, newStyle) {
+    const { editorState } = this.state;
+
+    const newContentState = Modifier.removeInlineStyle(
+      getContentState(editorState),
+      getSelectionState(editorState),
+      currentStyle
+    );
+
+    const newEditorState = EditorState.push(
+      editorState,
+      newContentState,
+      'change-inline-style'
+    );
+
     this.handleChange(
       RichUtils.toggleInlineStyle(
-        this.state.editorState,
-        style
+        newEditorState,
+        newStyle
       )
     );
   }

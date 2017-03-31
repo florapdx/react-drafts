@@ -1,6 +1,7 @@
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { convertToHTML as convert } from 'draft-convert';
+import { isTextAlignStyle } from './inline';
 import {
   getContentState,
   getEntityFromBlock
@@ -11,7 +12,12 @@ import Document from '../components/custom/document';
 import Photo from '../components/custom/photo';
 import Video from '../components/custom/video';
 
-function convertInline(style) {}
+function convertInline(style) {
+  // convert toolbar config `align-${value}` to JSX textAlign: ${value}
+  if (isTextAlignStyle(style)) {
+    return <span style={{ display: 'block', textAlign: style.split('-')[1]}} />;
+  }
+}
 
 function convertBlock(block) {
   const type = block.type;

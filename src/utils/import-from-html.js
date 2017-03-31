@@ -79,8 +79,22 @@ function convertToBlock(nodeName) {
   }
 }
 
+function convertToInline(nodeName, node, currentStyle) {
+  const style = node.getAttribute('style');
+
+  // convert text-align value "..text-align:${value};"
+  // to toolbar config value, `align-${value}`
+  if (nodeName === 'span' && style.split('text-align').length > 1) {
+    const textAlign = `align-${style.split('text-align:')[1].replace(';', '')}`;
+    return currentStyle.add(textAlign);
+  }
+
+  return currentStyle;
+}
+
 export function convertFromHTML(contentState, html, toolbarConfigs) {
   return convert({
+    htmlToStyle: convertToInline,
     htmlToEntity: (nodeName, node) =>
       convertToEntity(nodeName, node, contentState, toolbarConfigs),
     htmlToBlock: convertToBlock
