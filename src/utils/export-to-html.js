@@ -19,11 +19,16 @@ function convertInline(style) {
   }
 }
 
-function convertBlock(block) {
+function convertBlock(block, contentState, toolbarConfigs) {
   const type = block.type;
   if (type === 'atomic') {
+    // Get DraftJS block from convert block object, then get entity
+    // and add entity type as class on the wrapper for external styling.
+    const contentBlock = contentState.getBlockForKey(block.key);
+    const entity = getEntityFromBlock(contentBlock, contentState);
+
     return {
-      start: '<figure>',
+      start: entity ? `<figure class="${entity.getType()}">` : '<figure>',
       end: '</figure>'
     };
   }
@@ -51,7 +56,7 @@ function convertEntity(entity, toolbarConfigs) {
 export function convertToHTML(contentState, toolbarConfigs) {
   return convert({
     styleToHTML: convertInline,
-    blockToHTML: convertBlock,
+    blockToHTML: block => convertBlock(block, contentState, toolbarConfigs),
     entityToHTML: entity => convertEntity(entity, toolbarConfigs)
   })(contentState);
 }
