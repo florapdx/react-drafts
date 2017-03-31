@@ -1,6 +1,7 @@
 ## Content Editor
 React WYSIWYG editor component built using DraftJS.
 
+Demo is staged [here](https://stagingeditor-yrmhuegkus.now.sh).
 
 ## Installation
 ContentEditor is currently a private package, published under the `@crossfield` scope. As such, you'll need to obtain a crossfield npm token to install the editor in your project, and to build and deploy your project on remote servers. 
@@ -87,7 +88,6 @@ To use, run:
 $ npm start
 // access editor at localhost:3000
 ```
-Editor is currently staged [here](https://stagingeditor-vqodzcqphq.now.sh/).
 
 
 ## Publishing
