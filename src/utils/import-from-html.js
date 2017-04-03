@@ -59,7 +59,7 @@ function convertToEntity(nodeName, node, contentState, configs) {
       data = getPhotoData(node);
       break;
     case 'iframe':
-      type = configs.video.id,
+      type = configs.video.id;
       mutability = 'IMMUTABLE';
       data = getVideoData(node);
       break;

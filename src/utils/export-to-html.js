@@ -28,7 +28,7 @@ function convertBlock(block, contentState, toolbarConfigs) {
     const entity = getEntityFromBlock(contentBlock, contentState);
 
     return {
-      start: entity ? `<figure class="${entity.getType()}">` : '<figure>',
+      start: entity ? `<figure class="atomic ${entity.getType()}-block">` : '<figure>',
       end: '</figure>'
     };
   }
@@ -53,10 +53,34 @@ function convertEntity(entity, toolbarConfigs) {
   }
 }
 
+/*
+ * Temporary workaround for draft-convert issue around parsing innerText
+ * within nested elements in atomic blocks (ie, 'figcaption').
+ * Bug causes figcaption innerText to be appended to figure on each
+ * successive import, producing multiple instances of the caption text.
+ * See https://github.com/HubSpot/draft-convert/issues/55 for updates.
+ */
+function cleanHTML(html) {
+  const parser = new DOMParser();
+  const parsed = parser.parseFromString(html, 'text/html');
+
+  parsed.querySelectorAll('.atomic')
+    .forEach(figure => {
+      if (figure.childNodes.length === 2) {
+        // remove erroneously appended figcaption innerText on figure tags
+        figure.removeChild(figure.childNodes[1]);
+      }
+    });
+
+  return parsed.body.innerHTML;
+}
+
 export function convertToHTML(contentState, toolbarConfigs) {
-  return convert({
+  const html = convert({
     styleToHTML: convertInline,
     blockToHTML: block => convertBlock(block, contentState, toolbarConfigs),
     entityToHTML: entity => convertEntity(entity, toolbarConfigs)
   })(contentState);
+
+  return cleanHTML(html);
 }
