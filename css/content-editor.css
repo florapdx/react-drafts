@@ -78,6 +78,13 @@
 
 .content-editor figure {
   display: inline-block;
+  width: calc(100% - 80px); /* account for margin */
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.content-editor hr {
+  display: block;
 }
 
 /* optional css classes for matching external controls */

@@ -1,3 +1,4 @@
+import Divider from '../components/custom/divider';
 import Photo from '../components/custom/photo';
 import Video from '../components/custom/video';
 import Document from '../components/custom/document';
@@ -17,6 +18,8 @@ export function blockRenderer(toolbarControls, entityType, entityData) {
       component = Video;
     } else if (entityType === toolbarControls.file.id) {
       component = Document;
+    } else if (entityType === toolbarControls.divider.id) {
+      component = Divider;
     }
 
     return {

@@ -63,6 +63,10 @@ function convertToEntity(nodeName, node, contentState, configs) {
       mutability = 'IMMUTABLE';
       data = getVideoData(node);
       break;
+    case 'hr':
+      type = configs.divider.id;
+      mutability = 'IMMUTABLE';
+      data = {};
     default:
       break;
   }

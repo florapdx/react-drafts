@@ -84,6 +84,7 @@ class ContentEditor extends Component {
     this.handleToggleStyleVariant = this._handleToggleStyleVariant.bind(this);
     this.handleToggleBlockType = this._handleToggleBlockType.bind(this);
     this.handleToggleCustomBlockType = this._handleToggleCustomBlockType.bind(this);
+    this.toggleDivider = this._toggleDivider.bind(this);
 
     this.handleAddLink = this._handleAddLink.bind(this);
     this.insertCollapsedLink = this._insertCollapsedLink.bind(this);
@@ -135,7 +136,7 @@ class ContentEditor extends Component {
    */
   focus() {
     return new Promise((resolve, reject) => {
-      setTimeout(() => this.refs.editor.focus(), 0);
+      setTimeout(() => this.editor.focus(), 0);
       resolve();
     });
   }
@@ -327,7 +328,7 @@ class ContentEditor extends Component {
   }
 
   /*
-   * Show active embed input.
+   * Show active embed input (unless divider).
    * Ensures only one can be active at a time.
    * @TODO: It might be nice to find a more succinct way
    * to do this re: separate state for each input type,
@@ -341,7 +342,12 @@ class ContentEditor extends Component {
       showVideoInput: false,
       showFileInput: false
     };
-    const { link, photo, video, file } = this.toolbarControls;
+    const { link, photo, video, file, divider } = this.toolbarControls;
+
+    if (blockType === divider.id) {
+      this.toggleDivider(blockType);
+      return;
+    }
 
     // If user is toggling link, we don't want to show the link input,
     // we just want to toggle the selection to un-linkify it.
@@ -381,6 +387,27 @@ class ContentEditor extends Component {
     }
 
     this.setState(nextState);
+  }
+
+  _toggleDivider(blockType) {
+    const { editorState } = this.state;
+    const entityKey = getNewEntityKey(
+      editorState,
+      blockType,
+      false
+    );
+
+    this.setState({
+      editorState: AtomicBlockUtils.insertAtomicBlock(
+        editorState,
+        entityKey,
+        ' '
+      ),
+      showLinkInput: false,
+      showPhotoInput: false,
+      showVideoInput: false,
+      showFileInput: false
+    });
   }
 
   _handleAddLink(blockType, link) {
@@ -486,6 +513,7 @@ class ContentEditor extends Component {
         getEntityDataFromBlock(block, contentState)
       );
     }
+
     return null;
   }
 

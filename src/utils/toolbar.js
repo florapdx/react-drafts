@@ -89,4 +89,3 @@ export function getCustomStylesMap(toolbarControls) {
   });
   return map;
 }
-
