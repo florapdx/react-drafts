@@ -29,6 +29,7 @@ import {
 } from '../../utils/selection';
 import {
   getControls,
+  getBlockRenderMap,
   getCustomStylesMap
 } from '../../utils/toolbar';
 import {
@@ -56,6 +57,7 @@ class ContentEditor extends Component {
     super(props);
 
     this.toolbarControls = getControls(this.props.customControls);
+    this.blockRenderMap = getBlockRenderMap();
     this.customStyles = getCustomStylesMap(this.toolbarControls);
     this.state = {
       editorState: setNewEditorState(props, this.toolbarControls),
@@ -84,6 +86,7 @@ class ContentEditor extends Component {
     this.handleToggleStyleVariant = this._handleToggleStyleVariant.bind(this);
     this.handleToggleBlockType = this._handleToggleBlockType.bind(this);
     this.handleToggleCustomBlockType = this._handleToggleCustomBlockType.bind(this);
+    this.toggleDivider = this._toggleDivider.bind(this);
 
     this.handleAddLink = this._handleAddLink.bind(this);
     this.insertCollapsedLink = this._insertCollapsedLink.bind(this);
@@ -135,7 +138,7 @@ class ContentEditor extends Component {
    */
   focus() {
     return new Promise((resolve, reject) => {
-      setTimeout(() => this.refs.editor.focus(), 0);
+      setTimeout(() => this.editor.focus(), 0);
       resolve();
     });
   }
@@ -238,7 +241,7 @@ class ContentEditor extends Component {
     }
   }
 
-  _insertSpaceAfter() {
+  _insertSpaceAfter(cb) {
     const { editorState } = this.state;
     const selection = getSelectionState(editorState);
 
@@ -257,13 +260,13 @@ class ContentEditor extends Component {
       getCurrentInlineStyle(newEditorState)
     );
 
-    this.handleChange(
-      EditorState.push(
+    this.setState({
+      editorState: EditorState.push(
         newEditorState,
         newContentState,
         'insert-characters'
       )
-    );
+    }, cb);
   }
 
   _handleToggleStyle(style) {
@@ -327,7 +330,7 @@ class ContentEditor extends Component {
   }
 
   /*
-   * Show active embed input.
+   * Show active embed input (unless divider).
    * Ensures only one can be active at a time.
    * @TODO: It might be nice to find a more succinct way
    * to do this re: separate state for each input type,
@@ -341,7 +344,11 @@ class ContentEditor extends Component {
       showVideoInput: false,
       showFileInput: false
     };
-    const { link, photo, video, file } = this.toolbarControls;
+    const { link, photo, video, file, divider } = this.toolbarControls;
+
+    if (blockType === divider.id) {
+      this.toggleDivider(blockType);
+    }
 
     // If user is toggling link, we don't want to show the link input,
     // we just want to toggle the selection to un-linkify it.
@@ -381,6 +388,75 @@ class ContentEditor extends Component {
     }
 
     this.setState(nextState);
+  }
+
+  _toggleDivider(blockType) {
+    const { editorState } = this.state;
+
+    // insert two blank space characters;
+    // we're going to select the first to toggle to divider,
+    // and then add focus to end of second blank space
+    let newEditorState = EditorState.push(
+      editorState,
+      Modifier.insertText(
+        getContentState(editorState),
+        getSelectionState(editorState),
+        ' '
+      ),
+      'insert-characters'
+    );
+
+    const selection = getSelectionState(newEditorState);
+    newEditorState = EditorState.forceSelection(
+      newEditorState,
+      selection.merge({
+        anchorOffset: selection.getEndOffset() - 1,
+        focusOffset: selection.getEndOffset()
+      })
+    );
+
+    this.setState({
+      editorState: RichUtils.toggleBlockType(
+        newEditorState,
+        blockType
+      )
+    }, () => {
+      const { editorState } = this.state;
+      let newEditorState = EditorState.moveFocusToEnd(editorState);
+
+      newEditorState = EditorState.push(
+        newEditorState,
+        Modifier.insertText(
+          getContentState(newEditorState),
+          getSelectionState(newEditorState),
+          '\n'
+        ),
+        'insert-characters'
+      );
+
+      const selection = getSelectionState(newEditorState);
+      newEditorState = EditorState.forceSelection(
+        newEditorState,
+        selection.merge({
+          anchorOffset: selection.getEndOffset(),
+          focusOffset: selection.getEndOffset()
+        })
+      );
+
+      const newContentState = Modifier.setBlockType(
+        getContentState(newEditorState),
+        getSelectionState(newEditorState),
+        'unstyled'
+      );
+
+      this.setState({
+        editorState: EditorState.push(
+          newEditorState,
+          newContentState,
+          'change-block-type'
+        )
+      });
+    });
   }
 
   _handleAddLink(blockType, link) {
@@ -476,16 +552,19 @@ class ContentEditor extends Component {
 
   _renderBlock(block) {
     const { editorState } = this.state;
+    const type = block.getType();
 
-    if (block.getType() === 'atomic') {
+    if (type === 'atomic' || type === 'divider') {
       const contentState = getContentState(editorState);
 
       return blockRenderer(
         this.toolbarControls,
         getEntityTypeFromBlock(block, contentState),
-        getEntityDataFromBlock(block, contentState)
+        getEntityDataFromBlock(block, contentState),
+        type
       );
     }
+
     return null;
   }
 
@@ -528,6 +607,7 @@ class ContentEditor extends Component {
           editorState={editorState}
           placeholder={placeholder}
           customStyleMap={this.customStyles}
+          blockRenderMap={this.blockRenderMap}
           blockRendererFn={this.renderBlock}
           onChange={this.handleChange}
           onTab={this.handleTab}

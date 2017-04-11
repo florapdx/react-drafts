@@ -141,6 +141,13 @@ const alignRight = {
   }
 };
 
+const divider = {
+  id: 'divider',
+  type: TYPE_CUSTOM_BLOCK,
+  icon: 'minus',
+  label: 'Divider'
+};
+
 // const table = {
 //   id: 'table',
 //   type: TYPE_CUSTOM_BLOCK,
@@ -203,6 +210,7 @@ export const TOOLBAR_DEFAULTS = {
   alignLeft,
   alignCenter,
   alignRight,
+  divider,
   link,
   photo,
   video,
