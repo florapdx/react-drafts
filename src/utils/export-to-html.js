@@ -8,6 +8,7 @@ import {
 } from './content';
 
 import Link from '../components/custom/link';
+import Divider from '../components/custom/divider';
 import Document from '../components/custom/document';
 import Photo from '../components/custom/photo';
 import Video from '../components/custom/video';
@@ -41,6 +42,8 @@ function convertEntity(entity, toolbarConfigs) {
     switch (type) {
       case toolbarConfigs.link.id:
         return renderToStaticMarkup(<Link {...data} />);
+      case toolbarConfigs.divider.id:
+        return renderToStaticMarkup(<Divider />);
       case toolbarConfigs.file.id:
         return renderToStaticMarkup(<Document {...data} />);
       case toolbarConfigs.photo.id:

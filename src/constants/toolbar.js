@@ -145,7 +145,7 @@ const divider = {
   id: 'divider',
   type: TYPE_CUSTOM_BLOCK,
   icon: 'minus',
-  label: 'Divider'
+  label: 'Horizontal rule'
 };
 
 // const table = {

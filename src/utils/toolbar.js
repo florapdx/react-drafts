@@ -92,18 +92,3 @@ export function getCustomStylesMap(toolbarControls) {
   });
   return map;
 }
-
-/*
- * We can't currently use an <hr> tag b/c DraftJS passes
- * children to React.createElement when creating blocks, and
- * hr tags can't have children.
- */
-export function getBlockRenderMap() {
-  const extendedBlockMap = Immutable.Map({
-    'divider': {}
-  });
-
-  return DefaultDraftBlockRenderMap.merge(extendedBlockMap);
-}
-
-

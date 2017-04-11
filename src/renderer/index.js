@@ -9,14 +9,7 @@ import Document from '../components/custom/document';
  * (accessible in the component through `props.blockProps`,
  * and an `editable` state of false (in all cases).
  */
-export function blockRenderer(toolbarControls, entityType, entityData, blockType) {
-  if (blockType === toolbarControls.divider.id) {
-    return {
-      component: Divider,
-      editable: false
-    };
-  }
-
+export function blockRenderer(toolbarControls, entityType, entityData) {
   if (entityType) {
     let component;
     if (entityType === toolbarControls.photo.id) {
@@ -25,6 +18,8 @@ export function blockRenderer(toolbarControls, entityType, entityData, blockType
       component = Video;
     } else if (entityType === toolbarControls.file.id) {
       component = Document;
+    } else if (entityType === toolbarControls.divider.id) {
+      component = Divider;
     }
 
     return {

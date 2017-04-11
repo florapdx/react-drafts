@@ -57,7 +57,6 @@ class ContentEditor extends Component {
     super(props);
 
     this.toolbarControls = getControls(this.props.customControls);
-    this.blockRenderMap = getBlockRenderMap();
     this.customStyles = getCustomStylesMap(this.toolbarControls);
     this.state = {
       editorState: setNewEditorState(props, this.toolbarControls),
@@ -348,6 +347,7 @@ class ContentEditor extends Component {
 
     if (blockType === divider.id) {
       this.toggleDivider(blockType);
+      return;
     }
 
     // If user is toggling link, we don't want to show the link input,
@@ -392,70 +392,22 @@ class ContentEditor extends Component {
 
   _toggleDivider(blockType) {
     const { editorState } = this.state;
-
-    // insert two blank space characters;
-    // we're going to select the first to toggle to divider,
-    // and then add focus to end of second blank space
-    let newEditorState = EditorState.push(
+    const entityKey = getNewEntityKey(
       editorState,
-      Modifier.insertText(
-        getContentState(editorState),
-        getSelectionState(editorState),
-        ' '
-      ),
-      'insert-characters'
-    );
-
-    const selection = getSelectionState(newEditorState);
-    newEditorState = EditorState.forceSelection(
-      newEditorState,
-      selection.merge({
-        anchorOffset: selection.getEndOffset() - 1,
-        focusOffset: selection.getEndOffset()
-      })
+      blockType,
+      false
     );
 
     this.setState({
-      editorState: RichUtils.toggleBlockType(
-        newEditorState,
-        blockType
-      )
-    }, () => {
-      const { editorState } = this.state;
-      let newEditorState = EditorState.moveFocusToEnd(editorState);
-
-      newEditorState = EditorState.push(
-        newEditorState,
-        Modifier.insertText(
-          getContentState(newEditorState),
-          getSelectionState(newEditorState),
-          '\n'
-        ),
-        'insert-characters'
-      );
-
-      const selection = getSelectionState(newEditorState);
-      newEditorState = EditorState.forceSelection(
-        newEditorState,
-        selection.merge({
-          anchorOffset: selection.getEndOffset(),
-          focusOffset: selection.getEndOffset()
-        })
-      );
-
-      const newContentState = Modifier.setBlockType(
-        getContentState(newEditorState),
-        getSelectionState(newEditorState),
-        'unstyled'
-      );
-
-      this.setState({
-        editorState: EditorState.push(
-          newEditorState,
-          newContentState,
-          'change-block-type'
-        )
-      });
+      editorState: AtomicBlockUtils.insertAtomicBlock(
+        editorState,
+        entityKey,
+        ' '
+      ),
+      showLinkInput: false,
+      showPhotoInput: false,
+      showVideoInput: false,
+      showFileInput: false
     });
   }
 
@@ -554,14 +506,13 @@ class ContentEditor extends Component {
     const { editorState } = this.state;
     const type = block.getType();
 
-    if (type === 'atomic' || type === 'divider') {
+    if (type === 'atomic') {
       const contentState = getContentState(editorState);
 
       return blockRenderer(
         this.toolbarControls,
         getEntityTypeFromBlock(block, contentState),
-        getEntityDataFromBlock(block, contentState),
-        type
+        getEntityDataFromBlock(block, contentState)
       );
     }
 
@@ -607,7 +558,6 @@ class ContentEditor extends Component {
           editorState={editorState}
           placeholder={placeholder}
           customStyleMap={this.customStyles}
-          blockRenderMap={this.blockRenderMap}
           blockRendererFn={this.renderBlock}
           onChange={this.handleChange}
           onTab={this.handleTab}
