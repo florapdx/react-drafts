@@ -29,7 +29,6 @@ import {
 } from '../../utils/selection';
 import {
   getControls,
-  getBlockRenderMap,
   getCustomStylesMap
 } from '../../utils/toolbar';
 import {
@@ -240,7 +239,7 @@ class ContentEditor extends Component {
     }
   }
 
-  _insertSpaceAfter(cb) {
+  _insertSpaceAfter() {
     const { editorState } = this.state;
     const selection = getSelectionState(editorState);
 
@@ -259,13 +258,13 @@ class ContentEditor extends Component {
       getCurrentInlineStyle(newEditorState)
     );
 
-    this.setState({
-      editorState: EditorState.push(
+    this.handleChange(
+      EditorState.push(
         newEditorState,
         newContentState,
         'insert-characters'
       )
-    }, cb);
+    );
   }
 
   _handleToggleStyle(style) {
@@ -504,9 +503,8 @@ class ContentEditor extends Component {
 
   _renderBlock(block) {
     const { editorState } = this.state;
-    const type = block.getType();
 
-    if (type === 'atomic') {
+    if (block.getType() === 'atomic') {
       const contentState = getContentState(editorState);
 
       return blockRenderer(

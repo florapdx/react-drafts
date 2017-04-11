@@ -1,6 +1,3 @@
-import React from 'react';
-import { DefaultDraftBlockRenderMap } from 'draft-js';
-import Immutable from 'immutable';
 import values from 'lodash.values';
 import {
   TYPE_INLINE,
