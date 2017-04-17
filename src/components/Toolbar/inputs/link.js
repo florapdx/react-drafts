@@ -1,6 +1,10 @@
 import React, { PropTypes, Component } from 'react';
+import ReactDropzone from 'react-dropzone';
+import { SUPPORTED_DOCUMENT_TYPES } from '../../../constants/file';
 import Modal from '../../shared/modal';
 import InputControls from './controls';
+
+const ERROR_MSG = 'We\'re sorry, there was an upload error. Please try again.';
 
 class LinkInput extends Component {
   constructor(props) {
@@ -8,12 +12,16 @@ class LinkInput extends Component {
 
     this.state = {
       linkValue: '',
-      textValue: this.props.linkText || ''
+      textValue: this.props.linkText || '',
+      file: null,
+      error: null
     };
 
     this.handleLinkChange = this.handleLinkChange.bind(this);
     this.handleLinkTextChange = this.handleLinkTextChange.bind(this);
+    this.handleDrop = this.handleDrop.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
   }
 
   handleLinkChange(event) {
@@ -24,30 +32,107 @@ class LinkInput extends Component {
     this.setState({ textValue: event.target.value });
   }
 
+  handleDrop(acceptedFiles, rejectedFiles) {
+    if (rejectedFiles && rejectedFiles.length) {
+      this.setState({
+        error: ERROR_MSG
+      });
+    } else {
+      const file = acceptedFiles[0];
+
+      if (window.FileReader) {
+        const reader = new FileReader();
+
+        reader.addEventListener('load', () => {
+          file.src = reader.result;
+          this.setState({ file });
+        }, false);
+
+        reader.readAsDataURL(file);
+      } else {
+        this.setState({ file });
+      }
+    }
+  }
+
   handleConfirm() {
-    const { linkValue, textValue } = this.state;
-    this.props.onAddLink(this.props.blockType, {
-      url: linkValue,
-      text: textValue
+    const { blockType, onFileUpload, onAddLink } = this.props;
+    const { linkValue, textValue, file } = this.state;
+
+    if (file) {
+      onFileUpload(file)
+      .then(resp => {
+        onAddLink(blockType, {
+          url: resp.src,
+          text: textValue || resp.name
+        });
+      })
+      .catch(err => {
+        this.setState({
+          error: ERROR_MSG
+        });
+      });
+    } else {
+      onAddLink(blockType, {
+        url: linkValue,
+        text: textValue
+      });
+    }
+  }
+
+  handleCancel() {
+    this.setState({
+      file: null,
+      linkValue: '',
+      textValue: this.props.linkText || '',
+      error: null
     });
   }
 
   render() {
-    const { onCloseClick } = this.props;
-    const { linkValue, textValue } = this.state;
+    const { linkInputAcceptsFiles, onCloseClick } = this.props;
+    const { linkValue, textValue, file, error } = this.state;
 
     return (
       <Modal onCloseClick={onCloseClick}>
         <div className="content-editor__input link">
-          <input
-            value={linkValue}
-            placeholder="Paste or type link"
-            onChange={this.handleLinkChange}
-          />
+          {
+            file ? (
+              <div key="preview" className="preview">
+                <a className="upload-name" href={file.src}>{file.name}</a>
+              </div>
+            ) : (
+              <div>
+                <input
+                  value={linkValue}
+                  placeholder="Paste or type link"
+                  onChange={this.handleLinkChange}
+                />
+                {
+                  linkInputAcceptsFiles && ([
+                    <div key="separator" className="separator">or add downloadable file as link</div>,
+                    <div key="add" className="add">
+                      <ReactDropzone
+                        className="react-dropzone"
+                        multiple={false}
+                        accept={SUPPORTED_DOCUMENT_TYPES}
+                        onDrop={this.handleDrop}
+                      >
+                        <div className="dropzone">
+                          <span>Drag file or click to upload (pdf, docx, xls, txt)</span>
+                        </div>
+                      </ReactDropzone>
+                      { error && <p className="input-error">{error}</p> }
+                    </div>
+                  ])
+                }
+              </div>
+            )
+          }
           <div className="separator">and</div>
           <input
             value={textValue}
-            placeholder="Linked text"
+            placeholder="Add link text"
             onChange={this.handleLinkTextChange}
           />
           <InputControls
@@ -64,6 +149,8 @@ class LinkInput extends Component {
 LinkInput.propTypes = {
   blockType: PropTypes.string,
   linkText: PropTypes.string,
+  linkInputAcceptsFiles: PropTypes.bool,
+  onFileUpload: PropTypes.func,
   onAddLink: PropTypes.func,
   onCloseClick: PropTypes.func
 };

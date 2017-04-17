@@ -1,3 +1,3 @@
 export const SUPPORTED_PHOTO_TYPES = 'image/*'
 
-export const SUPPORTED_DOCUMENT_TYPES = '.doc, .docx, image/*, .ods, .pdf, .ppt, .pptx, .xls, .xlsx';
+export const SUPPORTED_DOCUMENT_TYPES = '.doc, .docx, application/msword, application/vnd.ms-office, application/vnd.openxmlformats-officedocument.wordprocessingml.document, image/*, .odt, application/vnd.oasis.opendocument.text, .otp, application/vnd.oasis.opendocument.presentation, .ods, application/vnd.oasis.opendocument.spreadsheet, .pdf, application/pdf, .ppt, .pptx, application/vnd.ms-powerpoint, .xls, .xlsx, application/vnd.ms-excel';
