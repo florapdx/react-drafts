@@ -21,18 +21,38 @@ function convertInline(style) {
 }
 
 function convertBlock(block, contentState, toolbarConfigs) {
-  const type = block.type;
-  if (type === 'atomic') {
+  const { type, key } = block;
+
+  const isEmptyPTag = block => {
+    return block.type === 'unstyled' &&
+      !block.depth && !block.text;
+  };
+
+  let converted;
+  if (isEmptyPTag(block)) {
+    // convert empty <p> to <br />s anytime we run into two
+    // <p>s in a row (double return). This preserves uniformity b/t
+    // appearance of content in the editor and rendered html.
+    const previousBlock = contentState.getBlockBefore(key);
+    if (previousBlock && isEmptyPTag(previousBlock)) {
+      converted = {
+        start: '<br />',
+        end: ''
+      };
+    }
+  } else if (type === 'atomic') {
     // Get DraftJS block from convert block object, then get entity
     // and add entity type as class on the wrapper for external styling.
-    const contentBlock = contentState.getBlockForKey(block.key);
+    const contentBlock = contentState.getBlockForKey(key);
     const entity = getEntityFromBlock(contentBlock, contentState);
 
-    return {
+    converted = {
       start: entity ? `<figure class="atomic ${entity.getType()}-block">` : '<figure>',
       end: '</figure>'
     };
   }
+
+  return converted || null;
 }
 
 function convertEntity(entity, toolbarConfigs) {
