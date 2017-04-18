@@ -14,6 +14,7 @@ import InputControls from './controls';
  *    rejecting allows user to continue or quit.
  */
 const ERROR_MSG = "We're sorry, there was an upload error. Please try again.";
+const NUM_REGEX = /^\d+$/;
 
 class PhotoInput extends Component {
   constructor(props) {
@@ -22,6 +23,9 @@ class PhotoInput extends Component {
     this.state = {
       file: null,
       srcValue: '',
+      width: 0,
+      height: 0,
+      ratio: 1,
       captionValue: '',
       error: null
     };
@@ -29,13 +33,28 @@ class PhotoInput extends Component {
     this.handlePasteLink = this.handlePasteLink.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
     this.handleCaptionChange = this.handleCaptionChange.bind(this);
+
+    this.setInitialDimensions = this.setInitialDimensions.bind(this);
+    this.handleWidthChange = this.handleWidthChange.bind(this);
+    this.handleHeightChange = this.handleHeightChange.bind(this);
+
     this.handleConfirm = this.handleConfirm.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
+
+    this.img = new Image();
+  }
+
+  componentWillUnmount() {
+    this.img.removeEventListener('load', this.setInitialDimensions);
   }
 
   handlePasteLink(event) {
+    const { value } = event.target;
+    this.img.src = value;
+    this.img.addEventListener('load', this.setInitialDimensions);
+
     this.setState({
-      srcValue: event.target.value,
+      srcValue: value,
       file: null
     });
   }
@@ -49,6 +68,9 @@ class PhotoInput extends Component {
         error: ERROR_MSG
       });
     } else {
+      this.img.src = acceptedFiles[0].preview;
+      this.img.addEventListener('load', this.setInitialDimensions);
+
       this.setState({
         file: acceptedFiles[0],
         srcValue: ''
@@ -62,9 +84,58 @@ class PhotoInput extends Component {
     });
   }
 
+  setInitialDimensions(event) {
+    const { naturalWidth, naturalHeight } = event.target;
+
+    this.setState({
+      width: naturalWidth || 440,
+      height: naturalHeight || 0,
+      ratio: naturalWidth && naturalHeight ?
+        (naturalWidth /  naturalHeight) : this.state.ratio
+    });
+    this.img.removeEventListener('load', this.setInitialDimensions);
+  }
+
+  handleWidthChange(event) {
+    const { value } = event.target;
+
+    if (value && !NUM_REGEX.test(value)) {
+      return;
+    }
+
+    this.setState({
+      width: value,
+      height: value && Math.round(value / this.state.ratio)
+    });
+  }
+
+  handleHeightChange(event) {
+    const { value } = event.target;
+
+    if (value && !NUM_REGEX.test(value)) {
+      return;
+    }
+
+    this.setState({
+      width: value && Math.round(value * this.state.ratio),
+      height: value
+    });
+  }
+
   handleConfirm() {
-    const { blockType, onFileUpload, onAddPhoto } = this.props;
-    const { file, srcValue, captionValue } = this.state;
+    const {
+      blockType,
+      onFileUpload,
+      onAddPhoto
+    } = this.props;
+
+    const {
+      file,
+      srcValue,
+      width,
+      height,
+      captionValue
+    } = this.state;
 
     if (file) {
       // Get the stored file source
@@ -72,7 +143,9 @@ class PhotoInput extends Component {
         .then(resp => {
           onAddPhoto(blockType, {
             src: resp.src,
-            caption: captionValue
+            caption: captionValue,
+            width: width,
+            height: height
           });
         })
         .catch(err => {
@@ -83,7 +156,9 @@ class PhotoInput extends Component {
     } else {
       onAddPhoto(blockType, {
         src: srcValue,
-        caption: captionValue
+        caption: captionValue,
+        width: width,
+        height: height
       });
     }
   }
@@ -93,12 +168,25 @@ class PhotoInput extends Component {
       file: null,
       srcValue: '',
       captionValue: '',
+      width: 0,
+      height: 0,
       error: ''
     });
+    this.img.removeEventListener('load', this.setInitialDimensions);
   }
 
   render() {
-    const { file, srcValue, captionValue, error } = this.state;
+    const { maxImgWidth } = this.props;
+    const {
+      file,
+      srcValue,
+      width,
+      height,
+      captionValue,
+      error
+    } = this.state;
+
+    const imgSizeWarning = (width && maxImgWidth) && width > maxImgWidth;
 
     // Render preview for file upload or pasted link
     const preview = (file || srcValue) && ([
@@ -111,6 +199,31 @@ class PhotoInput extends Component {
           onChange={this.handleCaptionChange}
           maxLength={1000}
         />
+        <div className="image-sizing">
+          <div>
+            <span>Set custom image size:</span>
+            {
+              imgSizeWarning && (
+                <p className="warning-msg">
+                  {`* Max width is ${maxImgWidth}px.`}
+                </p>
+              )
+            }
+          </div>
+          <input
+            className={`width ${imgSizeWarning && 'size-warning'}`}
+            placeholder="width"
+            value={width}
+            onChange={this.handleWidthChange}
+          />
+          <span>x</span>
+          <input
+            className={`width ${imgSizeWarning && 'size-warning'}`}
+            placeholder="height"
+            value={height}
+            onChange={this.handleHeightChange}
+          />
+        </div>
       </div>,
       <InputControls
         key="controls"

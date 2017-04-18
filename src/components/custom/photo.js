@@ -1,10 +1,19 @@
 import React, { PropTypes } from 'react';
 
 function Photo(props) {
-  const { src, caption } = props.blockProps || props;
+  const { src, caption, width, height } = props.blockProps || props;
+
+  const styles = {
+    width: width && `${width}px`,
+    height: height && `${height}px`
+  };
+
   return (
     <figure className="content-editor__custom-block photo">
-      <img src={src} />
+      <img
+        src={src}
+        style={styles}
+      />
       {
         caption && (
           <figcaption className="caption">

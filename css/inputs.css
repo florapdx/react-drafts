@@ -43,6 +43,41 @@
 .content-editor__input .add-caption {
   min-height: 60px;
   margin: 10px 0;
+  outline: none; /* causes flickering */
+}
+
+.content-editor__input.photo .add-caption {
+  margin-bottom: 0;
+}
+
+.content-editor__input .image-sizing {
+  display: inline-flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+  line-height: 1em;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.content-editor__input .image-sizing span,
+.content-editor__input .image-sizing input {
+  display: inline-block;
+  font-size: 14px;
+}
+
+.content-editor__input .image-sizing input {
+  width: 80px;
+}
+
+.content-editor__input .image-sizing input.size-warning {
+  color: red;
+}
+
+.content-editor__input .image-sizing .warning-msg {
+  color: red;
+  font-size: 11px;
+  margin: 0;
 }
 
 .content-editor__input .controls button {
