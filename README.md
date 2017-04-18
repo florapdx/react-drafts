@@ -4,7 +4,7 @@ React WYSIWYG editor component built using DraftJS.
 Demo is staged [here](https://stagingeditor-yrmhuegkus.now.sh).
 
 ## Installation
-ContentEditor is currently a private package, published under the `@crossfield` scope. As such, you'll need to obtain a crossfield npm token to install the editor in your project, and to build and deploy your project on remote servers. 
+ContentEditor is currently a private package, published under the `@crossfield` scope. As such, you'll need to obtain a crossfield npm token to install the editor in your project, and to build and deploy your project on remote servers.
 
 To install:
 `$ NPM_TOKEN=xxxxxxxxx npm install @crossfield/content-editor`
@@ -73,6 +73,8 @@ __onFocus__: { func } :: Respond to editor focus event.
 __onBlur__: { func } :: Respond to editor blur event.
 
 __onFileUpload__: { func, required } :: Respond to file upload event. Hook for saving file to server or cloud service.
+
+__linkInputAcceptsFiles__: { bool, default: false } :: If you'd like to give users the option to add downloadable file links inlined, in addition to (or instead of) as block components with optional captions, pass true.
 
 __exportTo__: { string, oneOf(['html', 'raw']), required } :: Import/Export format. Raw option exports DraftJS raw format, which can be parsed into markdown or other format.
 

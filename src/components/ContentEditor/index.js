@@ -531,6 +531,7 @@ class ContentEditor extends Component {
       onFileUpload,
       onFocus,
       onBlur,
+      linkInputAcceptsFiles,
       spellcheckEnabled
     } = this.props;
     const { toolbarControls } = this;
@@ -567,6 +568,8 @@ class ContentEditor extends Component {
             <LinkInput
               blockType={toolbarControls.link.id}
               linkText={getSelectedText(editorState)}
+              linkInputAcceptsFiles={linkInputAcceptsFiles}
+              onFileUpload={onFileUpload}
               onAddLink={this.handleAddLink}
               onCloseClick={this.handleModalClose}
             />
@@ -607,7 +610,8 @@ ContentEditor.defaultProps = {
   spellcheckEnabled: true,
   detachToolbarOnScroll: true,
   onFocus: () => {},
-  onBlur: () => {}
+  onBlur: () => {},
+  linkInputAcceptsFiles: false
 };
 
 ContentEditor.propTypes = {
@@ -619,6 +623,7 @@ ContentEditor.propTypes = {
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   onFileUpload: PropTypes.func.isRequired,
+  linkInputAcceptsFiles: PropTypes.bool,
   exportTo: PropTypes.oneOf(['html', 'raw']).isRequired
 };
 

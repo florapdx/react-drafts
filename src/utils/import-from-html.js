@@ -25,7 +25,7 @@ function getVideoData(node) {
 
 function getDocumentData(node) {
   return {
-    src: node.getAttribute('src'),
+    src: node.getAttribute('href'),
     name: node.getAttribute('download'),
     caption: getCaptionData(node)
   };
