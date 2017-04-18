@@ -74,6 +74,8 @@ __onBlur__: { func } :: Respond to editor blur event.
 
 __onFileUpload__: { func, required } :: Respond to file upload event. Hook for saving file to server or cloud service.
 
+__maxImgWidth__: { number } :: Setting this param will not constrain image upload sizes, but will warn users on photo upload that their image is too large and they need to size down below this max size.
+
 __linkInputAcceptsFiles__: { bool, default: false } :: If you'd like to give users the option to add downloadable file links inlined, in addition to (or instead of) as block components with optional captions, pass true.
 
 __exportTo__: { string, oneOf(['html', 'raw']), required } :: Import/Export format. Raw option exports DraftJS raw format, which can be parsed into markdown or other format.

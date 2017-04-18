@@ -9,9 +9,24 @@ function getCaptionData(node) {
 }
 
 function getPhotoData(node) {
+  const styles = node.getAttribute('style').split(';');
+  let width;
+  let height;
+
+  styles.forEach(style => {
+    const parts = style.split(':');
+    if (parts[0] === 'width') {
+      width = parts[1].split('px')[0];
+    } else if (parts[0] === 'height') {
+      height = parts[1].split('px')[0];
+    }
+  });
+
   return {
     src: node.getAttribute('src'),
-    caption: getCaptionData(node)
+    caption: getCaptionData(node),
+    width,
+    height
   };
 }
 
