@@ -6,7 +6,6 @@ import {
   RichUtils,
   AtomicBlockUtils,
   Modifier,
-  DefaultDraftBlockRenderMap,
   convertToRaw
 } from 'draft-js';
 
