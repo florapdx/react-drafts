@@ -122,3 +122,11 @@ export function convertFromHTML(contentState, html, toolbarConfigs) {
     htmlToBlock: convertToBlock
   })(html);
 }
+
+export const testInternals = {
+  convertToInline,
+  convertToBlock,
+  convertToEntity
+};
+
+

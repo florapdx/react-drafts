@@ -84,7 +84,7 @@ function convertEntity(entity, toolbarConfigs) {
  * See https://github.com/HubSpot/draft-convert/issues/55 for updates.
  */
 function cleanHTML(html) {
-  const parser = new DOMParser();
+  const parser = new window.DOMParser();
   const parsed = parser.parseFromString(html, 'text/html');
 
   parsed.querySelectorAll('.atomic')
@@ -107,3 +107,10 @@ export function convertToHTML(contentState, toolbarConfigs) {
 
   return cleanHTML(html);
 }
+
+export const testInternals = {
+  cleanHTML,
+  convertInline,
+  convertBlock,
+  convertEntity
+};

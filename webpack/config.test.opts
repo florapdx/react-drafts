@@ -1,5 +1,5 @@
 --colors
 --require babel-core/register
---webpack-config config/webpack/config.test.js
+--webpack-config webpack/config.test.js
 --include dom-test.js
---glob "*.test.js" app/assets/javascripts
+test/convert-to-html.test.js
