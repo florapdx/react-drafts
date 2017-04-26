@@ -26,6 +26,7 @@ class PhotoInput extends Component {
       width: 0,
       height: 0,
       ratio: 1,
+      link: '',
       captionValue: '',
       error: null
     };
@@ -37,6 +38,7 @@ class PhotoInput extends Component {
     this.setInitialDimensions = this.setInitialDimensions.bind(this);
     this.handleWidthChange = this.handleWidthChange.bind(this);
     this.handleHeightChange = this.handleHeightChange.bind(this);
+    this.handleHrefChange = this.handleHrefChange.bind(this);
 
     this.handleConfirm = this.handleConfirm.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
@@ -122,6 +124,12 @@ class PhotoInput extends Component {
     });
   }
 
+  handleHrefChange(event) {
+    this.setState({
+      link: event.target.value
+    });
+  }
+
   handleConfirm() {
     const {
       blockType,
@@ -134,6 +142,7 @@ class PhotoInput extends Component {
       srcValue,
       width,
       height,
+      link,
       captionValue
     } = this.state;
 
@@ -145,7 +154,8 @@ class PhotoInput extends Component {
             src: resp.src,
             caption: captionValue,
             width: width,
-            height: height
+            height: height,
+            href: link
           });
         })
         .catch(err => {
@@ -158,7 +168,8 @@ class PhotoInput extends Component {
         src: srcValue,
         caption: captionValue,
         width: width,
-        height: height
+        height: height,
+        href: link
       });
     }
   }
@@ -170,6 +181,7 @@ class PhotoInput extends Component {
       captionValue: '',
       width: 0,
       height: 0,
+      link: '',
       error: ''
     });
     this.img.removeEventListener('load', this.setInitialDimensions);
@@ -182,6 +194,7 @@ class PhotoInput extends Component {
       srcValue,
       width,
       height,
+      link,
       captionValue,
       error
     } = this.state;
@@ -224,6 +237,14 @@ class PhotoInput extends Component {
             onChange={this.handleHeightChange}
           />
         </div>
+      </div>,
+      <div key="image-link" className="image-link">
+        <span>Is the image a link?</span>
+        <input
+          placeholder="Paste link here"
+          value={link}
+          onChange={this.handleHrefChange}
+        />
       </div>,
       <InputControls
         key="controls"

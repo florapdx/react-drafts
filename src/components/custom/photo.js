@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 
 function Photo(props) {
-  const { src, caption, width, height } = props.blockProps || props;
+  const { src, caption, width, height, href } = props.blockProps || props;
 
   const styles = {
     width: width && `${width}px`,
@@ -10,10 +10,21 @@ function Photo(props) {
 
   return (
     <figure className="content-editor__custom-block photo">
-      <img
-        src={src}
-        style={styles}
-      />
+      {
+        href ? (
+          <a href={href}>
+            <img
+              src={src}
+              style={styles}
+            />
+          </a>
+        ) : (
+          <img
+            src={src}
+            style={styles}
+          />
+        )
+      }
       {
         caption && (
           <figcaption className="caption">
