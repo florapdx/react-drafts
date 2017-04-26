@@ -1,4 +1,5 @@
 import React from 'react';
+import { OrderedSet } from 'immutable';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { expect } from 'chai';
 import { oneLineTrim } from 'common-tags';
@@ -6,9 +7,12 @@ import { convertFromRaw } from 'draft-js';
 import { TOOLBAR_DEFAULTS } from '../src/constants/toolbar';
 import {
   convertToHTML,
-  testInternals
+  testToHTMLInternals
 } from '../src/utils/export-to-html';
-import { convertFromHTML } from '../src/utils/import-from-html';
+import {
+  convertFromHTML,
+  testFromHTMLInternals
+} from '../src/utils/import-from-html';
 
 import Link from '../src/components/custom/link';
 import Divider from '../src/components/custom/divider';
@@ -19,7 +23,7 @@ import Video from '../src/components/custom/video';
 describe('converting to html', () => {
   describe('converting inline styles', () => {
     it('should assign the correct text alignment given an align style', () => {
-      const actual = testInternals.convertInline(TOOLBAR_DEFAULTS.alignRight.id);
+      const actual = testToHTMLInternals.convertInline(TOOLBAR_DEFAULTS.alignRight.id);
       const expected = '<span style="display:block;text-align:right;"></span>';
       expect(renderToStaticMarkup(actual)).to.equal(expected);
     });
@@ -94,7 +98,7 @@ describe('converting to html', () => {
 
   describe('converting entities', () => {
     it('should return a Link rendered to markup when given a link entity', () => {
-      const markup = testInternals.convertEntity({
+      const markup = testToHTMLInternals.convertEntity({
         type: TOOLBAR_DEFAULTS.link.id,
         data: {
           src: 'test.com'
@@ -105,7 +109,7 @@ describe('converting to html', () => {
     });
 
     it('should return a Divider rendered to markup when given a divider entity', () => {
-      const markup = testInternals.convertEntity({
+      const markup = testToHTMLInternals.convertEntity({
         type: TOOLBAR_DEFAULTS.divider.id,
         data: {}
       }, TOOLBAR_DEFAULTS);
@@ -114,7 +118,7 @@ describe('converting to html', () => {
     });
 
     it('should return a Document rendered to markup when given a file entity', () => {
-      const markup = testInternals.convertEntity({
+      const markup = testToHTMLInternals.convertEntity({
         type: TOOLBAR_DEFAULTS.file.id,
         data: {
           src: 'test.com',
@@ -131,7 +135,7 @@ describe('converting to html', () => {
     });
 
     it('should return a Photo rendered to markup when given a photo entity', () => {
-      const markup = testInternals.convertEntity({
+      const markup = testToHTMLInternals.convertEntity({
         type: TOOLBAR_DEFAULTS.photo.id,
         data: {
           src: 'test.com'
@@ -147,7 +151,7 @@ describe('converting to html', () => {
     });
 
     it('should return a Video rendered to markup when given a video entity', () => {
-      const markup = testInternals.convertEntity({
+      const markup = testToHTMLInternals.convertEntity({
         type: TOOLBAR_DEFAULTS.video.id,
         data: {
           src: 'test.com'
@@ -184,7 +188,7 @@ describe('converting to html', () => {
         </figure>
       `;
 
-      expect(testInternals.cleanHTML(html)).to.equal(expected);
+      expect(testToHTMLInternals.cleanHTML(html)).to.equal(expected);
     });
   });
 });
@@ -192,17 +196,22 @@ describe('converting to html', () => {
 describe('converting from html', () => {
   describe('converting to inline', () => {
     it('should convert text-align styles to custom inline align-* rule', () => {
+      const node = document.createElement('span');
+      node.setAttribute('style', 'text-align:center');
+      const currentStyle = new OrderedSet();
 
+      expect(testFromHTMLInternals.convertToInline('span', node, currentStyle).toJSON()[0])
+        .to.equal(TOOLBAR_DEFAULTS.alignCenter.id);
     });
   });
 
-  describe('converting to block', () => {
+  xdescribe('converting to block', () => {
     it('should return block of type atomic for any figure tag', () => {
 
     });
   });
 
-  describe('converting to entity', () => {
+  xdescribe('converting to entity', () => {
     it('should return a document entity for <a> tags with class "file-name"', () => {
 
     });

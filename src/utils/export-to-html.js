@@ -108,7 +108,7 @@ export function convertToHTML(contentState, toolbarConfigs) {
   return cleanHTML(html);
 }
 
-export const testInternals = {
+export const testToHTMLInternals = {
   cleanHTML,
   convertInline,
   convertBlock,

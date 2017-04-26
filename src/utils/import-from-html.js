@@ -123,7 +123,7 @@ export function convertFromHTML(contentState, html, toolbarConfigs) {
   })(html);
 }
 
-export const testInternals = {
+export const testFromHTMLInternals = {
   convertToInline,
   convertToBlock,
   convertToEntity
