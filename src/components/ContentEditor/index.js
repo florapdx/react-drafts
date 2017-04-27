@@ -531,6 +531,8 @@ class ContentEditor extends Component {
       onFocus,
       onBlur,
       maxImgWidth,
+      allowPhotoSizeAdjust,
+      allowPhotoLink,
       linkInputAcceptsFiles,
       spellcheckEnabled
     } = this.props;
@@ -578,6 +580,8 @@ class ContentEditor extends Component {
           showPhotoInput &&
             <PhotoInput
               blockType={toolbarControls.photo.id}
+              allowPhotoLink={allowPhotoLink}
+              allowPhotoSizeAdjust={allowPhotoSizeAdjust}
               maxImgWidth={maxImgWidth}
               onFileUpload={onFileUpload}
               onAddPhoto={this.handleEmbedMedia}
@@ -624,6 +628,8 @@ ContentEditor.propTypes = {
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   onFileUpload: PropTypes.func.isRequired,
+  allowPhotoSizeAdjust: PropTypes.bool,
+  allowPhotoLink: PropTypes.bool,
   maxImgWidth: PropTypes.number,
   linkInputAcceptsFiles: PropTypes.bool,
   exportTo: PropTypes.oneOf(['html', 'raw']).isRequired

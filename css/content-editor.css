@@ -64,6 +64,7 @@
   padding: 0;
   border: 1px solid #ccc;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 .content-editor input:focus {
   outline: none;

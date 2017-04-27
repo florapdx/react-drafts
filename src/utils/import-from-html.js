@@ -25,11 +25,21 @@ function getPhotoData(node) {
     });
   }
 
+  let href;
+  let target;
+  const parent = node.parentElement;
+  if (parent.tagName.toLowerCase() === 'a') {
+    href = parent.getAttribute('href');
+    target = parent.getAttribute('target');
+  }
+
   return {
     src: node.getAttribute('src'),
     caption: getCaptionData(node),
     width,
-    height
+    height,
+    href,
+    target
   };
 }
 
@@ -67,7 +77,8 @@ function convertToEntity(nodeName, node, contentState, configs) {
         mutability = 'MUTABLE';
         data = {
           url: node.getAttribute('href'),
-          text: node.getAttribute('alt')
+          text: node.getAttribute('alt'),
+          target: node.getAttribute('target')
         };
       }
       break;
