@@ -131,15 +131,6 @@ class LinkInput extends Component {
                   placeholder="Paste or type link"
                   onChange={this.handleLinkChange}
                 />
-                <div className="target">
-                  <span>Open link in a new tab:</span>
-                  <input
-                    name="target"
-                    type="checkbox"
-                    checked={linkIsTargetBlank}
-                    onChange={this.handleToggleTarget}
-                  />
-                </div>
                 {
                   linkInputAcceptsFiles && ([
                     <div key="separator" className="separator">or add downloadable file as link</div>,
@@ -167,6 +158,15 @@ class LinkInput extends Component {
             placeholder="Add link text"
             onChange={this.handleLinkTextChange}
           />
+          <div className="target">
+            <span>Open link in a new tab:</span>
+            <input
+              name="target"
+              type="checkbox"
+              checked={linkIsTargetBlank}
+              onChange={this.handleToggleTarget}
+            />
+          </div>
           <InputControls
             confirmText="Add Link"
             onConfirm={this.handleConfirm}

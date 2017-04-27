@@ -80,6 +80,7 @@ class DemoEditor extends Component {
           allowPhotoLink={true}
           allowPhotoSizeAdjust={true}
           maxImgWidth={960}
+          linkInputAcceptsFiles={true}
           exportTo="html"
         />
       </div>
