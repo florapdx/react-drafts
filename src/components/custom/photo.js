@@ -1,7 +1,14 @@
 import React, { PropTypes } from 'react';
 
 function Photo(props) {
-  const { src, caption, width, height, href } = props.blockProps || props;
+  const {
+    src,
+    caption,
+    width,
+    height,
+    href,
+    target
+  } = props.blockProps || props;
 
   const styles = {
     width: width && `${width}px`,
@@ -12,7 +19,11 @@ function Photo(props) {
     <figure className="content-editor__custom-block photo">
       {
         href ? (
-          <a href={href}>
+          <a
+            href={href}
+            target={target ? "_blank" : "_self"}
+            rel={target ? "noopener noreferrer" : ""}
+          >
             <img
               src={src}
               style={styles}

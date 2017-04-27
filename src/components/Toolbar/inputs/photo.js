@@ -27,6 +27,7 @@ class PhotoInput extends Component {
       height: 0,
       ratio: 1,
       link: '',
+      linkIsTargetBlank: false,
       captionValue: '',
       error: null
     };
@@ -38,7 +39,9 @@ class PhotoInput extends Component {
     this.setInitialDimensions = this.setInitialDimensions.bind(this);
     this.handleWidthChange = this.handleWidthChange.bind(this);
     this.handleHeightChange = this.handleHeightChange.bind(this);
+
     this.handleHrefChange = this.handleHrefChange.bind(this);
+    this.handleToggleTarget = this.handleToggleTarget.bind(this);
 
     this.handleConfirm = this.handleConfirm.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
@@ -130,6 +133,12 @@ class PhotoInput extends Component {
     });
   }
 
+  handleToggleTarget(event) {
+    this.setState({
+      linkIsTargetBlank: event.target.checked
+    });
+  }
+
   handleConfirm() {
     const {
       blockType,
@@ -143,6 +152,7 @@ class PhotoInput extends Component {
       width,
       height,
       link,
+      linkIsTargetBlank,
       captionValue
     } = this.state;
 
@@ -155,7 +165,8 @@ class PhotoInput extends Component {
             caption: captionValue,
             width: width,
             height: height,
-            href: link
+            href: link,
+            target: linkIsTargetBlank
           });
         })
         .catch(err => {
@@ -169,7 +180,8 @@ class PhotoInput extends Component {
         caption: captionValue,
         width: width,
         height: height,
-        href: link
+        href: link,
+        target: linkIsTargetBlank
       });
     }
   }
@@ -182,19 +194,25 @@ class PhotoInput extends Component {
       width: 0,
       height: 0,
       link: '',
+      linkIsTargetBlank: false,
       error: ''
     });
     this.img.removeEventListener('load', this.setInitialDimensions);
   }
 
   render() {
-    const { maxImgWidth } = this.props;
+    const {
+      allowPhotoLink,
+      allowPhotoSizeAdjust,
+      maxImgWidth
+    } = this.props;
     const {
       file,
       srcValue,
       width,
       height,
       link,
+      linkIsTargetBlank,
       captionValue,
       error
     } = this.state;
@@ -212,39 +230,56 @@ class PhotoInput extends Component {
           onChange={this.handleCaptionChange}
           maxLength={1000}
         />
-        <div className="image-sizing">
-          <div>
-            <span>Set custom image size:</span>
-            {
-              imgSizeWarning && (
-                <p className="warning-msg">
-                  {`* Max width is ${maxImgWidth}px.`}
-                </p>
-              )
-            }
-          </div>
-          <input
-            className={`width ${imgSizeWarning && 'size-warning'}`}
-            placeholder="width"
-            value={width}
-            onChange={this.handleWidthChange}
-          />
-          <span>x</span>
-          <input
-            className={`width ${imgSizeWarning && 'size-warning'}`}
-            placeholder="height"
-            value={height}
-            onChange={this.handleHeightChange}
-          />
-        </div>
-      </div>,
-      <div key="image-link" className="image-link">
-        <span>Is the image a link?</span>
-        <input
-          placeholder="Paste link here"
-          value={link}
-          onChange={this.handleHrefChange}
-        />
+        {
+          allowPhotoSizeAdjust && (
+            <div className="image-sizing">
+              <div>
+                <span>Set custom image size:</span>
+                {
+                  imgSizeWarning && (
+                    <p className="warning-msg">
+                      {`* Max width is ${maxImgWidth}px.`}
+                    </p>
+                  )
+                }
+              </div>
+              <input
+                className={`width ${imgSizeWarning && 'size-warning'}`}
+                placeholder="width"
+                value={width}
+                onChange={this.handleWidthChange}
+              />
+              <span>x</span>
+              <input
+                className={`width ${imgSizeWarning && 'size-warning'}`}
+                placeholder="height"
+                value={height}
+                onChange={this.handleHeightChange}
+              />
+            </div>
+          )
+        }
+        {
+          allowPhotoLink && (
+            <div key="image-link" className="image-link">
+              <span>Is the image a link?</span>
+              <input
+                placeholder="Paste link here"
+                value={link}
+                onChange={this.handleHrefChange}
+              />
+              <div className="target">
+                <span>Open link in a new tab:</span>
+                <input
+                  name="target"
+                  type="checkbox"
+                  checked={linkIsTargetBlank}
+                  onChange={this.handleToggleTarget}
+                />
+              </div>
+            </div>
+          )
+        }
       </div>,
       <InputControls
         key="controls"
@@ -288,6 +323,9 @@ class PhotoInput extends Component {
 
 PhotoInput.propTypes = {
   blockType: PropTypes.string,
+  allowPhotoLink: PropTypes.bool,
+  allowPhotoSizeAdjust: PropTypes.bool,
+  maxImgWidth: PropTypes.number,
   onFileUpload: PropTypes.func,
   onAddPhoto: PropTypes.func,
   onCloseClick: PropTypes.func

@@ -74,6 +74,23 @@
   color: red;
 }
 
+.content-editor__input .image-link span {
+  font-size: 14px;
+}
+
+.content-editor__input .target {
+  text-align: right;
+}
+
+.content-editor__input .target span {
+  display: inline-block;
+  font-size: 12px;
+}
+
+.content-editor__input .target input {
+  width: auto;
+}
+
 .content-editor__input .image-sizing .warning-msg {
   color: red;
   font-size: 11px;

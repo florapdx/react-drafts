@@ -12,6 +12,7 @@ class LinkInput extends Component {
 
     this.state = {
       linkValue: '',
+      linkIsTargetBlank: false,
       textValue: this.props.linkText || '',
       file: null,
       error: null
@@ -19,6 +20,8 @@ class LinkInput extends Component {
 
     this.handleLinkChange = this.handleLinkChange.bind(this);
     this.handleLinkTextChange = this.handleLinkTextChange.bind(this);
+    this.handleToggleTarget = this.handleToggleTarget.bind(this);
+
     this.handleDrop = this.handleDrop.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
@@ -30,6 +33,12 @@ class LinkInput extends Component {
 
   handleLinkTextChange(event) {
     this.setState({ textValue: event.target.value });
+  }
+
+  handleToggleTarget(event) {
+    this.setState({
+      linkIsTargetBlank: event.target.checked
+    });
   }
 
   handleDrop(acceptedFiles, rejectedFiles) {
@@ -57,14 +66,20 @@ class LinkInput extends Component {
 
   handleConfirm() {
     const { blockType, onFileUpload, onAddLink } = this.props;
-    const { linkValue, textValue, file } = this.state;
+    const {
+      linkValue,
+      linkIsTargetBlank,
+      textValue,
+      file
+    } = this.state;
 
     if (file) {
       onFileUpload(file)
       .then(resp => {
         onAddLink(blockType, {
           url: resp.src,
-          text: textValue || resp.name
+          text: textValue || resp.name,
+          target: linkIsTargetBlank
         });
       })
       .catch(err => {
@@ -75,7 +90,8 @@ class LinkInput extends Component {
     } else {
       onAddLink(blockType, {
         url: linkValue,
-        text: textValue
+        text: textValue,
+        target: linkIsTargetBlank
       });
     }
   }
@@ -84,6 +100,7 @@ class LinkInput extends Component {
     this.setState({
       file: null,
       linkValue: '',
+      linkIsTargetBlank: false,
       textValue: this.props.linkText || '',
       error: null
     });
@@ -91,7 +108,13 @@ class LinkInput extends Component {
 
   render() {
     const { linkInputAcceptsFiles, onCloseClick } = this.props;
-    const { linkValue, textValue, file, error } = this.state;
+    const {
+      linkValue,
+      textValue,
+      linkIsTargetBlank,
+      file,
+      error
+    } = this.state;
 
     return (
       <Modal onCloseClick={onCloseClick}>
@@ -108,6 +131,15 @@ class LinkInput extends Component {
                   placeholder="Paste or type link"
                   onChange={this.handleLinkChange}
                 />
+                <div className="target">
+                  <span>Open link in a new tab:</span>
+                  <input
+                    name="target"
+                    type="checkbox"
+                    checked={linkIsTargetBlank}
+                    onChange={this.handleToggleTarget}
+                  />
+                </div>
                 {
                   linkInputAcceptsFiles && ([
                     <div key="separator" className="separator">or add downloadable file as link</div>,
