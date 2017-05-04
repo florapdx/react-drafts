@@ -43,7 +43,5 @@
 
 .content-editor__custom-block.rich .rich-wrapper {
   position: relative;
-  /* width: 440px;
-  height: calc(440px * 0.5625); */
   margin-bottom: 8px;
 }

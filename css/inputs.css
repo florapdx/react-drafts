@@ -13,14 +13,6 @@
   overflow: auto;
 }
 
-.content-editor__input.rich .rich-wrapper {
-  /* height: calc(440px * 0.5625); /* 16:9 aspect ratio; */
-}
-
-.content-editor__input.rich .preview iframe {
-  /*height: inherit; */
-}
-
 .content-editor__input .preview img {
   width: 100%;
 }
