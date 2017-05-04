@@ -41,7 +41,7 @@ import { blockRenderer } from '../../renderer';
 import Toolbar from '../Toolbar';
 import LinkInput from '../Toolbar/inputs/link';
 import PhotoInput from '../Toolbar/inputs/photo';
-import VideoInput from '../Toolbar/inputs/video';
+import RichInput from '../Toolbar/inputs/rich';
 import DocumentInput from '../Toolbar/inputs/document';
 
 /*
@@ -60,7 +60,7 @@ class ContentEditor extends Component {
       editorState: setNewEditorState(props, this.toolbarControls),
       showLinkInput: false,
       showPhotoInput: false,
-      showVideoInput: false,
+      showRichInput: false,
       showFileInput: false,
       detachToolbar: false,
       isSaving: false
@@ -189,7 +189,7 @@ class ContentEditor extends Component {
         editorState: setNewEditorState({}, this.toolbarControls),
         showLinkInput: false,
         showPhotoInput: false,
-        showVideoInput: false,
+        showRichInput: false,
         showFileInput: false,
         isSaving: false
       }, () => {
@@ -338,10 +338,10 @@ class ContentEditor extends Component {
     const nextState = {
       showLinkInput: false,
       showPhotoInput: false,
-      showVideoInput: false,
+      showRichInput: false,
       showFileInput: false
     };
-    const { link, photo, video, file, divider } = this.toolbarControls;
+    const { link, photo, rich, file, divider } = this.toolbarControls;
 
     if (blockType === divider.id) {
       this.toggleDivider(blockType);
@@ -375,8 +375,8 @@ class ContentEditor extends Component {
       case photo.id:
         nextState.showPhotoInput = true;
         break;
-      case video.id:
-        nextState.showVideoInput = true;
+      case rich.id:
+        nextState.showRichInput = true;
         break;
       case file.id:
         nextState.showFileInput = true;
@@ -404,7 +404,7 @@ class ContentEditor extends Component {
       ),
       showLinkInput: false,
       showPhotoInput: false,
-      showVideoInput: false,
+      showRichInput: false,
       showFileInput: false
     });
   }
@@ -486,7 +486,7 @@ class ContentEditor extends Component {
         ' '
       ),
       showPhotoInput: false,
-      showVideoInput: false,
+      showRichInput: false,
       showFileInput: false
     });
   }
@@ -495,7 +495,7 @@ class ContentEditor extends Component {
     this.setState({
       showLinkInput: false,
       showPhotoInput: false,
-      showVideoInput: false,
+      showRichInput: false,
       showFileInput: false
     });
   }
@@ -521,7 +521,7 @@ class ContentEditor extends Component {
       editorState,
       showLinkInput,
       showPhotoInput,
-      showVideoInput,
+      showRichInput,
       showFileInput,
       detachToolbar
     } = this.state;
@@ -589,10 +589,10 @@ class ContentEditor extends Component {
             />
         }
         {
-          showVideoInput &&
-            <VideoInput
-              blockType={toolbarControls.video.id}
-              onAddVideo={this.handleEmbedMedia}
+          showRichInput &&
+            <RichInput
+              blockType={toolbarControls.rich.id}
+              onAddRichMedia={this.handleEmbedMedia}
               onCloseClick={this.handleModalClose}
             />
         }

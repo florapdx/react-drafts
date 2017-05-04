@@ -43,10 +43,12 @@ function getPhotoData(node) {
   };
 }
 
-function getVideoData(node) {
+function getRichData(node) {
   // pass parentNode due to wrapper div
   return {
     src: node.getAttribute('src'),
+    width: node.getAttribute('width'),
+    height: node.getAttribute('height'),
     caption: getCaptionData(node.parentNode)
   };
 }
@@ -88,9 +90,9 @@ function convertToEntity(nodeName, node, contentState, configs) {
       data = getPhotoData(node);
       break;
     case 'iframe':
-      type = configs.video.id;
+      type = configs.rich.id;
       mutability = 'IMMUTABLE';
-      data = getVideoData(node);
+      data = getRichData(node);
       break;
     case 'hr':
       type = configs.divider.id;
