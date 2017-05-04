@@ -212,7 +212,7 @@ export const TOOLBAR_DEFAULTS = {
   alignRight,
   divider,
   link,
+  file,
   photo,
-  rich,
-  file
+  rich
 };
