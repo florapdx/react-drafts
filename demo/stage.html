@@ -13,8 +13,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js" type="text/javascript"></script>
   <style>
     .content-editor,
+    .content-editor__toolbar,
     .content-editor__toolbar .controls,
-    .content-editor__toolbar .controls.detached {
+    .content-editor__toolbar.detached .controls {
       width: 960px;
     }
   </style>
@@ -97,6 +98,10 @@
               ref={contentEditor => this.contentEditor = contentEditor}
               content={storedContent}
               onFileUpload={this.handleFileUpload}
+              allowPhotoLink={true}
+              allowPhotoSizeAdjust={true}
+              maxImgWidth={960}
+              linkInputAcceptsFiles={true}
               exportTo="html"
             />
           </div>

@@ -128,7 +128,7 @@ class LinkInput extends Component {
               <div>
                 <input
                   value={linkValue}
-                  placeholder="Paste or type link"
+                  placeholder="Paste or type link (or email address if mailto)"
                   onChange={this.handleLinkChange}
                 />
                 {

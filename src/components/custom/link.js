@@ -2,10 +2,16 @@ import React, { PropTypes } from 'react';
 
 function Link(props) {
   const { url, text, target, children } = props;
+
+  let href = url;
+  if (url.indexOf('@') >= 0 && url.indexOf('mailto:') < 0) {
+    href = `mailto:${url}`;
+  }
+
   return (
     <a
       className="content-editor__custom-block link"
-      href={url}
+      href={href}
       alt={text}
       target={target ? "_blank" : "_self"}
       rel={target ? "noopener noreferrer" : ""}
