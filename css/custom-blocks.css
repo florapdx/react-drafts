@@ -1,7 +1,7 @@
 .content-editor__custom-block {}
 
 /* inner figure tags */
-.content-editor__custom-block.video,
+.content-editor__custom-block.rich,
 .content-editor__custom-block.photo,
 .content-editor__custom-block.document {
   width: auto;
@@ -37,15 +37,11 @@
   box-sizing: border-box;
 }
 
-.content-editor__custom-block.video iframe {
-  width: 100%;
-  height: 100%;
+.content-editor__custom-block.rich iframe {
   box-sizing: border-box;
 }
 
-.content-editor__custom-block.video .video-wrapper {
+.content-editor__custom-block.rich .rich-wrapper {
   position: relative;
-  width: 440px;
-  height: calc(440px * 0.5625);
   margin-bottom: 8px;
 }

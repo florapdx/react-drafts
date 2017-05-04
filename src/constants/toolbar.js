@@ -169,11 +169,11 @@ const photo = {
   label: 'photo'
 };
 
-const video = {
-  id: 'video',
+const rich = {
+  id: 'rich',
   type: TYPE_CUSTOM_BLOCK,
-  icon: 'video-camera',
-  label: 'video'
+  icon: 'share-alt',
+  label: 'embed rich media'
 };
 
 const file = {
@@ -212,7 +212,7 @@ export const TOOLBAR_DEFAULTS = {
   alignRight,
   divider,
   link,
+  file,
   photo,
-  video,
-  file
+  rich
 };
