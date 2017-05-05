@@ -114,3 +114,32 @@
   font-size: 12px;
   text-align: center;
 }
+
+.content-editor__input.table {
+  min-width: 600px;
+}
+
+.content-editor__input.table .add-rows {
+  margin-bottom: 40px;
+}
+
+.content-editor__input.table .row {
+  display: flex;
+  margin: 8px 0;
+}
+
+.content-editor__input.table .row .empty,
+.content-editor__input.table .row input {
+  display: block;
+  width: 100px;
+  margin-right: 8px;
+}
+
+.content-editor__input.table .row .empty {
+  height: 2em;
+  background-color: #ccc;
+}
+
+.content-editor__input.table .count input {
+  width: 80px;
+}
