@@ -1,3 +1,4 @@
+import Table from '../components/custom/table';
 import Divider from '../components/custom/divider';
 import Photo from '../components/custom/photo';
 import Rich from '../components/custom/rich';
@@ -12,7 +13,9 @@ import Document from '../components/custom/document';
 export function blockRenderer(toolbarControls, entityType, entityData) {
   if (entityType) {
     let component;
-    if (entityType === toolbarControls.photo.id) {
+    if (entityType === toolbarControls.table.id) {
+      component = Table;
+    } else if (entityType === toolbarControls.photo.id) {
       component = Photo;
     } else if (entityType === toolbarControls.rich.id) {
       component = Rich;

@@ -114,3 +114,64 @@
   font-size: 12px;
   text-align: center;
 }
+
+.content-editor__input.table {
+  min-width: 600px;
+}
+
+.content-editor__input.table .add-rows {
+  margin-top: 12px;
+  margin-bottom: 40px;
+  overflow-x: auto;
+}
+
+.content-editor__input.table .row {
+  display: flex;
+  margin: 6px 0;
+}
+
+.content-editor__input.table .add.remove {
+  color: #aaa;
+}
+
+.content-editor__input.table .add.remove span {
+  font-size: 14px;
+}
+
+.content-editor__input.table .row.add.remove {
+  margin-top: 8px;
+  padding-bottom: 10px;
+}
+
+.content-editor__input.table .column.add.remove {
+  margin-left: 6px;
+}
+
+.content-editor__input.table .add.remove .fa-plus:before {
+  margin-right: 6px;
+}
+
+.content-editor__input.table .add.remove .fa-minus:before {
+  margin-left: 6px;
+}
+
+.content-editor__input.table .add.remove .fa-plus:hover,
+.content-editor__input.table .add.remove .fa-minus:hover {
+  color: #222;
+}
+
+.content-editor__input.table .row .empty,
+.content-editor__input.table .row input {
+  display: block;
+  width: 100px;
+  margin-right: 4px;
+  border-radius: 0;
+}
+
+.content-editor__input.table .row .empty {
+  background-color: #ccc;
+}
+
+.content-editor__input.table .count input {
+  width: 80px;
+}

@@ -40,6 +40,7 @@ import { blockRenderer } from '../../renderer';
 
 import Toolbar from '../Toolbar';
 import LinkInput from '../Toolbar/inputs/link';
+import TableInput from '../Toolbar/inputs/table';
 import PhotoInput from '../Toolbar/inputs/photo';
 import RichInput from '../Toolbar/inputs/rich';
 import DocumentInput from '../Toolbar/inputs/document';
@@ -59,6 +60,7 @@ class ContentEditor extends Component {
     this.state = {
       editorState: setNewEditorState(props, this.toolbarControls),
       showLinkInput: false,
+      showTableInput: false,
       showPhotoInput: false,
       showRichInput: false,
       showFileInput: false,
@@ -88,6 +90,8 @@ class ContentEditor extends Component {
     this.handleAddLink = this._handleAddLink.bind(this);
     this.insertCollapsedLink = this._insertCollapsedLink.bind(this);
     this.insertSpaceAfter = this._insertSpaceAfter.bind(this);
+
+    this.handleAddTable = this._handleAddTable.bind(this);
     this.handleEmbedMedia = this._handleEmbedMedia.bind(this);
     this.handleModalClose = this._handleModalClose.bind(this);
 
@@ -188,6 +192,7 @@ class ContentEditor extends Component {
       this.setState({
         editorState: setNewEditorState({}, this.toolbarControls),
         showLinkInput: false,
+        showTableInput: false,
         showPhotoInput: false,
         showRichInput: false,
         showFileInput: false,
@@ -337,11 +342,12 @@ class ContentEditor extends Component {
   _handleToggleCustomBlockType(blockType) {
     const nextState = {
       showLinkInput: false,
+      showTableInput: false,
       showPhotoInput: false,
       showRichInput: false,
       showFileInput: false
     };
-    const { link, photo, rich, file, divider } = this.toolbarControls;
+    const { link, table, photo, rich, file, divider } = this.toolbarControls;
 
     if (blockType === divider.id) {
       this.toggleDivider(blockType);
@@ -372,6 +378,9 @@ class ContentEditor extends Component {
       case link.id:
         nextState.showLinkInput = true;
         break;
+      case table.id:
+        nextState.showTableInput = true;
+        break;
       case photo.id:
         nextState.showPhotoInput = true;
         break;
@@ -401,11 +410,7 @@ class ContentEditor extends Component {
         editorState,
         entityKey,
         ' '
-      ),
-      showLinkInput: false,
-      showPhotoInput: false,
-      showRichInput: false,
-      showFileInput: false
+      )
     });
   }
 
@@ -470,6 +475,25 @@ class ContentEditor extends Component {
     }, () => this.insertSpaceAfter());
   }
 
+  _handleAddTable(blockType, tableData) {
+    const { editorState } = this.state;
+    const entityKey = getNewEntityKey(
+      editorState,
+      blockType,
+      false,
+      tableData
+    );
+
+    this.setState({
+      editorState: AtomicBlockUtils.insertAtomicBlock(
+        editorState,
+        entityKey,
+        ' '
+      ),
+      showTableInput: false
+    });
+  }
+
   _handleEmbedMedia(blockType, media) {
     const { editorState } = this.state;
     const entityKey = getNewEntityKey(
@@ -485,15 +509,16 @@ class ContentEditor extends Component {
         entityKey,
         ' '
       ),
+      showFileInput: false,
       showPhotoInput: false,
-      showRichInput: false,
-      showFileInput: false
+      showRichInput: false
     });
   }
 
   _handleModalClose() {
     this.setState({
       showLinkInput: false,
+      showTableInput: false,
       showPhotoInput: false,
       showRichInput: false,
       showFileInput: false
@@ -520,11 +545,13 @@ class ContentEditor extends Component {
     const {
       editorState,
       showLinkInput,
+      showTableInput,
       showPhotoInput,
       showRichInput,
       showFileInput,
       detachToolbar
     } = this.state;
+
     const {
       placeholder,
       onFileUpload,
@@ -573,6 +600,14 @@ class ContentEditor extends Component {
               linkInputAcceptsFiles={linkInputAcceptsFiles}
               onFileUpload={onFileUpload}
               onAddLink={this.handleAddLink}
+              onCloseClick={this.handleModalClose}
+            />
+        }
+        {
+          showTableInput &&
+            <TableInput
+              blockType={toolbarControls.table.id}
+              onAddTable={this.handleAddTable}
               onCloseClick={this.handleModalClose}
             />
         }

@@ -10,9 +10,10 @@ function Photo(props) {
     target
   } = props.blockProps || props;
 
+  // max-height supports image responsiveness for smaller screens
   const styles = {
     width: width && `${width}px`,
-    height: height && `${height}px`
+    maxHeight: height && `${height}px`
   };
 
   return (

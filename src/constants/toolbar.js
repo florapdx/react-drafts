@@ -148,12 +148,12 @@ const divider = {
   label: 'Horizontal rule'
 };
 
-// const table = {
-//   id: 'table',
-//   type: TYPE_CUSTOM_BLOCK,
-//   icon: 'table',
-//   label: 'Table'
-// };
+const table = {
+  id: 'table',
+  type: TYPE_CUSTOM_BLOCK,
+  icon: 'table',
+  label: 'Table'
+};
 
 const link = {
   id: 'LINK',
@@ -212,6 +212,7 @@ export const TOOLBAR_DEFAULTS = {
   alignRight,
   divider,
   link,
+  table,
   file,
   photo,
   rich

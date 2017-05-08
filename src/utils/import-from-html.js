@@ -61,6 +61,35 @@ function getDocumentData(node) {
   };
 }
 
+function getTableData(node) {
+  const thead = node.children[0];
+  const tbody = node.children[1];
+
+  let title = '';
+  if (thead.children.length > 1) {
+    title = thead.children[0].children[0].textContent;
+  }
+
+  const rows = [Array.from(thead.children).pop()].concat(Array.from(tbody.children));
+
+  const tableData = {};
+  rows.forEach((row, idx) => {
+    const rowData = {};
+    const cells = Array.from(row.children);
+
+    cells.forEach((cell, idx) => {
+      rowData[`c${idx}`] = cell.textContent;
+    });
+
+    tableData[`r${idx}`] = rowData;
+  });
+
+  return {
+    title,
+    tableData
+  };
+}
+
 function convertToEntity(nodeName, node, contentState, configs) {
   let type;
   let mutability;
@@ -98,6 +127,12 @@ function convertToEntity(nodeName, node, contentState, configs) {
       type = configs.divider.id;
       mutability = 'IMMUTABLE';
       data = {};
+      break;
+    case 'table':
+      type = configs.table.id;
+      mutability = 'IMMUTABLE';
+      data = getTableData(node);
+      break;
     default:
       break;
   }
@@ -108,9 +143,11 @@ function convertToEntity(nodeName, node, contentState, configs) {
   }
 }
 
-function convertToBlock(nodeName) {
+function convertToBlock(nodeName, node) {
   if (nodeName === 'figure') {
     return 'atomic';
+  } else if (nodeName === 'table') {
+    return null;
   }
 }
 
@@ -132,6 +169,6 @@ export function convertFromHTML(contentState, html, toolbarConfigs) {
     htmlToStyle: convertToInline,
     htmlToEntity: (nodeName, node) =>
       convertToEntity(nodeName, node, contentState, toolbarConfigs),
-    htmlToBlock: convertToBlock
+    htmlToBlock: (nodeName, node) => convertToBlock(nodeName, node)
   })(html);
 }

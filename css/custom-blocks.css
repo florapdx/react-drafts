@@ -33,15 +33,41 @@
 }
 
 .content-editor__custom-block img {
-  width: 320px;
+  max-width: 100%;
   box-sizing: border-box;
 }
 
 .content-editor__custom-block.rich iframe {
+  max-width: 100%;
   box-sizing: border-box;
 }
 
 .content-editor__custom-block.rich .rich-wrapper {
   position: relative;
   margin-bottom: 8px;
+}
+
+.content-editor__custom-block.table {
+  width: 100%;
+  font-family: monospace;
+  margin: 0;
+}
+
+.content-editor__custom-block.table table {
+  width: 100%;
+}
+
+.content-editor__custom-block.table .table-header th {
+  font-weight: bold;
+  text-align: left;
+}
+
+.content-editor__custom-block.table th {
+  min-width: 60px;
+  font-weight: normal;
+  text-align: left;
+}
+
+.content-editor__custom-block.table th.control-cell {
+  min-width: 85px;
 }
