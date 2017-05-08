@@ -8,28 +8,28 @@ class TableRow extends Component {
   }
 
   handleChange(event, colKey) {
-    const { value } = event.target;
-    this.props.onChangeCell(value, 'r0', colKey);
+    const { rowKey, onChangeCell } = this.props;
+    onChangeCell(event.target.value, rowKey, colKey);
   }
 
   render() {
-    const { rowKey, rowData, isHeaderRow, onAddColumn } = this.props;
+    const { rowData, isHeaderRow, onAddColumn } = this.props;
 
     return (
       <div className="row">
         {
-          isHeaderRow && <div className="empty r0c0" />
+          isHeaderRow && <input className="empty r0c0" disabled />
         }
         {
           Object.keys(rowData).map(cellKey => {
-            const colKey = isHeaderRow ? cellKey + 1 : cellKey;
+            // cellKey is the key of the column, ie `c1` or `c9`
             return (
               <input
-                key={colKey}
+                key={cellKey}
                 className="cell"
-                value={rowData[colKey]}
-                placeholder="col"
-                onChange={() => this.handleChange(event, colKey)}
+                value={rowData[cellKey]}
+                placeholder=""
+                onChange={event => this.handleChange(event, cellKey)}
               />
             );
           })

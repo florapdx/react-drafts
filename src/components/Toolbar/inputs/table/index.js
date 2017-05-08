@@ -11,10 +11,10 @@ class TableInput extends Component {
     this.state = {
       title: '',
       rowCount: 0,
-      colCount: 0,
+      colCount: 1,
       tableData: {
         r0: {
-          c1: {}
+          c1: ''
         }
       }
     };
@@ -73,14 +73,14 @@ class TableInput extends Component {
     });
   }
 
-  handleUpdateTableData(event, rowNum, colNum) {
+  handleUpdateTableData(value, rowNum, colNum) {
     const { tableData } = this.state;
 
     const nextTableData = {
       ...tableData,
       [rowNum]: {
         ...tableData[rowNum],
-        [colNum]: event.target.value
+        [colNum]: value
       }
     };
 
@@ -90,7 +90,13 @@ class TableInput extends Component {
   }
 
   handleConfirm() {
-    debugger;
+    const { blockType, onAddTable } = this.props;
+    const { title, tableData } = this.state;
+
+    onAddTable(blockType, {
+      title,
+      tableData
+    });
   }
 
   render() {
@@ -135,7 +141,7 @@ class TableInput extends Component {
           </div>
           <InputControls
             key="controls"
-            confirmText="Add File"
+            confirmText="Add Table"
             onConfirm={this.handleConfirm}
             onCancel={this.props.onCloseClick}
           />

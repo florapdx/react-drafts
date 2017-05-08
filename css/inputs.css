@@ -120,23 +120,29 @@
 }
 
 .content-editor__input.table .add-rows {
+  margin-top: 12px;
   margin-bottom: 40px;
+  overflow-x: auto;
 }
 
 .content-editor__input.table .row {
   display: flex;
-  margin: 8px 0;
+  margin: 6px 0;
+}
+
+.content-editor__input.table .row.add {
+  padding-bottom: 10px;
 }
 
 .content-editor__input.table .row .empty,
 .content-editor__input.table .row input {
   display: block;
   width: 100px;
-  margin-right: 8px;
+  margin-right: 4px;
+  border-radius: 0;
 }
 
 .content-editor__input.table .row .empty {
-  height: 2em;
   background-color: #ccc;
 }
 
