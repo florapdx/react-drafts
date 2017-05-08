@@ -14,7 +14,7 @@ class TableInput extends Component {
       colCount: 1,
       tableData: {
         r0: {
-          c1: ''
+          c0: ''
         }
       }
     };
@@ -34,9 +34,6 @@ class TableInput extends Component {
   }
 
   handleAddColumn() {
-    /*
-     * This has to account for the first row -- adds unevenly
-     */
     const { tableData, colCount } = this.state;
     const nextColCount = colCount + 1;
 
@@ -51,16 +48,12 @@ class TableInput extends Component {
   }
 
   handleAddRow(event) {
-    /*
-     * This adds a column to the row immediately above, but might
-     * clear up when above fixed.
-     */
     const { tableData, colCount, rowCount } = this.state;
 
     const nextRowCount = rowCount + 1;
     const nextRowObj = {};
 
-    for (var i = 0; i <= colCount; ++i) {
+    for (var i = 0; i < colCount; ++i) {
       nextRowObj[`c${i}`] = '';
     }
 
@@ -125,7 +118,6 @@ class TableInput extends Component {
                   key={`r${idx}`}
                   rowKey={`r${idx}`}
                   rowData={row}
-                  isHeaderRow={idx === 0}
                   onChangeCell={this.handleUpdateTableData}
                   onAddColumn={this.handleAddColumn}
                 />

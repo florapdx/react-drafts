@@ -53,6 +53,10 @@
   margin: 0;
 }
 
+.content-editor__custom-block.table table {
+  width: 100%;
+}
+
 .content-editor__custom-block.table .table-header {
   font-weight: bold;
   text-align: center;
@@ -61,6 +65,7 @@
 .content-editor__custom-block.table th {
   min-width: 60px;
   font-weight: normal;
+  text-align: left;
 }
 
 .content-editor__custom-block.table th.control-cell {

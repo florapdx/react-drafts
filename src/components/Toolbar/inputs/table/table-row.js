@@ -13,13 +13,10 @@ class TableRow extends Component {
   }
 
   render() {
-    const { rowData, isHeaderRow, onAddColumn } = this.props;
+    const { rowKey, rowData, onAddColumn } = this.props;
 
     return (
       <div className="row">
-        {
-          isHeaderRow && <input className="empty r0c0" disabled />
-        }
         {
           Object.keys(rowData).map(cellKey => {
             // cellKey is the key of the column, ie `c1` or `c9`
@@ -35,7 +32,7 @@ class TableRow extends Component {
           })
         }
         {
-          isHeaderRow && (
+          rowKey === 'r0' && (
             <button
               className="add column fa fa-plus"
               type="button"

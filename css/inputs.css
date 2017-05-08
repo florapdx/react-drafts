@@ -131,7 +131,16 @@
 }
 
 .content-editor__input.table .row.add {
+  margin-top: 8px;
   padding-bottom: 10px;
+}
+
+.content-editor__input.table .column.add {
+  margin-left: 6px;
+}
+
+.content-editor__input.table .add:before {
+  margin-right: 4px;
 }
 
 .content-editor__input.table .row .empty,

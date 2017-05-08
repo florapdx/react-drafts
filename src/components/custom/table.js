@@ -11,7 +11,6 @@ function Table(props) {
       <table>
         <thead>
           <tr>
-            <th className="control-cell" />
             {
               Object.keys(tableData.r0).map(colKey => (
                 <th key={colKey}>{tableData.r0[colKey]}</th>
