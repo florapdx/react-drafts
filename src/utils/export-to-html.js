@@ -92,7 +92,6 @@ function cleanHTML(html) {
 
   parsed.querySelectorAll('.atomic')
     .forEach(figure => {
-      debugger;
       if (figure.childNodes.length === 2) {
         // remove erroneously appended figcaption innerText on figure tags
         figure.removeChild(figure.childNodes[1]);

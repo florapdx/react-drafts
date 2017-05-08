@@ -509,6 +509,8 @@ class ContentEditor extends Component {
         entityKey,
         ' '
       ),
+      showFileInput: false,
+      showPhotoInput: false,
       showRichInput: false
     });
   }

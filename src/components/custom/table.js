@@ -2,17 +2,22 @@ import React, { PropTypes } from 'react';
 
 function Table(props) {
   const { title, tableData } = props.blockProps || props;
+  const firstRowColKeys = Object.keys(tableData.r0);
 
   return (
     <figure className="content-editor__custom-block table">
-      {
-        title && <div className="table-header">{title}</div>
-      }
       <table>
         <thead>
+          {
+            title && (
+              <tr className="table-header">
+                <th colSpan={firstRowColKeys.length}>{title}</th>
+              </tr>
+            )
+          }
           <tr>
             {
-              Object.keys(tableData.r0).map(colKey => (
+              firstRowColKeys.map(colKey => (
                 <th key={colKey}>{tableData.r0[colKey]}</th>
               ))
             }

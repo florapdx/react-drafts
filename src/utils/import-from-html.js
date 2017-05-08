@@ -62,13 +62,15 @@ function getDocumentData(node) {
 }
 
 function getTableData(node) {
-  const children = node.parentElement.children;
-  const title = children[0].nodeName.toLowerCase() === 'div' ?
-    children[0].textContent : '';
-
-  const theadRow = node.children[0].children[0];
+  const thead = node.children[0];
   const tbody = node.children[1];
-  const rows = [theadRow].concat(Array.from(tbody.children));
+
+  let title = '';
+  if (thead.children.length > 1) {
+    title = thead.children[0].children[0].textContent;
+  }
+
+  const rows = [Array.from(thead.children).pop()].concat(Array.from(tbody.children));
 
   const tableData = {};
   rows.forEach((row, idx) => {
@@ -125,10 +127,12 @@ function convertToEntity(nodeName, node, contentState, configs) {
       type = configs.divider.id;
       mutability = 'IMMUTABLE';
       data = {};
+      break;
     case 'table':
       type = configs.table.id;
       mutability = 'IMMUTABLE';
       data = getTableData(node);
+      break;
     default:
       break;
   }
@@ -139,9 +143,11 @@ function convertToEntity(nodeName, node, contentState, configs) {
   }
 }
 
-function convertToBlock(nodeName) {
+function convertToBlock(nodeName, node) {
   if (nodeName === 'figure') {
     return 'atomic';
+  } else if (nodeName === 'table') {
+    return null;
   }
 }
 
@@ -163,6 +169,6 @@ export function convertFromHTML(contentState, html, toolbarConfigs) {
     htmlToStyle: convertToInline,
     htmlToEntity: (nodeName, node) =>
       convertToEntity(nodeName, node, contentState, toolbarConfigs),
-    htmlToBlock: convertToBlock
+    htmlToBlock: (nodeName, node) => convertToBlock(nodeName, node)
   })(html);
 }

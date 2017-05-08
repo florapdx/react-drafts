@@ -57,7 +57,7 @@
   width: 100%;
 }
 
-.content-editor__custom-block.table .table-header {
+.content-editor__custom-block.table .table-header th {
   font-weight: bold;
   text-align: left;
 }
