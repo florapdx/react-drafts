@@ -59,7 +59,7 @@
 
 .content-editor__custom-block.table .table-header {
   font-weight: bold;
-  text-align: center;
+  text-align: left;
 }
 
 .content-editor__custom-block.table th {

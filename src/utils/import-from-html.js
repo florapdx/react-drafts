@@ -61,6 +61,33 @@ function getDocumentData(node) {
   };
 }
 
+function getTableData(node) {
+  const children = node.parentElement.children;
+  const title = children[0].nodeName.toLowerCase() === 'div' ?
+    children[0].textContent : '';
+
+  const theadRow = node.children[0].children[0];
+  const tbody = node.children[1];
+  const rows = [theadRow].concat(Array.from(tbody.children));
+
+  const tableData = {};
+  rows.forEach((row, idx) => {
+    const rowData = {};
+    const cells = Array.from(row.children);
+
+    cells.forEach((cell, idx) => {
+      rowData[`c${idx}`] = cell.textContent;
+    });
+
+    tableData[`r${idx}`] = rowData;
+  });
+
+  return {
+    title,
+    tableData
+  };
+}
+
 function convertToEntity(nodeName, node, contentState, configs) {
   let type;
   let mutability;
@@ -98,6 +125,10 @@ function convertToEntity(nodeName, node, contentState, configs) {
       type = configs.divider.id;
       mutability = 'IMMUTABLE';
       data = {};
+    case 'table':
+      type = configs.table.id;
+      mutability = 'IMMUTABLE';
+      data = getTableData(node);
     default:
       break;
   }
