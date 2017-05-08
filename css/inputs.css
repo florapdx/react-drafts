@@ -130,17 +130,34 @@
   margin: 6px 0;
 }
 
-.content-editor__input.table .row.add {
+.content-editor__input.table .add.remove {
+  color: #aaa;
+}
+
+.content-editor__input.table .add.remove span {
+  font-size: 14px;
+}
+
+.content-editor__input.table .row.add.remove {
   margin-top: 8px;
   padding-bottom: 10px;
 }
 
-.content-editor__input.table .column.add {
+.content-editor__input.table .column.add.remove {
   margin-left: 6px;
 }
 
-.content-editor__input.table .add:before {
-  margin-right: 4px;
+.content-editor__input.table .add.remove .fa-plus:before {
+  margin-right: 6px;
+}
+
+.content-editor__input.table .add.remove .fa-minus:before {
+  margin-left: 6px;
+}
+
+.content-editor__input.table .add.remove .fa-plus:hover,
+.content-editor__input.table .add.remove .fa-minus:hover {
+  color: #222;
 }
 
 .content-editor__input.table .row .empty,

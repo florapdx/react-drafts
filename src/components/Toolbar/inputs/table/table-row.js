@@ -13,7 +13,7 @@ class TableRow extends Component {
   }
 
   render() {
-    const { rowKey, rowData, onAddColumn } = this.props;
+    const { rowKey, rowData, onAddColumn, onRemoveColumn } = this.props;
 
     return (
       <div className="row">
@@ -33,13 +33,19 @@ class TableRow extends Component {
         }
         {
           rowKey === 'r0' && (
-            <button
-              className="add column fa fa-plus"
-              type="button"
-              onClick={onAddColumn}
-            >
-              Add column
-            </button>
+            <div className="add remove column">
+              <button
+                className="fa fa-plus"
+                type="button"
+                onClick={onAddColumn}
+              />
+              <span>col</span>
+              <button
+                className="fa fa-minus"
+                type="button"
+                onClick={onRemoveColumn}
+              />
+            </div>
           )
         }
       </div>

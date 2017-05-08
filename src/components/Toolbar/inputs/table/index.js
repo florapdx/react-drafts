@@ -20,9 +20,12 @@ class TableInput extends Component {
     };
 
     this.handleTitleChange = this.handleTitleChange.bind(this);
-    this.handleAddColumn = this.handleAddColumn.bind(this);
-    this.handleAddRow = this.handleAddRow.bind(this);
     this.handleUpdateTableData = this.handleUpdateTableData.bind(this);
+
+    this.handleAddColumn = this.handleAddColumn.bind(this);
+    this.handleRemoveColumn = this.handleRemoveColumn.bind(this);
+    this.handleAddRow = this.handleAddRow.bind(this);
+    this.handleRemoveRow = this.handleRemoveRow.bind(this);
 
     this.handleConfirm = this.handleConfirm.bind(this);
   }
@@ -33,24 +36,42 @@ class TableInput extends Component {
     });
   }
 
+  /*
+   * Row and column keys are 0-indexed, while counts start at 1.
+   */
   handleAddColumn() {
     const { tableData, colCount } = this.state;
-    const nextColCount = colCount + 1;
 
     Object.keys(tableData).forEach(rowKey => {
-      tableData[rowKey][`c${nextColCount}`] = '';
+      tableData[rowKey][`c${colCount}`] = '';
+    });
+
+    this.setState({
+      colCount: colCount + 1,
+      tableData
+    });
+  }
+
+  handleRemoveColumn() {
+    const { tableData, colCount } = this.state;
+
+    // Always have at least one column
+    const nextColCount = (colCount - 1) > 0 ? colCount - 1 : 1;
+    const nextTableData = { ...tableData };
+
+    Object.keys(nextTableData).forEach(rowKey => {
+      delete nextTableData[rowKey][`c${nextColCount}`];
     });
 
     this.setState({
       colCount: nextColCount,
-      tableData
+      tableData: nextTableData
     });
   }
 
   handleAddRow(event) {
     const { tableData, colCount, rowCount } = this.state;
 
-    const nextRowCount = rowCount + 1;
     const nextRowObj = {};
 
     for (var i = 0; i < colCount; ++i) {
@@ -61,8 +82,22 @@ class TableInput extends Component {
       rowCount: rowCount + 1,
       tableData: {
         ...tableData,
-        [`r${nextRowCount}`]: nextRowObj
+        [`r${rowCount}`]: nextRowObj
       }
+    });
+  }
+
+  handleRemoveRow(event) {
+    const { tableData, rowCount } = this.state;
+
+    // Always have at least one row
+    const nextRowCount = (rowCount - 1 > 0) ? rowCount - 1 : 1;
+    const nextTableData = { ...tableData };
+    delete nextTableData[`r${nextRowCount}`];
+
+    this.setState({
+      rowCount: nextRowCount,
+      tableData: nextTableData
     });
   }
 
@@ -120,16 +155,23 @@ class TableInput extends Component {
                   rowData={row}
                   onChangeCell={this.handleUpdateTableData}
                   onAddColumn={this.handleAddColumn}
+                  onRemoveColumn={this.handleRemoveColumn}
                 />
               ))
             }
-            <button
-              className="add row fa fa-plus"
-              type="button"
-              onClick={this.handleAddRow}
-            >
-              Add row
-            </button>
+            <div className="add remove row">
+              <button
+                className="fa fa-plus"
+                type="button"
+                onClick={this.handleAddRow}
+              />
+              <span>row</span>
+              <button
+                className="fa fa-minus"
+                type="button"
+                onClick={this.handleRemoveRow}
+              />
+            </div>
           </div>
           <InputControls
             key="controls"

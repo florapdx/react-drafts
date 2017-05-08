@@ -9,11 +9,11 @@ function Table(props) {
       <table>
         <thead>
           {
-            title && (
+            title ? (
               <tr className="table-header">
                 <th colSpan={firstRowColKeys.length}>{title}</th>
               </tr>
-            )
+            ) : null
           }
           <tr>
             {
