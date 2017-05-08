@@ -10,7 +10,7 @@ class TableInput extends Component {
 
     this.state = {
       title: '',
-      rowCount: 0,
+      rowCount: 1,
       colCount: 1,
       tableData: {
         r0: {
@@ -73,7 +73,6 @@ class TableInput extends Component {
     const { tableData, colCount, rowCount } = this.state;
 
     const nextRowObj = {};
-
     for (var i = 0; i < colCount; ++i) {
       nextRowObj[`c${i}`] = '';
     }
