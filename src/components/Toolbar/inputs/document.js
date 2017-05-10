@@ -24,6 +24,18 @@ class DocumentInput extends Component {
       error: null
     };
 
+    const { currentEntity } = this.props;
+    if (currentEntity) {
+      const data = currentEntity.entity.getData();
+      this.state = {
+        file: {
+          src: data.src,
+          name: data.name
+        },
+        captionValue: data.caption
+      };
+    }
+
     this.handleDrop = this.handleDrop.bind(this);
     this.handleCaptionChange = this.handleCaptionChange.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
@@ -66,22 +78,37 @@ class DocumentInput extends Component {
   }
 
   handleConfirm() {
-    const { blockType, onFileUpload, onAddDocument } = this.props;
+    const { blockType, currentEntity, onFileUpload, onAddDocument } = this.props;
     const { file, captionValue } = this.state;
 
-    onFileUpload(file)
-      .then(resp => {
-        onAddDocument(blockType, {
-          src: resp.src,
-          name: resp.name,
+    if (currentEntity) {
+      onAddDocument(
+        blockType,
+        currentEntity,
+        {
+          ...currentEntity.entity.getData(),
           caption: captionValue
+        }
+      );
+    } else {
+      onFileUpload(file)
+        .then(resp => {
+          onAddDocument(
+            blockType,
+            currentEntity,
+            {
+              src: resp.src,
+              name: resp.name,
+              caption: captionValue
+            }
+          );
+        })
+        .catch(err => {
+          this.setState({
+            error: ERROR_MSG
+          });
         });
-      })
-      .catch(err => {
-        this.setState({
-          error: ERROR_MSG
-        });
-      });
+    }
   }
 
   handleCancel() {
@@ -92,6 +119,7 @@ class DocumentInput extends Component {
   }
 
   render() {
+    const { currentEntity } = this.props;
     const { file, captionValue, error } = this.state;
 
     return (
@@ -111,7 +139,7 @@ class DocumentInput extends Component {
               </div>,
               <InputControls
                 key="controls"
-                confirmText="Add File"
+                confirmText={currentEntity ? 'Update' : 'Add File'}
                 onConfirm={this.handleConfirm}
                 onCancel={this.handleCancel}
               />
@@ -139,6 +167,7 @@ class DocumentInput extends Component {
 
 DocumentInput.propTypes = {
   blockType: PropTypes.string,
+  currentEntity: PropTypes.shape({}),
   onFileUpload: PropTypes.func,
   onAddDocument: PropTypes.func,
   onCloseClick: PropTypes.func

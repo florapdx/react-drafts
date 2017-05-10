@@ -32,6 +32,22 @@ class PhotoInput extends Component {
       error: null
     };
 
+    const { currentEntity } = this.props;
+    if (currentEntity) {
+      const data = currentEntity.entity.getData();
+      this.state = {
+        ...this.state,
+        srcValue: data.src,
+        width: data.width,
+        height: data.height,
+        ratio: (parseInt(data.width, 10) / parseInt(data.height, 10)),
+        link: data.href || '',
+        linkIsTargetBlank: data.target,
+        captionValue: data.caption
+      };
+    }
+
+
     this.handlePasteLink = this.handlePasteLink.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
     this.handleCaptionChange = this.handleCaptionChange.bind(this);
@@ -142,6 +158,7 @@ class PhotoInput extends Component {
   handleConfirm() {
     const {
       blockType,
+      currentEntity,
       onFileUpload,
       onAddPhoto
     } = this.props;
@@ -160,14 +177,18 @@ class PhotoInput extends Component {
       // Get the stored file source
       onFileUpload(file)
         .then(resp => {
-          onAddPhoto(blockType, {
-            src: resp.src,
-            caption: captionValue,
-            width: width,
-            height: height,
-            href: link,
-            target: linkIsTargetBlank
-          });
+          onAddPhoto(
+            blockType,
+            currentEntity,
+            {
+              src: resp.src,
+              caption: captionValue,
+              width: width,
+              height: height,
+              href: link,
+              target: linkIsTargetBlank
+            }
+          );
         })
         .catch(err => {
           this.setState({
@@ -175,14 +196,18 @@ class PhotoInput extends Component {
           });
         });
     } else {
-      onAddPhoto(blockType, {
-        src: srcValue,
-        caption: captionValue,
-        width: width,
-        height: height,
-        href: link,
-        target: linkIsTargetBlank
-      });
+      onAddPhoto(
+        blockType,
+        currentEntity,
+        {
+          src: srcValue,
+          caption: captionValue,
+          width: width,
+          height: height,
+          href: link,
+          target: linkIsTargetBlank
+        }
+      );
     }
   }
 
@@ -202,6 +227,7 @@ class PhotoInput extends Component {
 
   render() {
     const {
+      currentEntity,
       allowPhotoLink,
       allowPhotoSizeAdjust,
       maxImgWidth
@@ -283,7 +309,7 @@ class PhotoInput extends Component {
       </div>,
       <InputControls
         key="controls"
-        confirmText="Add Photo"
+        confirmText={currentEntity ? 'Update' : 'Add Photo'}
         onConfirm={this.handleConfirm}
         onCancel={this.handleCancel}
       />
@@ -323,6 +349,7 @@ class PhotoInput extends Component {
 
 PhotoInput.propTypes = {
   blockType: PropTypes.string,
+  currentEntity: PropTypes.shape({}),
   allowPhotoLink: PropTypes.bool,
   allowPhotoSizeAdjust: PropTypes.bool,
   maxImgWidth: PropTypes.number,
