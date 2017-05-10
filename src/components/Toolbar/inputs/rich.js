@@ -14,6 +14,18 @@ class RichMediaInput extends Component {
       error: null
     };
 
+    const { currentEntity } = this.props;
+    if (currentEntity) {
+      const data = currentEntity.entity.getData();
+      this.state = {
+        ...this.state,
+        src: data.src,
+        width: data.width,
+        height: data.height,
+        captionValue: data.caption
+      };
+    }
+
     this.handleChange = this.handleChange.bind(this);
     this.handleCaptionChange = this.handleCaptionChange.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
@@ -45,6 +57,7 @@ class RichMediaInput extends Component {
   }
 
   handleConfirm() {
+    const { blockType, currentEntity, onAddRichMedia } = this.props;
     const {
       src,
       width,
@@ -52,12 +65,16 @@ class RichMediaInput extends Component {
       captionValue
     } = this.state;
 
-    this.props.onAddRichMedia(this.props.blockType, {
-      src,
-      width,
-      height,
-      caption: captionValue
-    });
+    onAddRichMedia(
+      blockType,
+      currentEntity,
+      {
+        src,
+        width,
+        height,
+        caption: captionValue
+      }
+    );
   }
 
   handleCancel() {
@@ -71,6 +88,7 @@ class RichMediaInput extends Component {
   }
 
   render() {
+    const { currentEntity } = this.props;
     const {
       src,
       width,
@@ -104,7 +122,7 @@ class RichMediaInput extends Component {
               </div>,
               <InputControls
                 key="controls"
-                confirmText="Add Media"
+                confirmText={currentEntity ? 'Update' : 'Add Media'}
                 onConfirm={this.handleConfirm}
                 onCancel={this.handleCancel}
               />
@@ -127,6 +145,7 @@ class RichMediaInput extends Component {
 
 RichMediaInput.propTypes = {
   blockType: PropTypes.string,
+  currentEntity: PropTypes.shape({}),
   onAddRichMedia: PropTypes.func,
   onCloseClick: PropTypes.func
 };
