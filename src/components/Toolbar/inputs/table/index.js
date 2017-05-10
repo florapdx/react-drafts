@@ -8,16 +8,27 @@ class TableInput extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      title: '',
-      rowCount: 1,
-      colCount: 1,
-      tableData: {
-        r0: {
-          c0: ''
-        }
+    const { currentEntity } = this.props;
+    if (currentEntity) {
+      const { title, tableData } = currentEntity.entity.getData();
+      this.state = {
+        title,
+        rowCount: Object.keys(tableData).length,
+        colCount: Object.keys(tableData['r0']).length,
+        tableData
       }
-    };
+    } else {
+      this.state = {
+        title: '',
+        rowCount: 1,
+        colCount: 1,
+        tableData: {
+          r0: {
+            c0: ''
+          }
+        }
+      };
+    }
 
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleUpdateTableData = this.handleUpdateTableData.bind(this);
@@ -117,16 +128,18 @@ class TableInput extends Component {
   }
 
   handleConfirm() {
-    const { blockType, onAddTable } = this.props;
+    const { blockType, currentEntity, onAddTable } = this.props;
     const { title, tableData } = this.state;
 
-    onAddTable(blockType, {
-      title,
-      tableData
-    });
+    onAddTable(
+      blockType,
+      currentEntity,
+      { title, tableData }
+    );
   }
 
   render() {
+    const { currentEntity } = this.props;
     const {
       title,
       tableData,
@@ -174,7 +187,7 @@ class TableInput extends Component {
           </div>
           <InputControls
             key="controls"
-            confirmText="Add Table"
+            confirmText={ currentEntity ? 'Update' : 'Add Table' }
             onConfirm={this.handleConfirm}
             onCancel={this.props.onCloseClick}
           />
@@ -185,6 +198,8 @@ class TableInput extends Component {
 }
 
 TableInput.propTypes = {
+  blockType: PropTypes.string,
+  currentEntity: PropTypes.shape({}),
   onAddTable: PropTypes.func,
   onCloseClick: PropTypes.func
 };

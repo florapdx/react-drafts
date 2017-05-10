@@ -16,8 +16,10 @@ import {
   getContentState,
   getCurrentInlineStyle,
   getNewEntityKey,
+  getEntityFromBlock,
   getEntityTypeFromBlock,
-  getEntityDataFromBlock
+  getEntityDataFromBlock,
+  updateEntity
 } from '../../utils/content';
 import {
   getSelectionState,
@@ -64,6 +66,7 @@ class ContentEditor extends Component {
       showPhotoInput: false,
       showRichInput: false,
       showFileInput: false,
+      currentSelectedEntity: null,
       detachToolbar: false,
       isSaving: false
     };
@@ -340,13 +343,7 @@ class ContentEditor extends Component {
    * have to rethink this a little for customControlProps.
    */
   _handleToggleCustomBlockType(blockType) {
-    const nextState = {
-      showLinkInput: false,
-      showTableInput: false,
-      showPhotoInput: false,
-      showRichInput: false,
-      showFileInput: false
-    };
+    const { editorState } = this.state;
     const { link, table, photo, rich, file, divider } = this.toolbarControls;
 
     if (blockType === divider.id) {
@@ -357,7 +354,6 @@ class ContentEditor extends Component {
     // If user is toggling link, we don't want to show the link input,
     // we just want to toggle the selection to un-linkify it.
     if (blockType === link.id) {
-      const { editorState } = this.state;
       const selection = getSelectionState(editorState);
       if (
         RichUtils.currentBlockContainsLink(editorState) &&
@@ -373,6 +369,15 @@ class ContentEditor extends Component {
         return;
       }
     }
+
+    const nextState = {
+      showLinkInput: false,
+      showTableInput: false,
+      showPhotoInput: false,
+      showRichInput: false,
+      showFileInput: false,
+      currentSelectedEntity: null
+    };
 
     switch(blockType) {
       case link.id:
@@ -392,6 +397,17 @@ class ContentEditor extends Component {
         break;
       default:
         return;
+    }
+
+    const selectedBlock = getSelectedBlock(editorState);
+    const entity = selectedBlock.getType() === 'atomic' ?
+      getEntityFromBlock(selectedBlock, getContentState(editorState)) : null;
+
+    if (entity && entity.getType() === blockType) {
+      nextState.currentSelectedEntity = {
+        entityKey: selectedBlock.getEntityAt(0),
+        entity
+      };
     }
 
     this.setState(nextState);
@@ -475,21 +491,44 @@ class ContentEditor extends Component {
     }, () => this.insertSpaceAfter());
   }
 
-  _handleAddTable(blockType, tableData) {
+  _handleAddTable(blockType, existingEntity, data) {
     const { editorState } = this.state;
-    const entityKey = getNewEntityKey(
-      editorState,
-      blockType,
-      false,
-      tableData
-    );
+    let nextEditorState;
 
-    this.setState({
-      editorState: AtomicBlockUtils.insertAtomicBlock(
+    if (existingEntity) {
+      const nextContentState = updateEntity(
+        getContentState(editorState),
+        existingEntity.entityKey,
+        { ...data }
+      );
+
+      nextEditorState = EditorState.push(
+        editorState,
+        nextContentState,
+        'apply-entity'
+      );
+
+      nextEditorState = EditorState.forceSelection(
+        nextEditorState,
+        getSelectionState(editorState)
+      );
+    } else {
+      const entityKey = getNewEntityKey(
+        editorState,
+        blockType,
+        false,
+        data
+      );
+
+      nextEditorState = AtomicBlockUtils.insertAtomicBlock(
         editorState,
         entityKey,
         ' '
-      ),
+      );
+    }
+
+    this.setState({
+      editorState: nextEditorState,
       showTableInput: false
     });
   }
@@ -549,6 +588,7 @@ class ContentEditor extends Component {
       showPhotoInput,
       showRichInput,
       showFileInput,
+      currentSelectedEntity,
       detachToolbar
     } = this.state;
 
@@ -596,6 +636,7 @@ class ContentEditor extends Component {
           showLinkInput &&
             <LinkInput
               blockType={toolbarControls.link.id}
+              currentEntity={currentSelectedEntity}
               linkText={getSelectedText(editorState)}
               linkInputAcceptsFiles={linkInputAcceptsFiles}
               onFileUpload={onFileUpload}
@@ -607,6 +648,7 @@ class ContentEditor extends Component {
           showTableInput &&
             <TableInput
               blockType={toolbarControls.table.id}
+              currentEntity={currentSelectedEntity}
               onAddTable={this.handleAddTable}
               onCloseClick={this.handleModalClose}
             />
@@ -615,6 +657,7 @@ class ContentEditor extends Component {
           showPhotoInput &&
             <PhotoInput
               blockType={toolbarControls.photo.id}
+              currentEntity={currentSelectedEntity}
               allowPhotoLink={allowPhotoLink}
               allowPhotoSizeAdjust={allowPhotoSizeAdjust}
               maxImgWidth={maxImgWidth}
@@ -627,6 +670,7 @@ class ContentEditor extends Component {
           showRichInput &&
             <RichInput
               blockType={toolbarControls.rich.id}
+              currentEntity={currentSelectedEntity}
               onAddRichMedia={this.handleEmbedMedia}
               onCloseClick={this.handleModalClose}
             />
@@ -635,6 +679,7 @@ class ContentEditor extends Component {
           showFileInput &&
             <DocumentInput
               blockType={toolbarControls.file.id}
+              currentEntity={currentSelectedEntity}
               onFileUpload={onFileUpload}
               onAddDocument={this.handleEmbedMedia}
               onCloseClick={this.handleModalClose}
