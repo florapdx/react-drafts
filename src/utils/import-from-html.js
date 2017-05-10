@@ -19,7 +19,7 @@ function getPhotoData(node) {
 
       if (parts[0] === 'width') {
         width = parts[1].split('px')[0];
-      } else if (parts[0] === 'height') {
+      } else if (parts[0] === 'max-height') {
         height = parts[1].split('px')[0];
       }
     });
@@ -35,7 +35,7 @@ function getPhotoData(node) {
 
   return {
     src: node.getAttribute('src'),
-    caption: getCaptionData(node),
+    caption: href ? getCaptionData(node.parentElement) : getCaptionData(node),
     width,
     height,
     href,

@@ -97,6 +97,7 @@ class ContentEditor extends Component {
     this.handleAddTable = this._handleAddTable.bind(this);
     this.handleEmbedMedia = this._handleEmbedMedia.bind(this);
     this.handleModalClose = this._handleModalClose.bind(this);
+    this.updateEditorStateWithEntityChange = this._updateEditorStateWithEntityChange.bind(this);
 
     this.renderBlock = this._renderBlock.bind(this);
   }
@@ -491,26 +492,34 @@ class ContentEditor extends Component {
     }, () => this.insertSpaceAfter());
   }
 
+  _updateEditorStateWithEntityChange(editorState, entityKey, newEntityData) {
+    const nextContentState = updateEntity(
+      getContentState(editorState),
+      entityKey,
+      { ...newEntityData }
+    );
+
+    const nextEditorState = EditorState.push(
+      editorState,
+      nextContentState,
+      'apply-entity'
+    );
+
+    return EditorState.forceSelection(
+      nextEditorState,
+      getSelectionState(editorState)
+    );
+  }
+
   _handleAddTable(blockType, existingEntity, data) {
     const { editorState } = this.state;
     let nextEditorState;
 
     if (existingEntity) {
-      const nextContentState = updateEntity(
-        getContentState(editorState),
-        existingEntity.entityKey,
-        { ...data }
-      );
-
-      nextEditorState = EditorState.push(
+      nextEditorState = this.updateEditorStateWithEntityChange(
         editorState,
-        nextContentState,
-        'apply-entity'
-      );
-
-      nextEditorState = EditorState.forceSelection(
-        nextEditorState,
-        getSelectionState(editorState)
+        existingEntity.entityKey,
+        data
       );
     } else {
       const entityKey = getNewEntityKey(
@@ -533,21 +542,33 @@ class ContentEditor extends Component {
     });
   }
 
-  _handleEmbedMedia(blockType, media) {
+  _handleEmbedMedia(blockType, existingEntity, media) {
     const { editorState } = this.state;
-    const entityKey = getNewEntityKey(
-      editorState,
-      blockType,
-      false,
-      media
-    );
 
-    this.setState({
-      editorState: AtomicBlockUtils.insertAtomicBlock(
+    let nextEditorState;
+    if (existingEntity) {
+      nextEditorState = this.updateEditorStateWithEntityChange(
+        editorState,
+        existingEntity.entityKey,
+        media
+      );
+    } else {
+      const entityKey = getNewEntityKey(
+        editorState,
+        blockType,
+        false,
+        media
+      );
+
+      nextEditorState = AtomicBlockUtils.insertAtomicBlock(
         editorState,
         entityKey,
         ' '
-      ),
+      );
+    }
+
+    this.setState({
+      editorState: nextEditorState,
       showFileInput: false,
       showPhotoInput: false,
       showRichInput: false
