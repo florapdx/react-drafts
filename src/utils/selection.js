@@ -30,7 +30,30 @@ export function getSelectionStartKey(editorState) {
 export function getSelectedBlock(editorState) {
   const currentContent = editorState.getCurrentContent();
   const anchorKey = getSelectionAnchorKey(editorState);
+
   return currentContent.getBlockForKey(anchorKey);
+}
+
+/*
+ * Selecting atomic blocks can be tricky from a user standpoint
+ * because it's easy to accidentally select the surrounding
+ * buffer divs. Not ideal, but as a corrective we'll go ahead and
+ * check here to see if the next block is atomic.
+ */
+export function getSelectedAtomicBlock(editorState) {
+  const currentContent = editorState.getCurrentContent();
+  const anchorKey = getSelectionAnchorKey(editorState);
+
+  let selectedBlock = currentContent.getBlockForKey(anchorKey);
+  if (selectedBlock.getType() === 'unstyled' && selectedBlock.getText() === '') {
+    const nextBlock = currentContent.getBlockAfter(anchorKey);
+
+    if (nextBlock && nextBlock.getType() === 'atomic') {
+      selectedBlock = nextBlock;
+    }
+  }
+
+  return selectedBlock;
 }
 
 export function getSelectedBlockType(editorState) {

@@ -24,7 +24,7 @@ import {
 import {
   getSelectionState,
   getSelectedText,
-  getSelectedBlock,
+  getSelectedAtomicBlock,
   getSelectedBlockType,
   getSelectionInlineStyles
 } from '../../utils/selection';
@@ -400,7 +400,7 @@ class ContentEditor extends Component {
         return;
     }
 
-    const selectedBlock = getSelectedBlock(editorState);
+    const selectedBlock = getSelectedAtomicBlock(editorState);
     const entity = selectedBlock.getType() === 'atomic' ?
       getEntityFromBlock(selectedBlock, getContentState(editorState)) : null;
 
