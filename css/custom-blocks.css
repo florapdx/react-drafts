@@ -1,11 +1,13 @@
 .content-editor__custom-block {}
 
 /* inner figure tags */
+.content-editor__custom-block.table,
 .content-editor__custom-block.rich,
 .content-editor__custom-block.photo,
 .content-editor__custom-block.document {
   width: auto;
   margin: 0;
+  padding: 0;
 }
 
 .content-editor__custom-block .caption {
