@@ -2,9 +2,9 @@ import { convertFromHTML as convert } from 'draft-convert';
 import { getNewEntityKey } from './content';
 
 function getCaptionData(node) {
-  const captionNode = node.parentNode.children[1];
+  const captionNode = node.parentNode ? node.parentNode.children[1] : null;
   if (captionNode) {
-    return captionNode.innerText || '';
+    return captionNode.textContent || '';
   }
 }
 
@@ -28,7 +28,7 @@ function getPhotoData(node) {
   let href;
   let target;
   const parent = node.parentElement;
-  if (parent.tagName.toLowerCase() === 'a') {
+  if (parent && parent.tagName.toLowerCase() === 'a') {
     href = parent.getAttribute('href');
     target = parent.getAttribute('target');
   }
@@ -70,14 +70,14 @@ function getTableData(node) {
     title = thead.children[0].children[0].textContent;
   }
 
-  const rows = [Array.from(thead.children).pop()].concat(Array.from(tbody.children));
+  const rows = thead.children.length ?
+    [Array.from(thead.children).pop()].concat(Array.from(tbody.children)) : [];
 
   const tableData = {};
   rows.forEach((row, idx) => {
     const rowData = {};
-    const cells = Array.from(row.children);
 
-    cells.forEach((cell, idx) => {
+    Array.from(row.children).forEach((cell, idx) => {
       rowData[`c${idx}`] = cell.textContent;
     });
 
@@ -172,3 +172,11 @@ export function convertFromHTML(contentState, html, toolbarConfigs) {
     htmlToBlock: (nodeName, node) => convertToBlock(nodeName, node)
   })(html);
 }
+
+export const testFromHTMLInternals = {
+  convertToInline,
+  convertToBlock,
+  convertToEntity
+};
+
+

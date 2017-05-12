@@ -4,13 +4,17 @@ export default {
   target: 'node',
   externals: [nodeExternals()],
   resolve: {
-    extensions: ['', '.js'],
+    extensions: [' ', '.js'],
+  },
+  node: {
+    fs: 'empty'
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js?$/,
-        loader: 'babel-loader',
+        use: 'babel-loader',
+        exclude: /node_modules/
       },
     ],
   },
