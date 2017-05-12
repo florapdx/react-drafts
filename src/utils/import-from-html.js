@@ -4,7 +4,7 @@ import { getNewEntityKey } from './content';
 function getCaptionData(node) {
   const captionNode = node.parentNode ? node.parentNode.children[1] : null;
   if (captionNode) {
-    return captionNode.innerText || '';
+    return captionNode.textContent || '';
   }
 }
 
@@ -76,9 +76,8 @@ function getTableData(node) {
   const tableData = {};
   rows.forEach((row, idx) => {
     const rowData = {};
-    const cells = Array.from(row.children);
 
-    cells.forEach((cell, idx) => {
+    Array.from(row.children).forEach((cell, idx) => {
       rowData[`c${idx}`] = cell.textContent;
     });
 

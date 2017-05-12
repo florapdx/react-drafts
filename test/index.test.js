@@ -210,7 +210,7 @@ describe('converting to html', () => {
   });
 
   describe('cleaning html', () => {
-    it('should remove erroneously applied innerText in figure tags', () => {
+    it('should remove erroneously applied textContent in figure tags', () => {
       const html = oneLineTrim`
         <figure class="atomic">
           <figure>
@@ -380,7 +380,7 @@ describe('converting from html', () => {
           const parent = document.createElement('figure');
           const node = document.createElement('img');
           const node2 = document.createElement('figcaption');
-          node2.innerText = 'A caption';
+          node2.textContent = 'A caption';
           parent.appendChild(node);
           parent.appendChild(node2);
 
@@ -426,7 +426,7 @@ describe('converting from html', () => {
           const wrapper = document.createElement('div');
           const node = document.createElement('iframe');
           const caption = document.createElement('figcaption');
-          caption.innerText = 'Another caption';
+          caption.textContent = 'Another caption';
 
           wrapper.appendChild(node);
           parent.appendChild(wrapper);
@@ -477,11 +477,11 @@ describe('converting from html', () => {
           const thead = document.createElement('thead');
           const titletr = document.createElement('tr');
           const titleth = document.createElement('th');
-          titleth.innerText = "Table title";
+          titleth.textContent = "Table title";
 
           const colstr = document.createElement('tr');
           const colth = document.createElement('th');
-          colth.innerText = "Column title";
+          colth.textContent = "Column title";
 
           titletr.appendChild(titleth);
           colstr.appendChild(colth);
@@ -492,7 +492,7 @@ describe('converting from html', () => {
           const tbody = document.createElement('tbody');
           const btr = document.createElement('tr');
           const td = document.createElement('td');
-          td.innerText = "Some data";
+          td.textContent = "Some data";
 
           btr.appendChild(td);
           tbody.appendChild(btr);

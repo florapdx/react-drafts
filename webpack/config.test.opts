@@ -2,4 +2,4 @@
 --require babel-core/register
 --webpack-config webpack/config.test.js
 --include dom-test.js
-test/convert-to-html.test.js
+test/index.test.js
