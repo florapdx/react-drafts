@@ -3,7 +3,7 @@ import { OrderedSet } from 'immutable';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { expect } from 'chai';
 import { oneLineTrim } from 'common-tags';
-import { convertFromRaw } from 'draft-js';
+import { convertFromRaw, ContentState } from 'draft-js';
 import { TOOLBAR_DEFAULTS } from '../src/constants/toolbar';
 import {
   convertToHTML,
@@ -13,12 +13,6 @@ import {
   convertFromHTML,
   testFromHTMLInternals
 } from '../src/utils/import-from-html';
-
-import Link from '../src/components/custom/link';
-import Divider from '../src/components/custom/divider';
-import Document from '../src/components/custom/document';
-import Photo from '../src/components/custom/photo';
-import Video from '../src/components/custom/video';
 
 describe('converting to html', () => {
   describe('converting inline styles', () => {
@@ -101,11 +95,15 @@ describe('converting to html', () => {
       const markup = testToHTMLInternals.convertEntity({
         type: TOOLBAR_DEFAULTS.link.id,
         data: {
-          src: 'test.com'
+          url: 'test.com'
         }
       }, TOOLBAR_DEFAULTS);
 
-      expect(markup).to.equal('<a class="content-editor__custom-block link"></a>');
+      const expected = oneLineTrim`
+        <a class="content-editor__custom-block link" href="test.com" target="_self" rel="">
+        </a>
+      `;
+      expect(markup).to.equal(expected);
     });
 
     it('should return a Divider rendered to markup when given a divider entity', () => {
@@ -150,17 +148,17 @@ describe('converting to html', () => {
       expect(markup).to.equal(expected);
     });
 
-    it('should return a Video rendered to markup when given a video entity', () => {
+    it('should return a Rich embed rendered to markup when given a rich embed entity', () => {
       const markup = testToHTMLInternals.convertEntity({
-        type: TOOLBAR_DEFAULTS.video.id,
+        type: TOOLBAR_DEFAULTS.rich.id,
         data: {
           src: 'test.com'
         }
       }, TOOLBAR_DEFAULTS);
 
       const expected = oneLineTrim`
-        <figure class="content-editor__custom-block video">
-          <div class="video-wrapper">
+        <figure class="content-editor__custom-block rich">
+          <div class="rich-media-wrapper">
             <iframe src="test.com" frameborder="0" allowfullscreen=""></iframe>
           </div>
         </figure>
@@ -205,30 +203,94 @@ describe('converting from html', () => {
     });
   });
 
-  xdescribe('converting to block', () => {
+  describe('converting to block', () => {
     it('should return block of type atomic for any figure tag', () => {
+      const node = document.createElement('figure');
+      expect(testFromHTMLInternals.convertToBlock('figure', node)).to.equal('atomic');
+    });
 
+    it('should return null for any table tag (since tables are rendered by entity component)', () => {
+      const node = document.createElement('table');
+      expect(testFromHTMLInternals.convertToBlock('table', node)).to.be.null;
     });
   });
 
-  xdescribe('converting to entity', () => {
-    it('should return a document entity for <a> tags with class "file-name"', () => {
+  describe('converting to entity', () => {
+    const contentState = new ContentState();
+    const configs = TOOLBAR_DEFAULTS;
 
+    describe('entity type', () => {
+      it('should return a document entity for <a> tags with class "file-name"', () => {
+        const node = document.createElement('a');
+        node.setAttribute('class', 'file-name');
+
+        const entityKey = testFromHTMLInternals
+          .convertToEntity('a', node, contentState, configs);
+
+        expect(contentState.getEntity(entityKey).getType())
+          .to.equal(configs.file.id);
+      });
+
+      it('should return a link entity for all other <a> tags', () => {
+        const node = document.createElement('a');
+
+        const entityKey = testFromHTMLInternals
+          .convertToEntity('a', node, contentState, configs);
+
+        expect(contentState.getEntity(entityKey).getType())
+          .to.equal(configs.link.id);
+      });
+
+      it('should return a photo entity for <img> tags', () => {
+        const parent = document.createElement('figure');
+        const node = document.createElement('img');
+        parent.appendChild(node);
+
+        const entityKey = testFromHTMLInternals
+          .convertToEntity('img', node, contentState, configs);
+
+        expect(contentState.getEntity(entityKey).getType())
+          .to.equal(configs.photo.id);
+      });
+
+      it('should return a rich entity for <iframe> tags', () => {
+        const parent = document.createElement('figure');
+        const node = document.createElement('iframe');
+        parent.appendChild(node);
+
+        const entityKey = testFromHTMLInternals
+          .convertToEntity('iframe', node, contentState, configs);
+
+        expect(contentState.getEntity(entityKey).getType())
+          .to.equal(configs.rich.id);
+      });
+
+      it('should return a divider entity for <hr> tags', () => {
+        const node = document.createElement('hr');
+
+        const entityKey = testFromHTMLInternals
+          .convertToEntity('hr', node, contentState, configs);
+
+        expect(contentState.getEntity(entityKey).getType())
+          .to.equal(configs.divider.id);
+      });
+
+      it('should return a table entity for <table> tags', () => {
+        const node = document.createElement('table');
+        const child1 = document.createElement('thead');
+        const child2 = document.createElement('tbody');
+        node.appendChild(child1);
+        node.appendChild(child2);
+
+        const entityKey = testFromHTMLInternals
+          .convertToEntity('table', node, contentState, configs);
+
+        expect(contentState.getEntity(entityKey).getType())
+          .to.equal(configs.table.id);
+      });
     });
 
-    it('should return a link entity for all other <a> tags', () => {
-
-    });
-
-    it('should return a photo entity for <img> tags', () => {
-
-    });
-
-    it('should return a video entity for <iframe> tags', () => {
-
-    });
-
-    it('should return a divider entity for <hr> tags', () => {
+    describe('entity data', () => {
 
     });
   });
