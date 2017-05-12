@@ -1,6 +1,6 @@
 {
   "name": "@crossfield/content-editor",
-  "version": "0.22.1",
+  "version": "1.0.0",
   "description": "A React-based WYSIWYG editor",
   "main": "lib/index.js",
   "files": [
@@ -29,7 +29,8 @@
     "draft-js",
     "draftjs",
     "wysiwyg",
-    "blog editor"
+    "blog editor",
+    "cms editor"
   ],
   "authors": [
     "@florapdx",

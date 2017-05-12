@@ -714,6 +714,7 @@ class ContentEditor extends Component {
 ContentEditor.defaultProps = {
   placeholder: 'Enter text here...',
   spellcheckEnabled: true,
+  customControls: [],
   detachToolbarOnScroll: true,
   onFocus: () => {},
   onBlur: () => {},
@@ -724,15 +725,15 @@ ContentEditor.propTypes = {
   content: PropTypes.string,
   placeholder: PropTypes.string,
   spellcheckEnabled: PropTypes.bool,
-  customControls: PropTypes.shape({}),
+  customControls: PropTypes.arrayOf(PropTypes.string),
   detachToolbarOnScroll: PropTypes.bool,
+  allowPhotoLink: PropTypes.bool,
+  allowPhotoSizeAdjust: PropTypes.bool,
+  maxImgWidth: PropTypes.number,
+  linkInputAcceptsFiles: PropTypes.bool,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   onFileUpload: PropTypes.func.isRequired,
-  allowPhotoSizeAdjust: PropTypes.bool,
-  allowPhotoLink: PropTypes.bool,
-  maxImgWidth: PropTypes.number,
-  linkInputAcceptsFiles: PropTypes.bool,
   exportTo: PropTypes.oneOf(['html', 'raw']).isRequired
 };
 
