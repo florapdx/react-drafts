@@ -290,8 +290,151 @@ describe('converting from html', () => {
       });
     });
 
-    describe('entity data', () => {
+    describe('entity data: ', () => {
+      describe('photos', () => {
+        it('should return the src attribute value', () => {
+          const parent = document.createElement('figure');
+          const node = document.createElement('img');
+          node.setAttribute('src', 'photosrus.com');
+          parent.appendChild(node);
 
+          const entityKey = testFromHTMLInternals
+            .convertToEntity('img', node, contentState, configs);
+
+          expect(contentState.getEntity(entityKey).getData().src)
+            .to.equal('photosrus.com')
+        });
+
+        it('should return width and maxHeight data from styles', () => {
+          const parent = document.createElement('figure');
+          const node = document.createElement('img');
+          node.setAttribute('style', 'width:200px;max-height:150px');
+          parent.appendChild(node);
+
+          const entityKey = testFromHTMLInternals
+            .convertToEntity('img', node, contentState, configs);
+          const data = contentState.getEntity(entityKey).getData();
+
+          expect(data.width).to.equal('200');
+          expect(data.height).to.equal('150');
+        });
+
+        it('should return href and target values if photo is encased in a link', () => {
+          const parent = document.createElement('a');
+          const node = document.createElement('img');
+          parent.setAttribute('href', 'alink.com');
+          parent.setAttribute('target', '_blank');
+          parent.appendChild(node);
+
+          const entityKey = testFromHTMLInternals
+            .convertToEntity('img', node, contentState, configs);
+          const data = contentState.getEntity(entityKey).getData();
+
+          expect(data.href).to.equal('alink.com');
+          expect(data.target).to.equal('_blank');
+        });
+
+        it('should return caption value if there is a caption', () => {
+          const parent = document.createElement('figure');
+          const node = document.createElement('img');
+          const node2 = document.createElement('figcaption');
+          node2.innerText = 'A caption';
+          parent.appendChild(node);
+          parent.appendChild(node2);
+
+          const entityKey = testFromHTMLInternals
+            .convertToEntity('img', node, contentState, configs);
+          const data = contentState.getEntity(entityKey).getData();
+
+          expect(data.caption).to.equal('A caption');
+        });
+      });
+
+      describe('rich embeds', () => {
+        it('should return the src attribute value', () => {
+          const parent = document.createElement('figure');
+          const node = document.createElement('iframe');
+          node.setAttribute('src', 'iframesrus.com');
+          parent.appendChild(node);
+
+          const entityKey = testFromHTMLInternals
+            .convertToEntity('iframe', node, contentState, configs);
+
+          expect(contentState.getEntity(entityKey).getData().src)
+            .to.equal('iframesrus.com');
+        });
+
+        it('should return width and height attribute values', () => {
+          const parent = document.createElement('figure');
+          const node = document.createElement('iframe');
+          node.setAttribute('width', '300');
+          node.setAttribute('height', '200');
+          parent.appendChild(node);
+
+          const entityKey = testFromHTMLInternals
+            .convertToEntity('iframe', node, contentState, configs);
+          const data = contentState.getEntity(entityKey).getData();
+
+          expect(data.width).to.equal('300');
+          expect(data.height).to.equal('200');
+        });
+
+        it('should return caption value, if caption present', () => {
+          const parent = document.createElement('figure');
+          const wrapper = document.createElement('div');
+          const node = document.createElement('iframe');
+          const caption = document.createElement('figcaption');
+          caption.innerText = 'Another caption';
+
+          wrapper.appendChild(node);
+          parent.appendChild(wrapper);
+          parent.appendChild(caption);
+
+          const entityKey = testFromHTMLInternals
+            .convertToEntity('iframe', node, contentState, configs);
+
+          expect(contentState.getEntity(entityKey).getData().caption)
+            .to.equal('Another caption');
+        });
+      });
+
+      describe('documents', () => {
+        it('should return the src attribute value', () => {
+          const node = document.createElement('a');
+          node.setAttribute('class', 'file-name');
+          node.setAttribute('href', 'documentsrus.com');
+
+          const entityKey = testFromHTMLInternals
+            .convertToEntity('a', node, contentState, configs);
+
+          expect(contentState.getEntity(entityKey).getData().src)
+            .to.equal('documentsrus.com');
+        });
+
+        it('should return the href and download attribute values', () => {
+          const node = document.createElement('a');
+          node.setAttribute('class', 'file-name');
+          node.setAttribute('href', 'documentsrus.com');
+          node.setAttribute('download', 'a_document.pdf');
+
+          const entityKey = testFromHTMLInternals
+            .convertToEntity('a', node, contentState, configs);
+          const data = contentState.getEntity(entityKey).getData();
+
+          expect(data.src).to.equal('documentsrus.com');
+          expect(data.name).to.equal('a_document.pdf');
+        });
+      });
+
+      describe('tables', () => {
+        it('should return table title', () => {
+
+        });
+
+        it('should return table data', () => {
+
+        });
+      });
     });
   });
 });
