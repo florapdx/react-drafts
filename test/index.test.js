@@ -2,7 +2,7 @@ import React from 'react';
 import { OrderedSet } from 'immutable';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { expect } from 'chai';
-import { oneLineTrim } from 'common-tags';
+import { html, oneLineTrim } from 'common-tags';
 import { convertFromRaw, ContentState } from 'draft-js';
 import { TOOLBAR_DEFAULTS } from '../src/constants/toolbar';
 import {
@@ -161,6 +161,48 @@ describe('converting to html', () => {
           <div class="rich-media-wrapper">
             <iframe src="test.com" frameborder="0" allowfullscreen=""></iframe>
           </div>
+        </figure>
+      `;
+      expect(markup).to.equal(expected);
+    });
+
+    it('should return a Table rendered to markup when given a table entity', () => {
+      const markup = testToHTMLInternals.convertEntity({
+        type: TOOLBAR_DEFAULTS.table.id,
+        data: {
+          title: "My table",
+          tableData: {
+            r0: {
+              c0: 'col title',
+              c1: 'another col title'
+            },
+            r1: {
+              c0: 'some data',
+              c1: 'more data'
+            }
+          }
+        }
+      }, TOOLBAR_DEFAULTS);
+
+      const expected = oneLineTrim`
+        <figure class="content-editor__custom-block table">
+          <table>
+            <thead>
+              <tr class="table-header">
+                <th colspan="2">My table</th>
+              </tr>
+              <tr>
+                <th>col title</th>
+                <th>another col title</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>some data</td>
+                <td>more data</td>
+              </tr>
+            </tbody>
+          </table>
         </figure>
       `;
       expect(markup).to.equal(expected);
@@ -427,12 +469,52 @@ describe('converting from html', () => {
       });
 
       describe('tables', () => {
-        it('should return table title', () => {
+        let data;
 
+        before(() => {
+          const node = document.createElement('table');
+
+          const thead = document.createElement('thead');
+          const titletr = document.createElement('tr');
+          const titleth = document.createElement('th');
+          titleth.innerText = "Table title";
+
+          const colstr = document.createElement('tr');
+          const colth = document.createElement('th');
+          colth.innerText = "Column title";
+
+          titletr.appendChild(titleth);
+          colstr.appendChild(colth);
+          thead.appendChild(titletr);
+          thead.appendChild(colstr);
+          node.appendChild(thead);
+
+          const tbody = document.createElement('tbody');
+          const btr = document.createElement('tr');
+          const td = document.createElement('td');
+          td.innerText = "Some data";
+
+          btr.appendChild(td);
+          tbody.appendChild(btr);
+          node.appendChild(tbody);
+
+          const entityKey = testFromHTMLInternals
+              .convertToEntity('table', node, contentState, configs);
+          data = contentState.getEntity(entityKey).getData();
+        });
+
+        it('should return table title', () => {
+          expect(data.title).to.equal("Table title");
         });
 
         it('should return table data', () => {
-
+          // tableData is stored in an object with the shape:
+          // {
+          //  `r${rowIndex}`: {[`c${columnIndex}`]: value, ...},
+          //   ...
+          // }
+          expect(data.tableData.r0.c0).to.equal("Column title");
+          expect(data.tableData.r1.c0).to.equal("Some data");
         });
       });
     });
