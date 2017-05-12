@@ -347,14 +347,14 @@ class ContentEditor extends Component {
     const { editorState } = this.state;
     const { link, table, photo, rich, file, divider } = this.toolbarControls;
 
-    if (blockType === divider.id) {
+    if (divider && blockType === divider.id) {
       this.toggleDivider(blockType);
       return;
     }
 
     // If user is toggling link, we don't want to show the link input,
     // we just want to toggle the selection to un-linkify it.
-    if (blockType === link.id) {
+    if (link && blockType === link.id) {
       const selection = getSelectionState(editorState);
       if (
         RichUtils.currentBlockContainsLink(editorState) &&
@@ -381,19 +381,19 @@ class ContentEditor extends Component {
     };
 
     switch(blockType) {
-      case link.id:
+      case link && link.id:
         nextState.showLinkInput = true;
         break;
-      case table.id:
+      case table && table.id:
         nextState.showTableInput = true;
         break;
-      case photo.id:
+      case photo && photo.id:
         nextState.showPhotoInput = true;
         break;
-      case rich.id:
+      case rich && rich.id:
         nextState.showRichInput = true;
         break;
-      case file.id:
+      case file && file.id:
         nextState.showFileInput = true;
         break;
       default:
