@@ -9,9 +9,10 @@ import {
 
 import Link from '../components/custom/link';
 import Divider from '../components/custom/divider';
+import Table from '../components/custom/table';
 import Document from '../components/custom/document';
 import Photo from '../components/custom/photo';
-import Video from '../components/custom/video';
+import Rich from '../components/custom/rich';
 
 function convertInline(style) {
   // convert toolbar config `align-${value}` to JSX textAlign: ${value}
@@ -64,12 +65,14 @@ function convertEntity(entity, toolbarConfigs) {
         return renderToStaticMarkup(<Link {...data} />);
       case toolbarConfigs.divider.id:
         return renderToStaticMarkup(<Divider />);
+      case toolbarConfigs.table.id:
+        return renderToStaticMarkup(<Table {...data} />);
       case toolbarConfigs.file.id:
         return renderToStaticMarkup(<Document {...data} />);
       case toolbarConfigs.photo.id:
         return renderToStaticMarkup(<Photo {...data} />);
-      case toolbarConfigs.video.id:
-        return renderToStaticMarkup(<Video {...data} />);
+      case toolbarConfigs.rich.id:
+        return renderToStaticMarkup(<Rich {...data} />);
       default:
         return null;
     }

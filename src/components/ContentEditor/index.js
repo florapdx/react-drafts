@@ -16,13 +16,15 @@ import {
   getContentState,
   getCurrentInlineStyle,
   getNewEntityKey,
+  getEntityFromBlock,
   getEntityTypeFromBlock,
-  getEntityDataFromBlock
+  getEntityDataFromBlock,
+  updateEntity
 } from '../../utils/content';
 import {
   getSelectionState,
   getSelectedText,
-  getSelectedBlock,
+  getSelectedAtomicBlock,
   getSelectedBlockType,
   getSelectionInlineStyles
 } from '../../utils/selection';
@@ -40,8 +42,9 @@ import { blockRenderer } from '../../renderer';
 
 import Toolbar from '../Toolbar';
 import LinkInput from '../Toolbar/inputs/link';
+import TableInput from '../Toolbar/inputs/table';
 import PhotoInput from '../Toolbar/inputs/photo';
-import VideoInput from '../Toolbar/inputs/video';
+import RichInput from '../Toolbar/inputs/rich';
 import DocumentInput from '../Toolbar/inputs/document';
 
 /*
@@ -59,9 +62,11 @@ class ContentEditor extends Component {
     this.state = {
       editorState: setNewEditorState(props, this.toolbarControls),
       showLinkInput: false,
+      showTableInput: false,
       showPhotoInput: false,
-      showVideoInput: false,
+      showRichInput: false,
       showFileInput: false,
+      currentSelectedEntity: null,
       detachToolbar: false,
       isSaving: false
     };
@@ -88,8 +93,11 @@ class ContentEditor extends Component {
     this.handleAddLink = this._handleAddLink.bind(this);
     this.insertCollapsedLink = this._insertCollapsedLink.bind(this);
     this.insertSpaceAfter = this._insertSpaceAfter.bind(this);
+
+    this.handleAddTable = this._handleAddTable.bind(this);
     this.handleEmbedMedia = this._handleEmbedMedia.bind(this);
     this.handleModalClose = this._handleModalClose.bind(this);
+    this.updateEditorStateWithEntityChange = this._updateEditorStateWithEntityChange.bind(this);
 
     this.renderBlock = this._renderBlock.bind(this);
   }
@@ -188,8 +196,9 @@ class ContentEditor extends Component {
       this.setState({
         editorState: setNewEditorState({}, this.toolbarControls),
         showLinkInput: false,
+        showTableInput: false,
         showPhotoInput: false,
-        showVideoInput: false,
+        showRichInput: false,
         showFileInput: false,
         isSaving: false
       }, () => {
@@ -335,13 +344,8 @@ class ContentEditor extends Component {
    * have to rethink this a little for customControlProps.
    */
   _handleToggleCustomBlockType(blockType) {
-    const nextState = {
-      showLinkInput: false,
-      showPhotoInput: false,
-      showVideoInput: false,
-      showFileInput: false
-    };
-    const { link, photo, video, file, divider } = this.toolbarControls;
+    const { editorState } = this.state;
+    const { link, table, photo, rich, file, divider } = this.toolbarControls;
 
     if (blockType === divider.id) {
       this.toggleDivider(blockType);
@@ -351,7 +355,6 @@ class ContentEditor extends Component {
     // If user is toggling link, we don't want to show the link input,
     // we just want to toggle the selection to un-linkify it.
     if (blockType === link.id) {
-      const { editorState } = this.state;
       const selection = getSelectionState(editorState);
       if (
         RichUtils.currentBlockContainsLink(editorState) &&
@@ -368,21 +371,44 @@ class ContentEditor extends Component {
       }
     }
 
+    const nextState = {
+      showLinkInput: false,
+      showTableInput: false,
+      showPhotoInput: false,
+      showRichInput: false,
+      showFileInput: false,
+      currentSelectedEntity: null
+    };
+
     switch(blockType) {
       case link.id:
         nextState.showLinkInput = true;
         break;
+      case table.id:
+        nextState.showTableInput = true;
+        break;
       case photo.id:
         nextState.showPhotoInput = true;
         break;
-      case video.id:
-        nextState.showVideoInput = true;
+      case rich.id:
+        nextState.showRichInput = true;
         break;
       case file.id:
         nextState.showFileInput = true;
         break;
       default:
         return;
+    }
+
+    const selectedBlock = getSelectedAtomicBlock(editorState);
+    const entity = selectedBlock.getType() === 'atomic' ?
+      getEntityFromBlock(selectedBlock, getContentState(editorState)) : null;
+
+    if (entity && entity.getType() === blockType) {
+      nextState.currentSelectedEntity = {
+        entityKey: selectedBlock.getEntityAt(0),
+        entity
+      };
     }
 
     this.setState(nextState);
@@ -401,11 +427,7 @@ class ContentEditor extends Component {
         editorState,
         entityKey,
         ' '
-      ),
-      showLinkInput: false,
-      showPhotoInput: false,
-      showVideoInput: false,
-      showFileInput: false
+      )
     });
   }
 
@@ -470,32 +492,95 @@ class ContentEditor extends Component {
     }, () => this.insertSpaceAfter());
   }
 
-  _handleEmbedMedia(blockType, media) {
-    const { editorState } = this.state;
-    const entityKey = getNewEntityKey(
-      editorState,
-      blockType,
-      false,
-      media
+  _updateEditorStateWithEntityChange(editorState, entityKey, newEntityData) {
+    const nextContentState = updateEntity(
+      getContentState(editorState),
+      entityKey,
+      { ...newEntityData }
     );
 
-    this.setState({
-      editorState: AtomicBlockUtils.insertAtomicBlock(
+    const nextEditorState = EditorState.push(
+      editorState,
+      nextContentState,
+      'apply-entity'
+    );
+
+    return EditorState.forceSelection(
+      nextEditorState,
+      getSelectionState(editorState)
+    );
+  }
+
+  _handleAddTable(blockType, existingEntity, data) {
+    const { editorState } = this.state;
+    let nextEditorState;
+
+    if (existingEntity) {
+      nextEditorState = this.updateEditorStateWithEntityChange(
+        editorState,
+        existingEntity.entityKey,
+        data
+      );
+    } else {
+      const entityKey = getNewEntityKey(
+        editorState,
+        blockType,
+        false,
+        data
+      );
+
+      nextEditorState = AtomicBlockUtils.insertAtomicBlock(
         editorState,
         entityKey,
         ' '
-      ),
+      );
+    }
+
+    this.setState({
+      editorState: nextEditorState,
+      showTableInput: false
+    });
+  }
+
+  _handleEmbedMedia(blockType, existingEntity, media) {
+    const { editorState } = this.state;
+
+    let nextEditorState;
+    if (existingEntity) {
+      nextEditorState = this.updateEditorStateWithEntityChange(
+        editorState,
+        existingEntity.entityKey,
+        media
+      );
+    } else {
+      const entityKey = getNewEntityKey(
+        editorState,
+        blockType,
+        false,
+        media
+      );
+
+      nextEditorState = AtomicBlockUtils.insertAtomicBlock(
+        editorState,
+        entityKey,
+        ' '
+      );
+    }
+
+    this.setState({
+      editorState: nextEditorState,
+      showFileInput: false,
       showPhotoInput: false,
-      showVideoInput: false,
-      showFileInput: false
+      showRichInput: false
     });
   }
 
   _handleModalClose() {
     this.setState({
       showLinkInput: false,
+      showTableInput: false,
       showPhotoInput: false,
-      showVideoInput: false,
+      showRichInput: false,
       showFileInput: false
     });
   }
@@ -520,17 +605,22 @@ class ContentEditor extends Component {
     const {
       editorState,
       showLinkInput,
+      showTableInput,
       showPhotoInput,
-      showVideoInput,
+      showRichInput,
       showFileInput,
+      currentSelectedEntity,
       detachToolbar
     } = this.state;
+
     const {
       placeholder,
       onFileUpload,
       onFocus,
       onBlur,
       maxImgWidth,
+      allowPhotoSizeAdjust,
+      allowPhotoLink,
       linkInputAcceptsFiles,
       spellcheckEnabled
     } = this.props;
@@ -567,6 +657,7 @@ class ContentEditor extends Component {
           showLinkInput &&
             <LinkInput
               blockType={toolbarControls.link.id}
+              currentEntity={currentSelectedEntity}
               linkText={getSelectedText(editorState)}
               linkInputAcceptsFiles={linkInputAcceptsFiles}
               onFileUpload={onFileUpload}
@@ -575,9 +666,21 @@ class ContentEditor extends Component {
             />
         }
         {
+          showTableInput &&
+            <TableInput
+              blockType={toolbarControls.table.id}
+              currentEntity={currentSelectedEntity}
+              onAddTable={this.handleAddTable}
+              onCloseClick={this.handleModalClose}
+            />
+        }
+        {
           showPhotoInput &&
             <PhotoInput
               blockType={toolbarControls.photo.id}
+              currentEntity={currentSelectedEntity}
+              allowPhotoLink={allowPhotoLink}
+              allowPhotoSizeAdjust={allowPhotoSizeAdjust}
               maxImgWidth={maxImgWidth}
               onFileUpload={onFileUpload}
               onAddPhoto={this.handleEmbedMedia}
@@ -585,10 +688,11 @@ class ContentEditor extends Component {
             />
         }
         {
-          showVideoInput &&
-            <VideoInput
-              blockType={toolbarControls.video.id}
-              onAddVideo={this.handleEmbedMedia}
+          showRichInput &&
+            <RichInput
+              blockType={toolbarControls.rich.id}
+              currentEntity={currentSelectedEntity}
+              onAddRichMedia={this.handleEmbedMedia}
               onCloseClick={this.handleModalClose}
             />
         }
@@ -596,6 +700,7 @@ class ContentEditor extends Component {
           showFileInput &&
             <DocumentInput
               blockType={toolbarControls.file.id}
+              currentEntity={currentSelectedEntity}
               onFileUpload={onFileUpload}
               onAddDocument={this.handleEmbedMedia}
               onCloseClick={this.handleModalClose}
@@ -624,6 +729,8 @@ ContentEditor.propTypes = {
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   onFileUpload: PropTypes.func.isRequired,
+  allowPhotoSizeAdjust: PropTypes.bool,
+  allowPhotoLink: PropTypes.bool,
   maxImgWidth: PropTypes.number,
   linkInputAcceptsFiles: PropTypes.bool,
   exportTo: PropTypes.oneOf(['html', 'raw']).isRequired

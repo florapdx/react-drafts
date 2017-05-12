@@ -148,12 +148,12 @@ const divider = {
   label: 'Horizontal rule'
 };
 
-// const table = {
-//   id: 'table',
-//   type: TYPE_CUSTOM_BLOCK,
-//   icon: 'table',
-//   label: 'Table'
-// };
+const table = {
+  id: 'table',
+  type: TYPE_CUSTOM_BLOCK,
+  icon: 'table',
+  label: 'Table'
+};
 
 const link = {
   id: 'LINK',
@@ -169,11 +169,11 @@ const photo = {
   label: 'photo'
 };
 
-const video = {
-  id: 'video',
+const rich = {
+  id: 'rich',
   type: TYPE_CUSTOM_BLOCK,
-  icon: 'video-camera',
-  label: 'video'
+  icon: 'share-alt',
+  label: 'embed rich media'
 };
 
 const file = {
@@ -212,7 +212,8 @@ export const TOOLBAR_DEFAULTS = {
   alignRight,
   divider,
   link,
+  table,
+  file,
   photo,
-  video,
-  file
+  rich
 };

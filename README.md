@@ -1,7 +1,7 @@
 ## Content Editor
 React WYSIWYG editor component built using DraftJS.
 
-Demo is staged [here](https://stagingeditor-yrmhuegkus.now.sh).
+Demo is staged [here](https://stagingeditor-vwolxulurr.now.sh).
 
 ## Installation
 ContentEditor is currently a private package, published under the `@crossfield` scope. As such, you'll need to obtain a crossfield npm token to install the editor in your project, and to build and deploy your project on remote servers.
@@ -73,6 +73,10 @@ __onFocus__: { func } :: Respond to editor focus event.
 __onBlur__: { func } :: Respond to editor blur event.
 
 __onFileUpload__: { func, required } :: Respond to file upload event. Hook for saving file to server or cloud service.
+
+__allowPhotoLink__: { bool, default: false } :: Whether to allow users to wrap uploaded photos in links.
+
+__allowPhotoSizeAdjust__: { bool, default: false } :: Whether to allow users to adjust the size of uploaded images.
 
 __maxImgWidth__: { number } :: Setting this param will not constrain image upload sizes, but will warn users on photo upload that their image is too large and they need to size down below this max size.
 

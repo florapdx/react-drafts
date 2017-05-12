@@ -64,6 +64,7 @@
   padding: 0;
   border: 1px solid #ccc;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 .content-editor input:focus {
   outline: none;
@@ -78,9 +79,9 @@
 
 .content-editor figure {
   display: inline-block;
-  width: calc(100% - 80px); /* account for margin */
-  margin-left: 40px;
-  margin-right: 40px;
+  width: calc(100% - 80px); /* account for margin + padding */
+  margin:  0 20px;
+  padding: 20px;
 }
 
 .content-editor hr {

@@ -1,4 +1,3 @@
-import { EditorState } from 'draft-js';
 /*
  * ContentState helpers.
  * Includes utils to help with entities.
@@ -55,4 +54,11 @@ export function getEntityTypeFromBlock(block, contentState) {
 export function getEntityDataFromBlock(block, contentState) {
   const entity = getEntityFromBlock(block, contentState);
   return entity ? entity.getData() : null;
+}
+
+export function updateEntity(contentState, entityKey, toMerge) {
+  return contentState.mergeEntityData(
+    entityKey,
+    toMerge
+  );
 }

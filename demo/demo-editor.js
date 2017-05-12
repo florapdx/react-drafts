@@ -77,7 +77,10 @@ class DemoEditor extends Component {
           ref={contentEditor => this.contentEditor = contentEditor}
           content={storedContent}
           onFileUpload={this.handleFileUpload}
+          allowPhotoLink={true}
+          allowPhotoSizeAdjust={true}
           maxImgWidth={960}
+          linkInputAcceptsFiles={true}
           exportTo="html"
         />
       </div>

@@ -26,9 +26,27 @@ class PhotoInput extends Component {
       width: 0,
       height: 0,
       ratio: 1,
+      link: '',
+      linkIsTargetBlank: false,
       captionValue: '',
       error: null
     };
+
+    const { currentEntity } = this.props;
+    if (currentEntity) {
+      const data = currentEntity.entity.getData();
+      this.state = {
+        ...this.state,
+        srcValue: data.src,
+        width: data.width,
+        height: data.height,
+        ratio: (parseInt(data.width, 10) / parseInt(data.height, 10)),
+        link: data.href || '',
+        linkIsTargetBlank: data.target,
+        captionValue: data.caption
+      };
+    }
+
 
     this.handlePasteLink = this.handlePasteLink.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
@@ -37,6 +55,9 @@ class PhotoInput extends Component {
     this.setInitialDimensions = this.setInitialDimensions.bind(this);
     this.handleWidthChange = this.handleWidthChange.bind(this);
     this.handleHeightChange = this.handleHeightChange.bind(this);
+
+    this.handleHrefChange = this.handleHrefChange.bind(this);
+    this.handleToggleTarget = this.handleToggleTarget.bind(this);
 
     this.handleConfirm = this.handleConfirm.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
@@ -122,9 +143,22 @@ class PhotoInput extends Component {
     });
   }
 
+  handleHrefChange(event) {
+    this.setState({
+      link: event.target.value
+    });
+  }
+
+  handleToggleTarget(event) {
+    this.setState({
+      linkIsTargetBlank: event.target.checked
+    });
+  }
+
   handleConfirm() {
     const {
       blockType,
+      currentEntity,
       onFileUpload,
       onAddPhoto
     } = this.props;
@@ -134,6 +168,8 @@ class PhotoInput extends Component {
       srcValue,
       width,
       height,
+      link,
+      linkIsTargetBlank,
       captionValue
     } = this.state;
 
@@ -141,12 +177,18 @@ class PhotoInput extends Component {
       // Get the stored file source
       onFileUpload(file)
         .then(resp => {
-          onAddPhoto(blockType, {
-            src: resp.src,
-            caption: captionValue,
-            width: width,
-            height: height
-          });
+          onAddPhoto(
+            blockType,
+            currentEntity,
+            {
+              src: resp.src,
+              caption: captionValue,
+              width: width,
+              height: height,
+              href: link,
+              target: linkIsTargetBlank
+            }
+          );
         })
         .catch(err => {
           this.setState({
@@ -154,12 +196,18 @@ class PhotoInput extends Component {
           });
         });
     } else {
-      onAddPhoto(blockType, {
-        src: srcValue,
-        caption: captionValue,
-        width: width,
-        height: height
-      });
+      onAddPhoto(
+        blockType,
+        currentEntity,
+        {
+          src: srcValue,
+          caption: captionValue,
+          width: width,
+          height: height,
+          href: link,
+          target: linkIsTargetBlank
+        }
+      );
     }
   }
 
@@ -170,18 +218,27 @@ class PhotoInput extends Component {
       captionValue: '',
       width: 0,
       height: 0,
+      link: '',
+      linkIsTargetBlank: false,
       error: ''
     });
     this.img.removeEventListener('load', this.setInitialDimensions);
   }
 
   render() {
-    const { maxImgWidth } = this.props;
+    const {
+      currentEntity,
+      allowPhotoLink,
+      allowPhotoSizeAdjust,
+      maxImgWidth
+    } = this.props;
     const {
       file,
       srcValue,
       width,
       height,
+      link,
+      linkIsTargetBlank,
       captionValue,
       error
     } = this.state;
@@ -199,35 +256,60 @@ class PhotoInput extends Component {
           onChange={this.handleCaptionChange}
           maxLength={1000}
         />
-        <div className="image-sizing">
-          <div>
-            <span>Set custom image size:</span>
-            {
-              imgSizeWarning && (
-                <p className="warning-msg">
-                  {`* Max width is ${maxImgWidth}px.`}
-                </p>
-              )
-            }
-          </div>
-          <input
-            className={`width ${imgSizeWarning && 'size-warning'}`}
-            placeholder="width"
-            value={width}
-            onChange={this.handleWidthChange}
-          />
-          <span>x</span>
-          <input
-            className={`width ${imgSizeWarning && 'size-warning'}`}
-            placeholder="height"
-            value={height}
-            onChange={this.handleHeightChange}
-          />
-        </div>
+        {
+          allowPhotoSizeAdjust && (
+            <div className="image-sizing">
+              <div>
+                <span>Set custom image size:</span>
+                {
+                  imgSizeWarning && (
+                    <p className="warning-msg">
+                      {`* Max width is ${maxImgWidth}px.`}
+                    </p>
+                  )
+                }
+              </div>
+              <input
+                className={`width ${imgSizeWarning && 'size-warning'}`}
+                placeholder="width"
+                value={width}
+                onChange={this.handleWidthChange}
+              />
+              <span>x</span>
+              <input
+                className={`width ${imgSizeWarning && 'size-warning'}`}
+                placeholder="height"
+                value={height}
+                onChange={this.handleHeightChange}
+              />
+            </div>
+          )
+        }
+        {
+          allowPhotoLink && (
+            <div key="image-link" className="image-link">
+              <span>Is the image a link?</span>
+              <input
+                placeholder="Paste link here"
+                value={link}
+                onChange={this.handleHrefChange}
+              />
+              <div className="target">
+                <span>Open link in a new tab:</span>
+                <input
+                  name="target"
+                  type="checkbox"
+                  checked={linkIsTargetBlank}
+                  onChange={this.handleToggleTarget}
+                />
+              </div>
+            </div>
+          )
+        }
       </div>,
       <InputControls
         key="controls"
-        confirmText="Add Photo"
+        confirmText={currentEntity ? 'Update' : 'Add Photo'}
         onConfirm={this.handleConfirm}
         onCancel={this.handleCancel}
       />
@@ -267,6 +349,10 @@ class PhotoInput extends Component {
 
 PhotoInput.propTypes = {
   blockType: PropTypes.string,
+  currentEntity: PropTypes.shape({}),
+  allowPhotoLink: PropTypes.bool,
+  allowPhotoSizeAdjust: PropTypes.bool,
+  maxImgWidth: PropTypes.number,
   onFileUpload: PropTypes.func,
   onAddPhoto: PropTypes.func,
   onCloseClick: PropTypes.func

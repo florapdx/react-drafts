@@ -19,24 +19,36 @@ function getPhotoData(node) {
 
       if (parts[0] === 'width') {
         width = parts[1].split('px')[0];
-      } else if (parts[0] === 'height') {
+      } else if (parts[0] === 'max-height') {
         height = parts[1].split('px')[0];
       }
     });
   }
 
+  let href;
+  let target;
+  const parent = node.parentElement;
+  if (parent.tagName.toLowerCase() === 'a') {
+    href = parent.getAttribute('href');
+    target = parent.getAttribute('target');
+  }
+
   return {
     src: node.getAttribute('src'),
-    caption: getCaptionData(node),
+    caption: href ? getCaptionData(node.parentElement) : getCaptionData(node),
     width,
-    height
+    height,
+    href,
+    target
   };
 }
 
-function getVideoData(node) {
+function getRichData(node) {
   // pass parentNode due to wrapper div
   return {
     src: node.getAttribute('src'),
+    width: node.getAttribute('width'),
+    height: node.getAttribute('height'),
     caption: getCaptionData(node.parentNode)
   };
 }
@@ -46,6 +58,35 @@ function getDocumentData(node) {
     src: node.getAttribute('href'),
     name: node.getAttribute('download'),
     caption: getCaptionData(node)
+  };
+}
+
+function getTableData(node) {
+  const thead = node.children[0];
+  const tbody = node.children[1];
+
+  let title = '';
+  if (thead.children.length > 1) {
+    title = thead.children[0].children[0].textContent;
+  }
+
+  const rows = [Array.from(thead.children).pop()].concat(Array.from(tbody.children));
+
+  const tableData = {};
+  rows.forEach((row, idx) => {
+    const rowData = {};
+    const cells = Array.from(row.children);
+
+    cells.forEach((cell, idx) => {
+      rowData[`c${idx}`] = cell.textContent;
+    });
+
+    tableData[`r${idx}`] = rowData;
+  });
+
+  return {
+    title,
+    tableData
   };
 }
 
@@ -67,7 +108,8 @@ function convertToEntity(nodeName, node, contentState, configs) {
         mutability = 'MUTABLE';
         data = {
           url: node.getAttribute('href'),
-          text: node.getAttribute('alt')
+          text: node.getAttribute('alt'),
+          target: node.getAttribute('target')
         };
       }
       break;
@@ -77,14 +119,20 @@ function convertToEntity(nodeName, node, contentState, configs) {
       data = getPhotoData(node);
       break;
     case 'iframe':
-      type = configs.video.id;
+      type = configs.rich.id;
       mutability = 'IMMUTABLE';
-      data = getVideoData(node);
+      data = getRichData(node);
       break;
     case 'hr':
       type = configs.divider.id;
       mutability = 'IMMUTABLE';
       data = {};
+      break;
+    case 'table':
+      type = configs.table.id;
+      mutability = 'IMMUTABLE';
+      data = getTableData(node);
+      break;
     default:
       break;
   }
@@ -95,9 +143,11 @@ function convertToEntity(nodeName, node, contentState, configs) {
   }
 }
 
-function convertToBlock(nodeName) {
+function convertToBlock(nodeName, node) {
   if (nodeName === 'figure') {
     return 'atomic';
+  } else if (nodeName === 'table') {
+    return null;
   }
 }
 
@@ -119,7 +169,7 @@ export function convertFromHTML(contentState, html, toolbarConfigs) {
     htmlToStyle: convertToInline,
     htmlToEntity: (nodeName, node) =>
       convertToEntity(nodeName, node, contentState, toolbarConfigs),
-    htmlToBlock: convertToBlock
+    htmlToBlock: (nodeName, node) => convertToBlock(nodeName, node)
   })(html);
 }
 

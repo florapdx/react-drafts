@@ -1,6 +1,7 @@
+import Table from '../components/custom/table';
 import Divider from '../components/custom/divider';
 import Photo from '../components/custom/photo';
-import Video from '../components/custom/video';
+import Rich from '../components/custom/rich';
 import Document from '../components/custom/document';
 
 /*
@@ -12,10 +13,12 @@ import Document from '../components/custom/document';
 export function blockRenderer(toolbarControls, entityType, entityData) {
   if (entityType) {
     let component;
-    if (entityType === toolbarControls.photo.id) {
+    if (entityType === toolbarControls.table.id) {
+      component = Table;
+    } else if (entityType === toolbarControls.photo.id) {
       component = Photo;
-    } else if (entityType === toolbarControls.video.id) {
-      component = Video;
+    } else if (entityType === toolbarControls.rich.id) {
+      component = Rich;
     } else if (entityType === toolbarControls.file.id) {
       component = Document;
     } else if (entityType === toolbarControls.divider.id) {
