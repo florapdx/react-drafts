@@ -99,7 +99,7 @@ __clear__: Clear content from the editor. Returns a promise.
 ## Props
 
 | PropName | Type | Description | Default value |
-| --- | --- |
+| --- | --- | --- | --- |
 | content | string (html string or stringified JSON for raw) | HTML or raw content | none |
 | placeholder | string | Editor placeholder message | 'Enter text here...' |
 | spellcheckEnabled | boolean | Enable browser spellcheck (behavior is dependent on user settings) | true |
