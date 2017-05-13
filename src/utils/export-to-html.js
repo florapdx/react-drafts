@@ -61,17 +61,17 @@ function convertEntity(entity, toolbarConfigs) {
 
   if (data) {
     switch (type) {
-      case toolbarConfigs.link.id:
+      case toolbarConfigs.link && toolbarConfigs.link.id:
         return renderToStaticMarkup(<Link {...data} />);
-      case toolbarConfigs.divider.id:
+      case toolbarConfigs.divider && toolbarConfigs.divider.id:
         return renderToStaticMarkup(<Divider />);
-      case toolbarConfigs.table.id:
+      case toolbarConfigs.table && toolbarConfigs.table.id:
         return renderToStaticMarkup(<Table {...data} />);
-      case toolbarConfigs.file.id:
+      case toolbarConfigs.file && toolbarConfigs.file.id:
         return renderToStaticMarkup(<Document {...data} />);
-      case toolbarConfigs.photo.id:
+      case toolbarConfigs.photo && toolbarConfigs.photo.id:
         return renderToStaticMarkup(<Photo {...data} />);
-      case toolbarConfigs.rich.id:
+      case toolbarConfigs.rich && toolbarConfigs.rich.id:
         return renderToStaticMarkup(<Rich {...data} />);
       default:
         return null;

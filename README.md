@@ -1,7 +1,43 @@
 ## Content Editor
-React WYSIWYG editor component built using DraftJS.
+React WYSIWYG editor built using DraftJS.
 
-Demo is staged [here](https://stagingeditor-vwolxulurr.now.sh).
+Demo is staged [here](https://stagingeditor-jpmeupmthp.now.sh/).
+
+## Features:
+* Rich text editing, including:
+  * heading levels,
+  * bold,
+  * italic,
+  * strikethrough,
+  * underline,
+  * blockquotes,
+  * dividers (ie, `<hr>`)
+  * text alignment
+* Add links:
+  * select text to decorate with link, or add your own link text
+  * smart parsing into "mailto:" link string if email entered
+  * add downloadables as links via file-picker or drag-and-drop
+  * ability to set target:blank to open in a new tab (rel="noopener noreferrer" added automatically)
+* Add documents:
+  * add documents via file-picker or drag-and-drop
+  * give documents captions
+  * edit embedded documents by selecting and clicking toolbar table button
+* Add tables:
+  * add tables with variable column and row counts
+  * edit embedded tables by selecting and clicking toolbar table button
+* Photo embeds:
+  * add photos via file-picker or drag-and-drop
+  * give users the option to set image width and (max)height (inlined styles)
+  * give users the option to add photo links, and to open those links in a new tab
+  * give photos captions
+  * edit embedded photos by selecting and clicking toolbar photo button
+* Rich embeds:
+  * add YouTube videos, SoundCloud audio clips, PayPal "buy now" buttons -- any service that can be embedded via iframe
+  * give rich embeds captions
+  * edit embedded content by selecting and clicking toolbar rich button (share icon)
+* Import/export:
+  * export to raw (Javascript), or to html for persistence to your render target (blog, website, etc)
+  * import from raw or from html back to editorState
 
 ## Installation
 ContentEditor is currently a private package, published under the `@crossfield` scope. As such, you'll need to obtain a crossfield npm token to install the editor in your project, and to build and deploy your project on remote servers.
@@ -17,14 +53,10 @@ Then add the `NPM_TOKEN` as an environment variable in your CI and deployment se
 
 
 ## Use
-This package includes a Common module build at `/lib` and a UMD bundle in `/dist`. Most applications will use the Common build by importing `ContentEditor` as below. To include styles, just import the css file from `/dist`, ie:
-```
-// manifest.css
-@import <path_to>/node_modules/@crossfield/content-editor/dist/content-editor-styles.css
-```
+This package includes a Common module build at `/lib` and a UMD bundle in `/dist`. Most applications will use the Common build by importing `ContentEditor` as below.
 
 ```
-// editor parent component
+## editor parent component
 import React, { Component } from 'react';
 import ContentEditor from '@crossfield/content-editor';
 
@@ -46,6 +78,13 @@ class MyEditor extends Component {
 }
 ```
 
+To include styles, just import the css file from `/dist`, ie:
+
+```
+## manifest.css
+@import <path_to>/node_modules/@crossfield/content-editor/dist/content-editor-styles.css
+```
+
 See the demo directory for a more complete example. Demo contains a sample editor parent container that instantiates the `ContentEditor` component and passes in props.
 
 
@@ -58,32 +97,44 @@ __clear__: Clear content from the editor. Returns a promise.
 
 
 ## Props
-__content__: { string } :: HTML or raw content
 
-__placeholder__: { string } :: Editor placeholder message
+| PropName | Type | Description | Default value |
+| --- | --- | --- | --- |
+| content | string (html string or stringified JSON for raw) | HTML or raw content | none |
+| placeholder | string | Editor placeholder message | 'Enter text here...' |
+| spellcheckEnabled | boolean | Enable browser spellcheck (behavior is dependent on user settings) | true |
+| customControls | array (of strings) | If you wish to exclude any of the default options, do so by passing an array of the control names that you do wish to include as `customControls` prop. | defaults (see list below) |
+| detachToolbarOnScroll | boolean | Whether to detach the toolbar on scroll. Fixes to top of viewport for better user experience on longer posts. | true |
+| allowPhotoLink | boolean | Whether to allow users to wrap uploaded photos in links. | false |
+| allowPhotoSizeAdjust | boolean | Whether to allow users to adjust the size of uploaded images. | false |
+| maxImgWidth | number | Setting this param will not constrain image upload sizes, but will warn users on photo upload that their image is too large and they need to size down below this max size. | none |
+| linkInputAcceptsFiles | boolean | If you'd like to give users the option to add downloadable file links inlined, in addition to (or instead of) as block components with optional captions, pass true. | false |
+| onFocus | function | Respond to editor focus event. | no-op |
+| onBlur | function | Respond to editor blur event. | no-op |
+| onFileUpload | function, *required | Respond to file upload event. Hook for saving file to server or cloud service. | none, required |
+| exportTo | string ('html' or 'raw'), *required | Import/Export format. Raw option exports DraftJS raw format, which can be parsed into markdown or other format. | none, required |
 
-__spellcheckEnabled__: { bool } :: Enable browser spellcheck (behavior is dependent on user settings)
 
-__customControls__: { object } :: Custom controls to add to the toolbar. Must adhere to the signature of toolbar constants. Note: this feature is currently experimental, and will likely need additional work to support (particularly anything other than simple inline or block controls).
-
-__detachToolbarOnScroll__: { bool } :: Whether to detach the toolbar on scroll. Fixes to top of viewport for better user experience on longer posts.
-
-__onFocus__: { func } :: Respond to editor focus event.
-
-__onBlur__: { func } :: Respond to editor blur event.
-
-__onFileUpload__: { func, required } :: Respond to file upload event. Hook for saving file to server or cloud service.
-
-__allowPhotoLink__: { bool, default: false } :: Whether to allow users to wrap uploaded photos in links.
-
-__allowPhotoSizeAdjust__: { bool, default: false } :: Whether to allow users to adjust the size of uploaded images.
-
-__maxImgWidth__: { number } :: Setting this param will not constrain image upload sizes, but will warn users on photo upload that their image is too large and they need to size down below this max size.
-
-__linkInputAcceptsFiles__: { bool, default: false } :: If you'd like to give users the option to add downloadable file links inlined, in addition to (or instead of) as block components with optional captions, pass true.
-
-__exportTo__: { string, oneOf(['html', 'raw']), required } :: Import/Export format. Raw option exports DraftJS raw format, which can be parsed into markdown or other format.
-
+## Toolbar controls
+```
+headings
+bold
+italic
+underline
+strikethrough
+quotes
+bulletList
+orderedList
+alignLeft
+alignCenter
+alignRight
+divider
+link
+table
+file
+photo
+rich
+```
 
 ## Developing and testing
 To get started, clone down the repo and ```$ npm install```.
@@ -94,7 +145,16 @@ To use, run:
 
 ```
 $ npm start
-// access editor at localhost:3000
+## editor is running at localhost:3000
+```
+
+Tests can be run both in node or in the browser:
+```
+## Node:
+$ npm test
+
+## Browser:
+$ npm run test:browser
 ```
 
 

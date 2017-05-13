@@ -11,27 +11,21 @@ import {
 /*
  * Toolbar utilities.
  * When adding utilities, make sure to operate on the result of `getControls`
- * versus TOOLBAR_DEFAULTS so that any custom controls will be counted.
+ * versus TOOLBAR_DEFAULTS so that we're referencing the right set of controls.
  */
 
 export function getControls(customControls) {
-  customControls = customControls || {};
-  let defaults = { ...TOOLBAR_DEFAULTS };
-
-  // Merge deep
-  if (customControls.embedOptions) {
-    defaults = {
-      ...defaults,
-      embed: {
-        ...defaults.embed,
-        options: [
-          ...defaults.embed.options,
-          ...customControls.embedOptions
-        ]
-      }
-    };
+  let controls;
+  if (!customControls.length) {
+    controls = { ...TOOLBAR_DEFAULTS };
+  } else {
+    controls = {};
+    customControls.forEach(controlName => {
+      controls[controlName] = TOOLBAR_DEFAULTS[controlName] || {};
+    });
   }
-  return { ...defaults, ...customControls };
+
+  return controls;
 }
 
 export function isMenuContext(ctrl) {
