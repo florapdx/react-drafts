@@ -11,7 +11,7 @@ Demo is staged [here](https://stagingeditor-jpmeupmthp.now.sh/).
   * strikethrough,
   * underline,
   * blockquotes,
-  * dividers (<hr>s),
+  * dividers (ie, `<hr>`)
   * text alignment
 * Add links:
   * select text to decorate with link, or add your own link text
@@ -97,51 +97,40 @@ __clear__: Clear content from the editor. Returns a promise.
 
 
 ## Props
-__content__: { string } :: HTML or raw content
-
-__placeholder__: { string } :: Editor placeholder message
-
-__spellcheckEnabled__: { bool } :: Enable browser spellcheck (behavior is dependent on user settings)
-
-__customControls__: { array of string } :: If you wish to exclude any of the default options, do so by passing an array of the control names that you do wish to include as `customControls` prop.
-```
-## Available options:
-headings,
-bold,
-italic,
-underline,
-strikethrough,
-quotes,
-bulletList,
-orderedList,
-alignLeft,
-alignCenter,
-alignRight,
-divider,
-link,
-table,
-file,
-photo,
+| PropName | Type | Description | Default value |
+| --- | --- |
+| content | string (html string or stringified JSON for raw) | HTML or raw content | none |
+| placeholder | string | Editor placeholder message | 'Enter text here...' |
+| spellcheckEnabled | boolean | Enable browser spellcheck (behavior is dependent on user settings) | true |
+| customControls | array (of strings) | If you wish to exclude any of the default options, do so by passing an array of the control names that you do wish to include as `customControls` prop. | ```
+## Toolbar controls:
+headings
+bold
+italic
+underline
+strikethrough
+quotes
+bulletList
+orderedList
+alignLeft
+alignCenter
+alignRight
+divider
+link
+table
+file
+photo
 rich
-```
-
-__detachToolbarOnScroll__: { bool } :: Whether to detach the toolbar on scroll. Fixes to top of viewport for better user experience on longer posts.
-
-__allowPhotoLink__: { bool, default: false } :: Whether to allow users to wrap uploaded photos in links.
-
-__allowPhotoSizeAdjust__: { bool, default: false } :: Whether to allow users to adjust the size of uploaded images.
-
-__maxImgWidth__: { number } :: Setting this param will not constrain image upload sizes, but will warn users on photo upload that their image is too large and they need to size down below this max size.
-
-__linkInputAcceptsFiles__: { bool, default: false } :: If you'd like to give users the option to add downloadable file links inlined, in addition to (or instead of) as block components with optional captions, pass true.
-
-__onFocus__: { func } :: Respond to editor focus event.
-
-__onBlur__: { func } :: Respond to editor blur event.
-
-__onFileUpload__: { func, required } :: Respond to file upload event. Hook for saving file to server or cloud service.
-
-__exportTo__: { string, oneOf(['html', 'raw']), required } :: Import/Export format. Raw option exports DraftJS raw format, which can be parsed into markdown or other format.
+``` |
+| detachToolbarOnScroll | boolean | Whether to detach the toolbar on scroll. Fixes to top of viewport for better user experience on longer posts. | true |
+| allowPhotoLink | boolean | Whether to allow users to wrap uploaded photos in links. | false |
+| allowPhotoSizeAdjust | boolean | Whether to allow users to adjust the size of uploaded images. | false |
+| maxImgWidth | number | Setting this param will not constrain image upload sizes, but will warn users on photo upload that their image is too large and they need to size down below this max size. | none |
+| linkInputAcceptsFiles | boolean | If you'd like to give users the option to add downloadable file links inlined, in addition to (or instead of) as block components with optional captions, pass true. | false |
+| onFocus | function | Respond to editor focus event. | no-op |
+| onBlur | function | Respond to editor blur event. | no-op |
+| onFileUpload | function, *required | Respond to file upload event. Hook for saving file to server or cloud service. | none, required |
+| exportTo | string ('html' or 'raw'), *required | Import/Export format. Raw option exports DraftJS raw format, which can be parsed into markdown or other format. | none, required |
 
 
 ## Developing and testing
