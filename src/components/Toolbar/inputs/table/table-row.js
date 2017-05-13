@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class TableRow extends Component {
   constructor() {
@@ -52,5 +53,13 @@ class TableRow extends Component {
     );
   }
 }
+
+TableRow.propTypes = {
+  rowKey: PropTypes.string,
+  rowData: PropTypes.shape({}),
+  onChangeCell: PropTypes.func,
+  onAddColumn: PropTypes.func,
+  onRemoveColumn: PropTypes.func
+};
 
 export default TableRow;

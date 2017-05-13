@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ReactDropzone from 'react-dropzone';
 import { SUPPORTED_DOCUMENT_TYPES } from '../../../constants/file';
 import Modal from '../../shared/modal';

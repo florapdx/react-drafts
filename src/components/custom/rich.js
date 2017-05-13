@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 function RichMedia(props) {
   const { src, width, height, caption } = props.blockProps || props;

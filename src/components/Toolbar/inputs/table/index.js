@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import values from 'lodash.values';
 import Modal from '../../../shared/modal';
 import InputControls from '../controls';
