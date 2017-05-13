@@ -97,13 +97,26 @@ __clear__: Clear content from the editor. Returns a promise.
 
 
 ## Props
+
 | PropName | Type | Description | Default value |
 | --- | --- |
 | content | string (html string or stringified JSON for raw) | HTML or raw content | none |
 | placeholder | string | Editor placeholder message | 'Enter text here...' |
 | spellcheckEnabled | boolean | Enable browser spellcheck (behavior is dependent on user settings) | true |
-| customControls | array (of strings) | If you wish to exclude any of the default options, do so by passing an array of the control names that you do wish to include as `customControls` prop. | ```
-## Toolbar controls:
+| customControls | array (of strings) | If you wish to exclude any of the default options, do so by passing an array of the control names that you do wish to include as `customControls` prop. | defaults (see list below) |
+| detachToolbarOnScroll | boolean | Whether to detach the toolbar on scroll. Fixes to top of viewport for better user experience on longer posts. | true |
+| allowPhotoLink | boolean | Whether to allow users to wrap uploaded photos in links. | false |
+| allowPhotoSizeAdjust | boolean | Whether to allow users to adjust the size of uploaded images. | false |
+| maxImgWidth | number | Setting this param will not constrain image upload sizes, but will warn users on photo upload that their image is too large and they need to size down below this max size. | none |
+| linkInputAcceptsFiles | boolean | If you'd like to give users the option to add downloadable file links inlined, in addition to (or instead of) as block components with optional captions, pass true. | false |
+| onFocus | function | Respond to editor focus event. | no-op |
+| onBlur | function | Respond to editor blur event. | no-op |
+| onFileUpload | function, *required | Respond to file upload event. Hook for saving file to server or cloud service. | none, required |
+| exportTo | string ('html' or 'raw'), *required | Import/Export format. Raw option exports DraftJS raw format, which can be parsed into markdown or other format. | none, required |
+
+
+## Toolbar controls
+```
 headings
 bold
 italic
@@ -121,17 +134,7 @@ table
 file
 photo
 rich
-``` |
-| detachToolbarOnScroll | boolean | Whether to detach the toolbar on scroll. Fixes to top of viewport for better user experience on longer posts. | true |
-| allowPhotoLink | boolean | Whether to allow users to wrap uploaded photos in links. | false |
-| allowPhotoSizeAdjust | boolean | Whether to allow users to adjust the size of uploaded images. | false |
-| maxImgWidth | number | Setting this param will not constrain image upload sizes, but will warn users on photo upload that their image is too large and they need to size down below this max size. | none |
-| linkInputAcceptsFiles | boolean | If you'd like to give users the option to add downloadable file links inlined, in addition to (or instead of) as block components with optional captions, pass true. | false |
-| onFocus | function | Respond to editor focus event. | no-op |
-| onBlur | function | Respond to editor blur event. | no-op |
-| onFileUpload | function, *required | Respond to file upload event. Hook for saving file to server or cloud service. | none, required |
-| exportTo | string ('html' or 'raw'), *required | Import/Export format. Raw option exports DraftJS raw format, which can be parsed into markdown or other format. | none, required |
-
+```
 
 ## Developing and testing
 To get started, clone down the repo and ```$ npm install```.
