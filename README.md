@@ -89,11 +89,12 @@ See the demo directory for a more complete example. Demo contains a sample edito
 
 
 ## Public methods
-__focus__: Focus the editor.
 
-__save__: Save content to whatever format is specified in the `exportTo` prop (see below). Returns a promise, and resolves with content or error message if an error is thrown.
-
-__clear__: Clear content from the editor. Returns a promise.
+| Name | Description |
+| --- | --- |
+| focus | Focus the editor. |
+| save | Save content to whatever format is specified in the `exportTo` prop (see below). Returns a promise, and resolves with content or error message if an error is thrown. |
+| clear | Clear content from the editor. Returns a promise. | 
 
 
 ## Props
