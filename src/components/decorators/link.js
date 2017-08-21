@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Entity } from 'draft-js';
 import { getEntityData, getEntityType } from '../../utils/content';
 import Link from '../custom/link';
 
@@ -19,7 +20,16 @@ function findLinkEntities(contentBlock, callback, contentState) {
 // Clicking a link in the editor will not trigger a navigation
 // event in the browser without the `onClick` handler.
 function LinkRenderer({ contentState, children, entityKey }) {
-  const { url, text } = getEntityData(contentState, entityKey);
+  let { url, text } = getEntityData(contentState, entityKey);
+
+  // If pasted, link inner text won't be stored in the data object, so we'll
+  // grab it here.
+  // NOTE: next DraftJS upgrade, migrate to new Editor prop `handlePastedText`.
+  if (!text && children && children[0].props.text) {
+    text = children[0].props.text;
+    Entity.mergeData(entityKey, { text });
+  }
+
   return (
     <Link url={url} text={text}>
       {children}
