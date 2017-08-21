@@ -1,6 +1,6 @@
 {
   "name": "@crossfield/content-editor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A React-based WYSIWYG editor",
   "main": "lib/index.js",
   "files": [
