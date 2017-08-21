@@ -1,7 +1,7 @@
 ## Content Editor
 React WYSIWYG editor built using DraftJS.
 
-Demo is staged [here](https://stagingeditor-jpmeupmthp.now.sh/).
+Demo is staged [here](https://stagingeditor-qnxhhgevmd.now.sh).
 
 ## Features:
 * Rich text editing, including:
