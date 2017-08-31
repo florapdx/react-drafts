@@ -2,41 +2,6 @@
 
 React-based WYSIWYG editor built using DraftJS. Aim is to support the most commonly requested editor features, plus some uncommonly found features like support for tables.
 
-## Features:
-* __Rich text editing, including__:
-  * heading levels,
-  * bold,
-  * italic,
-  * strikethrough,
-  * underline,
-  * blockquotes,
-  * dividers (ie, `<hr>`)
-  * text alignment
-* __Add links__:
-  * select text to decorate with link, or add your own link text
-  * smart parsing into "mailto:" link string if email entered
-  * add downloadables as links via file-picker or drag-and-drop
-  * ability to set target:blank to open in a new tab (rel="noopener noreferrer" added automatically)
-* __Add documents__:
-  * add documents via file-picker or drag-and-drop
-  * give documents captions
-  * edit embedded documents by selecting and clicking toolbar table button
-* __Add tables__:
-  * add tables with variable column and row counts
-  * edit embedded tables by selecting and clicking toolbar table button
-* __Photo embeds__:
-  * add photos via file-picker or drag-and-drop
-  * give users the option to set image width and (max)height (inlined styles)
-  * give users the option to add photo links, and to open those links in a new tab
-  * give photos captions
-  * edit embedded photos by selecting and clicking toolbar photo button
-* __Rich embeds__:
-  * add YouTube videos, SoundCloud audio clips, PayPal "buy now" buttons -- any service that can be embedded via iframe
-  * give rich embeds captions
-  * edit embedded content by selecting and clicking toolbar rich button (share icon)
-* __Import/export__:
-  * export to raw (Javascript), or to html for persistence to your render target (blog, website, etc)
-  * import from raw or from html back to editorState
 
 ## Installation
 
