@@ -2,6 +2,8 @@
 
 React-based WYSIWYG editor built using DraftJS. Aim is to support the most commonly requested editor features, plus some uncommonly found features like support for tables.
 
+![react-drafts-features](https://user-images.githubusercontent.com/1137259/29945943-19044528-8e58-11e7-869f-ed6f002b47a7.png)
+
 ## Installation
 
 `$ npm install react-drafts`
