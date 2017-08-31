@@ -1,5 +1,6 @@
 ## React Text Editor
-React-based WYSIWYG editor built using DraftJS.
+
+React-based WYSIWYG editor built using DraftJS. Aim is to support the most commonly requested editor features, plus some uncommonly found features like support for tables.
 
 ## Features:
 * __Rich text editing, including__:

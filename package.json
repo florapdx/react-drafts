@@ -19,7 +19,6 @@
     "build:umd": "webpack --config webpack/config.dist.js ./css/index.css ./src/index.js ./dist/react-text-editor.js",
     "watch": "webpack -w --config webpack/config.dev.js",
     "prepublish": "npm run clean && npm run build",
-    "build:now": "npm run prepublish",
     "test": "mocha-webpack --opts webpack/config.test.opts",
     "test:browser": "webpack-dev-server --config webpack/config.browser-test.js",
     "watch:test": "npm run test -- -w"
