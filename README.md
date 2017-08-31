@@ -4,7 +4,7 @@ React WYSIWYG editor built using DraftJS.
 Demo is staged [here](https://stagingeditor-qnxhhgevmd.now.sh).
 
 ## Features:
-* Rich text editing, including:
+* __Rich text editing, including__:
   * heading levels,
   * bold,
   * italic,
@@ -13,29 +13,29 @@ Demo is staged [here](https://stagingeditor-qnxhhgevmd.now.sh).
   * blockquotes,
   * dividers (ie, `<hr>`)
   * text alignment
-* Add links:
+* __Add links__:
   * select text to decorate with link, or add your own link text
   * smart parsing into "mailto:" link string if email entered
   * add downloadables as links via file-picker or drag-and-drop
   * ability to set target:blank to open in a new tab (rel="noopener noreferrer" added automatically)
-* Add documents:
+* __Add documents__:
   * add documents via file-picker or drag-and-drop
   * give documents captions
   * edit embedded documents by selecting and clicking toolbar table button
-* Add tables:
+* __Add tables__:
   * add tables with variable column and row counts
   * edit embedded tables by selecting and clicking toolbar table button
-* Photo embeds:
+* __Photo embeds__:
   * add photos via file-picker or drag-and-drop
   * give users the option to set image width and (max)height (inlined styles)
   * give users the option to add photo links, and to open those links in a new tab
   * give photos captions
   * edit embedded photos by selecting and clicking toolbar photo button
-* Rich embeds:
+* __Rich embeds__:
   * add YouTube videos, SoundCloud audio clips, PayPal "buy now" buttons -- any service that can be embedded via iframe
   * give rich embeds captions
   * edit embedded content by selecting and clicking toolbar rich button (share icon)
-* Import/export:
+* __Import/export__:
   * export to raw (Javascript), or to html for persistence to your render target (blog, website, etc)
   * import from raw or from html back to editorState
 
@@ -94,7 +94,7 @@ See the demo directory for a more complete example. Demo contains a sample edito
 | --- | --- |
 | focus | Focus the editor. |
 | save | Save content to whatever format is specified in the `exportTo` prop (see below). Returns a promise, and resolves with content or error message if an error is thrown. |
-| clear | Clear content from the editor. Returns a promise. | 
+| clear | Clear content from the editor. Returns a promise. |
 
 
 ## Props
