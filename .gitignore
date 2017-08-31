@@ -4,6 +4,7 @@ logs
 
 .DS_Store
 .npmrc
+
 # Dependency directory
 node_modules
 .tmp
@@ -11,4 +12,4 @@ node_modules
 # Generated files
 dist
 lib
-coverage
+build

@@ -1,3 +1,3 @@
-import ContentEditor from './components';
+import ReactTextEditor from './components';
 
-module.exports = ContentEditor;
+module.exports = ReactTextEditor;

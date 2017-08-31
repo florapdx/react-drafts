@@ -1,13 +1,13 @@
 {
-  "name": "@crossfield/content-editor",
-  "version": "1.0.1",
-  "description": "A React-based WYSIWYG editor",
+  "name": "react-text-editor",
+  "version": "1.1.0",
+  "description": "A React, DraftJS-based WYSIWYG editor",
   "main": "lib/index.js",
   "files": [
     "dist",
     "lib"
   ],
-  "repository": "https://github.com/crossfield/toolkit-content-editor",
+  "repository": "https://github.com/crossfield/react-text-editor",
   "directories": {
     "test": "test"
   },
@@ -16,19 +16,22 @@
     "clean": "rimraf ./dist",
     "build": "NODE_ENV=production npm run build:cjs && npm run build:umd",
     "build:cjs": "BABEL_ENV=commonjs babel ./src --out-dir lib",
-    "build:umd": "webpack --config webpack/config.dist.js ./css/index.css ./src/index.js ./dist/content-editor.js",
+    "build:umd": "webpack --config webpack/config.dist.js ./css/index.css ./src/index.js ./dist/react-text-editor.js",
     "watch": "webpack -w --config webpack/config.dev.js",
     "prepublish": "npm run clean && npm run build",
-    "build:now": "npm run prepublish",
     "test": "mocha-webpack --opts webpack/config.test.opts",
     "test:browser": "webpack-dev-server --config webpack/config.browser-test.js",
     "watch:test": "npm run test -- -w"
   },
   "keywords": [
     "editor",
+    "text editor",
     "draft-js",
     "draftjs",
+    "draftjs editor",
     "wysiwyg",
+    "react wysiwyg",
+    "react editor",
     "blog editor",
     "cms editor"
   ],
@@ -80,7 +83,6 @@
   "dependencies": {
     "draft-convert": "^1.4.2",
     "draft-js": "^0.10.1",
-    "font-awesome": "^4.7.0",
     "immutable": "^3.8.1",
     "lodash.values": "^4.3.0",
     "react-dropzone": "^3.13.1"

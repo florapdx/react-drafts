@@ -1,3 +1,3 @@
-import ContentEditor from './ContentEditor';
+import ReactTextEditor from './ReactTextEditor';
 
-export default ContentEditor;
+export default ReactTextEditor;

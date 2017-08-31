@@ -49,12 +49,12 @@ import RichInput from '../Toolbar/inputs/rich';
 import DocumentInput from '../Toolbar/inputs/document';
 
 /*
- * ContentEditor.
+ * ReactTextEditor.
  * Renders a WYSIWG editor and toolbar.
  * Content is converted on its way out to html, and back to
  * DraftJS editorState on the way back in (on load, on save, etc).
  */
-class ContentEditor extends Component {
+class ReactTextEditor extends Component {
   constructor(props) {
     super(props);
 
@@ -712,7 +712,7 @@ class ContentEditor extends Component {
   }
 }
 
-ContentEditor.defaultProps = {
+ReactTextEditor.defaultProps = {
   placeholder: 'Enter text here...',
   spellcheckEnabled: true,
   customControls: [],
@@ -722,7 +722,7 @@ ContentEditor.defaultProps = {
   linkInputAcceptsFiles: false
 };
 
-ContentEditor.propTypes = {
+ReactTextEditor.propTypes = {
   content: PropTypes.string,
   placeholder: PropTypes.string,
   spellcheckEnabled: PropTypes.bool,
@@ -738,4 +738,4 @@ ContentEditor.propTypes = {
   exportTo: PropTypes.oneOf(['html', 'raw']).isRequired
 };
 
-export default ContentEditor;
+export default ReactTextEditor;

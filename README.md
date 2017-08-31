@@ -1,64 +1,20 @@
-## Content Editor
-React WYSIWYG editor built using DraftJS.
+## React Text Editor
 
-Demo is staged [here](https://stagingeditor-qnxhhgevmd.now.sh).
+React-based WYSIWYG editor built using DraftJS. Aim is to support the most commonly requested editor features, plus some uncommonly found features like support for tables.
 
-## Features:
-* Rich text editing, including:
-  * heading levels,
-  * bold,
-  * italic,
-  * strikethrough,
-  * underline,
-  * blockquotes,
-  * dividers (ie, `<hr>`)
-  * text alignment
-* Add links:
-  * select text to decorate with link, or add your own link text
-  * smart parsing into "mailto:" link string if email entered
-  * add downloadables as links via file-picker or drag-and-drop
-  * ability to set target:blank to open in a new tab (rel="noopener noreferrer" added automatically)
-* Add documents:
-  * add documents via file-picker or drag-and-drop
-  * give documents captions
-  * edit embedded documents by selecting and clicking toolbar table button
-* Add tables:
-  * add tables with variable column and row counts
-  * edit embedded tables by selecting and clicking toolbar table button
-* Photo embeds:
-  * add photos via file-picker or drag-and-drop
-  * give users the option to set image width and (max)height (inlined styles)
-  * give users the option to add photo links, and to open those links in a new tab
-  * give photos captions
-  * edit embedded photos by selecting and clicking toolbar photo button
-* Rich embeds:
-  * add YouTube videos, SoundCloud audio clips, PayPal "buy now" buttons -- any service that can be embedded via iframe
-  * give rich embeds captions
-  * edit embedded content by selecting and clicking toolbar rich button (share icon)
-* Import/export:
-  * export to raw (Javascript), or to html for persistence to your render target (blog, website, etc)
-  * import from raw or from html back to editorState
 
 ## Installation
-ContentEditor is currently a private package, published under the `@crossfield` scope. As such, you'll need to obtain a crossfield npm token to install the editor in your project, and to build and deploy your project on remote servers.
 
-To install:
-`$ NPM_TOKEN=xxxxxxxxx npm install @crossfield/content-editor`
-
-In your project, add an `.npmrc` file and copy/paste the following into it (don't replace the NPM_TOKEN w/actual token):
-```
-//registry.npmjs.org/:_authToken=${NPM_TOKEN}
-```
-Then add the `NPM_TOKEN` as an environment variable in your CI and deployment services.
+`$ npm install react-text-editor`
 
 
 ## Use
-This package includes a Common module build at `/lib` and a UMD bundle in `/dist`. Most applications will use the Common build by importing `ContentEditor` as below.
+This package includes a Common module build at `/lib` and a UMD bundle in `/dist`. Most applications will use the Common build by importing `ReactTextEditor` as below.
 
 ```
 ## editor parent component
 import React, { Component } from 'react';
-import ContentEditor from '@crossfield/content-editor';
+import ReactTextEditor from 'react-text-editor';
 
 class MyEditor extends Component {
   ...
@@ -68,7 +24,7 @@ class MyEditor extends Component {
       <div>
         <button onClick={this.handleSave}>Save</button>
         <button onClick={this.handleClear}>Clear</button>
-        <ContentEditor
+        <ReactTextEditor
           onFileUpload={this.handleFileUpload}
           exportTo="raw"
         />
@@ -82,10 +38,10 @@ To include styles, just import the css file from `/dist`, ie:
 
 ```
 ## manifest.css
-@import <path_to>/node_modules/@crossfield/content-editor/dist/content-editor-styles.css
+@import <path_to>/node_modules/react-text-editor/dist/react-text-editor.css
 ```
 
-See the demo directory for a more complete example. Demo contains a sample editor parent container that instantiates the `ContentEditor` component and passes in props.
+See the demo directory for a more complete example. Demo contains a sample editor parent container that instantiates the `ReactTextEditor` component and passes in props.
 
 
 ## Public methods
@@ -94,7 +50,7 @@ See the demo directory for a more complete example. Demo contains a sample edito
 | --- | --- |
 | focus | Focus the editor. |
 | save | Save content to whatever format is specified in the `exportTo` prop (see below). Returns a promise, and resolves with content or error message if an error is thrown. |
-| clear | Clear content from the editor. Returns a promise. | 
+| clear | Clear content from the editor. Returns a promise. |
 
 
 ## Props
@@ -140,7 +96,7 @@ rich
 ## Developing and testing
 To get started, clone down the repo and ```$ npm install```.
 
-There's a development server that serves a demo project that consists of a parent component that renders the exported `ContentEditor` module.
+There's a development server that serves a demo project that consists of a parent component that renders the exported `ReactTextEditor` module.
 The server has built-in hot-reloading.
 To use, run:
 

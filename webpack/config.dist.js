@@ -5,7 +5,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
   output: {
     libraryTarget: 'umd',
-    library: 'ContentEditor'
+    library: 'ReactTextEditor'
   },
   module: {
     rules: [
@@ -57,6 +57,6 @@ module.exports = {
     }
   },
   plugins: [
-    new ExtractTextPlugin('content-editor-styles.css')
+    new ExtractTextPlugin('react-text-editor.css')
   ]
 }
