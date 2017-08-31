@@ -2,6 +2,7 @@
 
 React-based WYSIWYG editor built using DraftJS. Aim is to support the most commonly requested editor features, plus some uncommonly found features like support for tables.
 
+![react-text-editor-features](https://user-images.githubusercontent.com/1137259/29940605-9fee138e-8e44-11e7-9cd2-7f1c8a1b3f49.png)
 
 ## Installation
 
@@ -114,13 +115,21 @@ $ npm test
 $ npm run test:browser
 ```
 
+## Issues and Contributions
 
-## Publishing
-Steps to publish to npm:
-1. Make sure you have group permissions, and log back into npm in your console:
-  `npm login --scope=@crossfield --registry=https://registry.npmjs.org/`
-2. Bump the version in `package.json` and commit
-3. Add a git tag: `$ git tag #.#.#` (please follow semver :)
-4. `$ git push origin #.#.#`
-5. `$ npm publish`
+Contributions are welcome! We will be using Github issues to track feature requests and other proposals. Enhancements and bugs will be tagged accordingly. 
 
+If you find a bug, please report using the following format:
+ ```
+ ## What I was trying to do:
+ 
+ ## Expected behavior:
+ 
+ ## Actual behavior:
+ 
+ ## OS/platform, browser and browser version
+ 
+ ## Reproducible case and/or test (if applicable)
+ 
+ ```
+ 
