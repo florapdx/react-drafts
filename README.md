@@ -1,7 +1,5 @@
-## Content Editor
-React WYSIWYG editor built using DraftJS.
-
-Demo is staged [here](https://stagingeditor-qnxhhgevmd.now.sh).
+## React Text Editor
+React-based WYSIWYG editor built using DraftJS.
 
 ## Features:
 * __Rich text editing, including__:
@@ -40,25 +38,17 @@ Demo is staged [here](https://stagingeditor-qnxhhgevmd.now.sh).
   * import from raw or from html back to editorState
 
 ## Installation
-ContentEditor is currently a private package, published under the `@crossfield` scope. As such, you'll need to obtain a crossfield npm token to install the editor in your project, and to build and deploy your project on remote servers.
 
-To install:
-`$ NPM_TOKEN=xxxxxxxxx npm install @crossfield/content-editor`
-
-In your project, add an `.npmrc` file and copy/paste the following into it (don't replace the NPM_TOKEN w/actual token):
-```
-//registry.npmjs.org/:_authToken=${NPM_TOKEN}
-```
-Then add the `NPM_TOKEN` as an environment variable in your CI and deployment services.
+`$ npm install react-text-editor`
 
 
 ## Use
-This package includes a Common module build at `/lib` and a UMD bundle in `/dist`. Most applications will use the Common build by importing `ContentEditor` as below.
+This package includes a Common module build at `/lib` and a UMD bundle in `/dist`. Most applications will use the Common build by importing `ReactTextEditor` as below.
 
 ```
 ## editor parent component
 import React, { Component } from 'react';
-import ContentEditor from '@crossfield/content-editor';
+import ReactTextEditor from 'react-text-editor';
 
 class MyEditor extends Component {
   ...
@@ -68,7 +58,7 @@ class MyEditor extends Component {
       <div>
         <button onClick={this.handleSave}>Save</button>
         <button onClick={this.handleClear}>Clear</button>
-        <ContentEditor
+        <ReactTextEditor
           onFileUpload={this.handleFileUpload}
           exportTo="raw"
         />
@@ -82,10 +72,10 @@ To include styles, just import the css file from `/dist`, ie:
 
 ```
 ## manifest.css
-@import <path_to>/node_modules/@crossfield/content-editor/dist/content-editor-styles.css
+@import <path_to>/node_modules/react-text-editor/dist/react-text-editor.css
 ```
 
-See the demo directory for a more complete example. Demo contains a sample editor parent container that instantiates the `ContentEditor` component and passes in props.
+See the demo directory for a more complete example. Demo contains a sample editor parent container that instantiates the `ReactTextEditor` component and passes in props.
 
 
 ## Public methods
@@ -140,7 +130,7 @@ rich
 ## Developing and testing
 To get started, clone down the repo and ```$ npm install```.
 
-There's a development server that serves a demo project that consists of a parent component that renders the exported `ContentEditor` module.
+There's a development server that serves a demo project that consists of a parent component that renders the exported `ReactTextEditor` module.
 The server has built-in hot-reloading.
 To use, run:
 

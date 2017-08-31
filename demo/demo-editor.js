@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ContentEditor from '../src';
+import ReactTextEditor from '../src';
 
 class DemoEditor extends Component {
   constructor() {
@@ -32,8 +32,9 @@ class DemoEditor extends Component {
     this.setState({
       isSaving: true
     }, () => {
-      this.contentEditor.save().then(content => {
+      this.editor.save().then(content => {
         localStorage.setItem('myContent', content);
+
         const date = new Date();
         setTimeout(() => {
           this.setState({
@@ -47,7 +48,7 @@ class DemoEditor extends Component {
 
   handleClear() {
     localStorage.removeItem('myContent');
-    this.contentEditor.clear();
+    this.editor.clear();
   }
 
   render() {
@@ -73,8 +74,8 @@ class DemoEditor extends Component {
             { isSaving ? 'Saving' : 'Save' }
           </button>
         </div>
-        <ContentEditor
-          ref={contentEditor => this.contentEditor = contentEditor}
+        <ReactTextEditor
+          ref={editor => this.editor = editor}
           content={storedContent}
           onFileUpload={this.handleFileUpload}
           allowPhotoLink={true}
