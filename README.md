@@ -1,3 +1,6 @@
+[![CircleCI](https://circleci.com/gh/crossfield/react-drafts.svg?&style=shield&circle-tokenf783e8fb93595accb6408ae3e9da2ee02c3706e7)](https://circleci.com/gh/crossfield/react-drafts)
+
+
 ## React Drafts
 
 React-based WYSIWYG editor built using DraftJS. Aim is to support the most commonly requested editor features, plus some uncommonly found features like support for tables.
