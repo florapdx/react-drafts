@@ -152,7 +152,7 @@ class TableInput extends Component {
 
     return (
       <Modal onCloseClick={this.props.onCloseClick}>
-        <div className="content-editor__input table">
+        <div className="drafts-editor__input table">
           <input
             className="title"
             placeholder="Enter table title (optional)"

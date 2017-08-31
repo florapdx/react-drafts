@@ -1,16 +1,16 @@
-.content-editor__custom-block {}
+.drafts-editor__custom-block {}
 
 /* inner figure tags */
-.content-editor__custom-block.table,
-.content-editor__custom-block.rich,
-.content-editor__custom-block.photo,
-.content-editor__custom-block.document {
+.drafts-editor__custom-block.table,
+.drafts-editor__custom-block.rich,
+.drafts-editor__custom-block.photo,
+.drafts-editor__custom-block.document {
   width: auto;
   margin: 0;
   padding: 0;
 }
 
-.content-editor__custom-block .caption {
+.drafts-editor__custom-block .caption {
   color: #7c7c7c;
   font-size: 11px;
   line-height: 1.4em;
@@ -20,56 +20,56 @@
   box-sizing: border-box;
 }
 
-.content-editor__custom-block.document {
+.drafts-editor__custom-block.document {
   width: 220px;
   padding: 0 8px;
   border: 1px solid #ccc;
   box-sizing: border-box;
 }
-.content-editor__custom-block.document a { font-size: 13px; }
-.content-editor__custom-block.document .caption {
+.drafts-editor__custom-block.document a { font-size: 13px; }
+.drafts-editor__custom-block.document .caption {
   width: 220px;
   margin-left: -8px;
   border: none;
   border-top: 1px solid #ccc;
 }
 
-.content-editor__custom-block img {
+.drafts-editor__custom-block img {
   max-width: 100%;
   box-sizing: border-box;
 }
 
-.content-editor__custom-block.rich iframe {
+.drafts-editor__custom-block.rich iframe {
   max-width: 100%;
   box-sizing: border-box;
 }
 
-.content-editor__custom-block.rich .rich-wrapper {
+.drafts-editor__custom-block.rich .rich-wrapper {
   position: relative;
   margin-bottom: 8px;
 }
 
-.content-editor__custom-block.table {
+.drafts-editor__custom-block.table {
   width: 100%;
   font-family: monospace;
   margin: 0;
 }
 
-.content-editor__custom-block.table table {
+.drafts-editor__custom-block.table table {
   width: 100%;
 }
 
-.content-editor__custom-block.table .table-header th {
+.drafts-editor__custom-block.table .table-header th {
   font-weight: bold;
   text-align: left;
 }
 
-.content-editor__custom-block.table th {
+.drafts-editor__custom-block.table th {
   min-width: 60px;
   font-weight: normal;
   text-align: left;
 }
 
-.content-editor__custom-block.table th.control-cell {
+.drafts-editor__custom-block.table th.control-cell {
   min-width: 85px;
 }

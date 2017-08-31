@@ -6,7 +6,7 @@ function Table(props) {
   const firstRowColKeys = Object.keys(tableData.r0);
 
   return (
-    <figure className="content-editor__custom-block table">
+    <figure className="drafts-editor__custom-block table">
       <table>
         <thead>
           {

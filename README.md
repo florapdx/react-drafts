@@ -1,21 +1,19 @@
-## React Text Editor
+## React Drafts
 
 React-based WYSIWYG editor built using DraftJS. Aim is to support the most commonly requested editor features, plus some uncommonly found features like support for tables.
 
-![react-text-editor-features](https://user-images.githubusercontent.com/1137259/29940605-9fee138e-8e44-11e7-9cd2-7f1c8a1b3f49.png)
-
 ## Installation
 
-`$ npm install react-text-editor`
+`$ npm install react-drafts`
 
 
 ## Use
-This package includes a Common module build at `/lib` and a UMD bundle in `/dist`. Most applications will use the Common build by importing `ReactTextEditor` as below.
+This package includes a Common module build at `/lib` and a UMD bundle in `/dist`. Most applications will use the Common build by importing `ReactDrafts` as below.
 
 ```
 ## editor parent component
 import React, { Component } from 'react';
-import ReactTextEditor from 'react-text-editor';
+import ReactDrafts from 'react-drafts';
 
 class MyEditor extends Component {
   ...
@@ -25,7 +23,7 @@ class MyEditor extends Component {
       <div>
         <button onClick={this.handleSave}>Save</button>
         <button onClick={this.handleClear}>Clear</button>
-        <ReactTextEditor
+        <ReactDrafts
           onFileUpload={this.handleFileUpload}
           exportTo="raw"
         />
@@ -39,10 +37,10 @@ To include styles, just import the css file from `/dist`, ie:
 
 ```
 ## manifest.css
-@import <path_to>/node_modules/react-text-editor/dist/react-text-editor.css
+@import <path_to>/node_modules/react-drafts/dist/react-drafts.css
 ```
 
-See the demo directory for a more complete example. Demo contains a sample editor parent container that instantiates the `ReactTextEditor` component and passes in props.
+See the demo directory for a more complete example. Demo contains a sample editor parent container that instantiates the `ReactDrafts` component and passes in props.
 
 
 ## Public methods
@@ -97,7 +95,7 @@ rich
 ## Developing and testing
 To get started, clone down the repo and ```$ npm install```.
 
-There's a development server that serves a demo project that consists of a parent component that renders the exported `ReactTextEditor` module.
+There's a development server that serves a demo project that consists of a parent component that renders the exported `ReactDrafts` module.
 The server has built-in hot-reloading.
 To use, run:
 
@@ -117,19 +115,19 @@ $ npm run test:browser
 
 ## Issues and Contributions
 
-Contributions are welcome! We will be using Github issues to track feature requests and other proposals. Enhancements and bugs will be tagged accordingly. 
+Contributions are welcome! We will be using Github issues to track feature requests and other proposals. Enhancements and bugs will be tagged accordingly.
 
 If you find a bug, please report using the following format:
  ```
  ## What I was trying to do:
- 
+
  ## Expected behavior:
- 
+
  ## Actual behavior:
- 
+
  ## OS/platform, browser and browser version
- 
+
  ## Reproducible case and/or test (if applicable)
- 
+
  ```
- 
+

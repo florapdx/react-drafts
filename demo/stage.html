@@ -3,19 +3,19 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>ReactTextEditor Demo</title>
-    <meta name="description" content="DraftJS WYSIWYG editor demo by Crossfield">
+    <title>ReactDrafts Demo</title>
+    <meta name="description" content="A React, DraftJS-based WYSIWYG editor">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="./dist/content-editor-styles.css" />
+    <link rel="stylesheet" href="./dist/react-drafts.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.3/es6-shim.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.23.1/babel.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js" type="text/javascript"></script>
     <style>
-      .content-editor,
-      .content-editor__toolbar,
-      .content-editor__toolbar .controls,
-      .content-editor__toolbar.detached .controls {
+      .drafts-editor,
+      .drafts-editor__toolbar,
+      .drafts-editor__toolbar .controls,
+      .drafts-editor__toolbar.detached .controls {
         width: 960px;
       }
     </style>
@@ -25,10 +25,10 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <div class="main">
-      <h1 style="margin-left: 40px">ReactTextEditor Demo</h1>
+      <h1 style="margin-left: 40px">ReactDrafts Demo</h1>
       <div id="app"></div>
     </div>
-    <script src="./dist/content-editor.js" type="text/javascript"></script>
+    <script src="./dist/react-drafts.js" type="text/javascript"></script>
     <script type="text/babel">
       class DemoEditor extends React.Component {
         constructor() {
@@ -89,13 +89,13 @@
               <p style={{position: 'absolute', top: '16px', right: '10%', color: '#bebebe'}}>
                 {lastSavedAt && `Last saved: ${lastSavedAt || ''}`}
               </p>
-              <div className="content-editor__external-controls">
-                <button className="content-editor__external-control clear" onClick={this.handleClear}>Clear</button>
-                <button className="content-editor__external-control save" onClick={this.handleSave}>
+              <div className="drafts-editor__external-controls">
+                <button className="drafts-editor__external-control clear" onClick={this.handleClear}>Clear</button>
+                <button className="drafts-editor__external-control save" onClick={this.handleSave}>
                   { isSaving ? 'Saving' : 'Save' }
                 </button>
               </div>
-              <ReactTextEditor
+              <ReactDrafts
                 ref={editor => this.editor = editor}
                 content={storedContent}
                 onFileUpload={this.handleFileUpload}

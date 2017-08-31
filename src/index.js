@@ -1,3 +1,3 @@
-import ReactTextEditor from './components';
+import ReactDrafts from './components';
 
-module.exports = ReactTextEditor;
+module.exports = ReactDrafts;

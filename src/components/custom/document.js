@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 function Document(props) {
   const { src, name, caption } = props.blockProps || props;
 
-  let blockClass = 'content-editor__custom-block document';
+  let blockClass = 'drafts-editor__custom-block document';
   if (caption) {
     blockClass += ' with-caption';
   }

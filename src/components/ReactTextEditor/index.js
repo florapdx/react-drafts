@@ -49,12 +49,12 @@ import RichInput from '../Toolbar/inputs/rich';
 import DocumentInput from '../Toolbar/inputs/document';
 
 /*
- * ReactTextEditor.
+ * ReactDrafts.
  * Renders a WYSIWG editor and toolbar.
  * Content is converted on its way out to html, and back to
  * DraftJS editorState on the way back in (on load, on save, etc).
  */
-class ReactTextEditor extends Component {
+class ReactDrafts extends Component {
   constructor(props) {
     super(props);
 
@@ -106,7 +106,7 @@ class ReactTextEditor extends Component {
   componentDidMount() {
     window.scrollTo(0, 0);
     if (this.props.detachToolbarOnScroll) {
-      this.toolbarHeight = document.querySelector('.content-editor__toolbar')
+      this.toolbarHeight = document.querySelector('.drafts-editor__toolbar')
         .clientHeight;
       window.addEventListener('scroll', this.handleToolbarDetach);
     }
@@ -238,7 +238,7 @@ class ReactTextEditor extends Component {
 
   _handleToolbarDetach() {
     const { detachToolbar } = this.state;
-    const editorRect = document.querySelector('.content-editor')
+    const editorRect = document.querySelector('.drafts-editor')
       .getBoundingClientRect();
 
     if (editorRect.top < 0 && editorRect.bottom > this.toolbarHeight) {
@@ -631,7 +631,7 @@ class ReactTextEditor extends Component {
     const contentState = getContentState(editorState);
     const rootClassName = !contentState.hasText() &&
       contentState.getBlockMap().first().getType() !== 'unstyled' ?
-      'content-editor no-placeholder' : 'content-editor';
+      'drafts-editor no-placeholder' : 'drafts-editor';
 
     return (
       <div className={rootClassName} onFocus={onFocus} onBlur={onBlur}>
@@ -712,7 +712,7 @@ class ReactTextEditor extends Component {
   }
 }
 
-ReactTextEditor.defaultProps = {
+ReactDrafts.defaultProps = {
   placeholder: 'Enter text here...',
   spellcheckEnabled: true,
   customControls: [],
@@ -722,7 +722,7 @@ ReactTextEditor.defaultProps = {
   linkInputAcceptsFiles: false
 };
 
-ReactTextEditor.propTypes = {
+ReactDrafts.propTypes = {
   content: PropTypes.string,
   placeholder: PropTypes.string,
   spellcheckEnabled: PropTypes.bool,
@@ -738,4 +738,4 @@ ReactTextEditor.propTypes = {
   exportTo: PropTypes.oneOf(['html', 'raw']).isRequired
 };
 
-export default ReactTextEditor;
+export default ReactDrafts;

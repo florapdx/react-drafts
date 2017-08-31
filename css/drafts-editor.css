@@ -1,4 +1,4 @@
-.content-editor {
+.drafts-editor {
   position: relative;
   width: 100%;
   margin: 0 auto;
@@ -10,13 +10,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.content-editor blockquote {
+.drafts-editor blockquote {
   font-weight: bold;
   font-style: italic;
 }
 
 /* button reset */
-.content-editor button {
+.drafts-editor button {
   background: none repeat scroll 0 0 transparent;
   border: none;
   color: inherit;
@@ -31,20 +31,20 @@
   white-space: nowrap;
   cursor: pointer;
 }
-.content-editor button:hover,
-.content-editor button:focus,
-.content-editor button:active {
+.drafts-editor button:hover,
+.drafts-editor button:focus,
+.drafts-editor button:active {
   outline: none;
 }
 
-.content-editor a {
+.drafts-editor a {
   cursor: pointer;
   color: #00b2ee;
   font-weight: bold;
   text-decoration: none;
 }
 
-.content-editor .fa {
+.drafts-editor .fa {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
   font-size: inherit;
@@ -54,8 +54,8 @@
 }
 
 /* input reset */
-.content-editor input,
-.content-editor textarea {
+.drafts-editor input,
+.drafts-editor textarea {
   width: 100%;
   color: #3c3c3c;
   font-size: 14px;
@@ -66,10 +66,10 @@
   border-radius: 4px;
   box-sizing: border-box;
 }
-.content-editor input:focus {
+.drafts-editor input:focus {
   outline: none;
 }
-.content-editor textarea {
+.drafts-editor textarea {
   font-size: 12px;
   line-height: 1.2em;
   text-indent: 0;
@@ -77,26 +77,26 @@
   box-sizing: border-box;
 }
 
-.content-editor figure {
+.drafts-editor figure {
   display: inline-block;
   width: calc(100% - 80px); /* account for margin + padding */
   margin:  0 20px;
   padding: 20px;
 }
 
-.content-editor hr {
+.drafts-editor hr {
   display: block;
 }
 
 /* optional css classes for matching external controls */
-.content-editor__external-controls {
+.drafts-editor__external-controls {
   display: flex;
   justify-content: flex-end;
   width: 960px;
   margin: 10px auto;
 }
 
-.content-editor__external-control {
+.drafts-editor__external-control {
   cursor: pointer;
   width: 60px;
   background: none repeat scroll 0 0 transparent;
@@ -114,7 +114,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-.content-editor__external-control.save { background-color: #00b2ee; }
-.content-editor__external-control.save:hover { background-color: #00a7df; }
-.content-editor__external-control.clear { background-color: #c6c6c6; }
-.content-editor__external-control.clear:hover { background-color: #bebebe; }
+.drafts-editor__external-control.save { background-color: #00b2ee; }
+.drafts-editor__external-control.save:hover { background-color: #00a7df; }
+.drafts-editor__external-control.clear { background-color: #c6c6c6; }
+.drafts-editor__external-control.clear:hover { background-color: #bebebe; }

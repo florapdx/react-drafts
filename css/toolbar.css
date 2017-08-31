@@ -1,15 +1,15 @@
-.csfd-editor__toolbar {
+.drafts-editor__toolbar {
   width: 100%;
 }
 
-.content-editor__toolbar .phantom-detached {
+.drafts-editor__toolbar .phantom-detached {
   height: 0;
 }
-.content-editor__toolbar.detached .phantom-detached {
+.drafts-editor__toolbar.detached .phantom-detached {
   height: 38px;
 }
 
-.content-editor__toolbar .controls {
+.drafts-editor__toolbar .controls {
   display: flex;
   width: 100%;
   list-style-type: none;
@@ -18,13 +18,13 @@
   border: 1px solid #ccc;
   z-index: 101;
 }
-.content-editor__toolbar.detached .controls {
+.drafts-editor__toolbar.detached .controls {
   position: fixed;
   top: 0;
   width: 95%;
 }
 
-.content-editor__toolbar .btn {
+.drafts-editor__toolbar .btn {
   width: 100%;
   background-color: #fefefe;
   color: #3c3c3c;
@@ -37,20 +37,20 @@
   outline: none;
 }
 
-.content-editor__toolbar .embed,
-.content-editor__toolbar .btn {
+.drafts-editor__toolbar .embed,
+.drafts-editor__toolbar .btn {
   border-left: 1px solid #ccc;
 }
 
-.content-editor__toolbar button:hover {
+.drafts-editor__toolbar button:hover {
   background-color: #fefefe;
 }
 
-.content-editor__toolbar button:hover,
-.content-editor__toolbar button.active {
+.drafts-editor__toolbar button:hover,
+.drafts-editor__toolbar button.active {
   background-color: #efefef;
 }
 
-.content-editor__toolbar .control {
+.drafts-editor__toolbar .control {
   flex: 1 auto;
 }

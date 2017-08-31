@@ -18,7 +18,7 @@ function Photo(props) {
   };
 
   return (
-    <figure className="content-editor__custom-block photo">
+    <figure className="drafts-editor__custom-block photo">
       {
         href ? (
           <a

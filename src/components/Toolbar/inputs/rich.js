@@ -100,7 +100,7 @@ class RichMediaInput extends Component {
 
     return (
       <Modal onCloseClick={this.props.onCloseClick}>
-        <div className="content-editor__input rich">
+        <div className="drafts-editor__input rich">
           {
             src ? ([
               <div key="preview" className="preview">

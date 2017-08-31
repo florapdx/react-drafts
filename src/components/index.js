@@ -1,3 +1,3 @@
-import ReactTextEditor from './ReactTextEditor';
+import ReactDrafts from './ReactDrafts';
 
-export default ReactTextEditor;
+export default ReactDrafts;

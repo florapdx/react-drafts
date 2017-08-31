@@ -81,7 +81,7 @@ describe('converting to html', () => {
 
       const expected = oneLineTrim`
         <figure class="atomic photo-block">
-          <figure class="content-editor__custom-block photo">
+          <figure class="drafts-editor__custom-block photo">
             <img src="test.com">
           </figure>
         </figure>
@@ -100,7 +100,7 @@ describe('converting to html', () => {
       }, TOOLBAR_DEFAULTS);
 
       const expected = oneLineTrim`
-        <a class="content-editor__custom-block link" href="test.com" target="_self" rel="">
+        <a class="drafts-editor__custom-block link" href="test.com" target="_self" rel="">
         </a>
       `;
       expect(markup).to.equal(expected);
@@ -125,7 +125,7 @@ describe('converting to html', () => {
       }, TOOLBAR_DEFAULTS);
 
       const expected = oneLineTrim`
-        <figure class="content-editor__custom-block document">
+        <figure class="drafts-editor__custom-block document">
           <a class="file-name" href="test.com" download="test">test</a>
         </figure>
       `;
@@ -141,7 +141,7 @@ describe('converting to html', () => {
       }, TOOLBAR_DEFAULTS);
 
       const expected = oneLineTrim`
-        <figure class="content-editor__custom-block photo">
+        <figure class="drafts-editor__custom-block photo">
           <img src="test.com"/>
         </figure>`
       ;
@@ -157,7 +157,7 @@ describe('converting to html', () => {
       }, TOOLBAR_DEFAULTS);
 
       const expected = oneLineTrim`
-        <figure class="content-editor__custom-block rich">
+        <figure class="drafts-editor__custom-block rich">
           <div class="rich-media-wrapper">
             <iframe src="test.com" frameborder="0" allowfullscreen=""></iframe>
           </div>
@@ -185,7 +185,7 @@ describe('converting to html', () => {
       }, TOOLBAR_DEFAULTS);
 
       const expected = oneLineTrim`
-        <figure class="content-editor__custom-block table">
+        <figure class="drafts-editor__custom-block table">
           <table>
             <thead>
               <tr class="table-header">

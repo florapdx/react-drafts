@@ -318,7 +318,7 @@ class PhotoInput extends Component {
 
     return (
       <Modal onCloseClick={this.props.onCloseClick}>
-        <div className="content-editor__input photo">
+        <div className="drafts-editor__input photo">
           {
             preview ? preview : (
               <div className="add">

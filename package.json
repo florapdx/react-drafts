@@ -1,5 +1,5 @@
 {
-  "name": "react-text-editor",
+  "name": "react-drafts",
   "version": "1.1.0",
   "description": "A React, DraftJS-based WYSIWYG editor",
   "main": "lib/index.js",
@@ -7,7 +7,7 @@
     "dist",
     "lib"
   ],
-  "repository": "https://github.com/crossfield/react-text-editor",
+  "repository": "https://github.com/crossfield/react-drafts",
   "directories": {
     "test": "test"
   },
@@ -16,7 +16,7 @@
     "clean": "rimraf ./dist",
     "build": "NODE_ENV=production npm run build:cjs && npm run build:umd",
     "build:cjs": "BABEL_ENV=commonjs babel ./src --out-dir lib",
-    "build:umd": "webpack --config webpack/config.dist.js ./css/index.css ./src/index.js ./dist/react-text-editor.js",
+    "build:umd": "webpack --config webpack/config.dist.js ./css/index.css ./src/index.js ./dist/react-drafts.js",
     "watch": "webpack -w --config webpack/config.dev.js",
     "prepublish": "npm run clean && npm run build",
     "test": "mocha-webpack --opts webpack/config.test.opts",

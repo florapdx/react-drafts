@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactTextEditor from '../src';
+import ReactDrafts from '../src';
 
 class DemoEditor extends Component {
   constructor() {
@@ -60,21 +60,21 @@ class DemoEditor extends Component {
         <p style={{position: 'absolute', top: '16px', right: '10%', color: '#bebebe'}}>
           {lastSavedAt && `Last saved: ${lastSavedAt || ''}`}
         </p>
-        <div className="content-editor__external-controls">
+        <div className="drafts-editor__external-controls">
           <button
-            className="content-editor__external-control clear"
+            className="drafts-editor__external-control clear"
             onClick={this.handleClear}
           >
             Clear
           </button>
           <button
-            className="content-editor__external-control save"
+            className="drafts-editor__external-control save"
             onClick={this.handleSave}
           >
             { isSaving ? 'Saving' : 'Save' }
           </button>
         </div>
-        <ReactTextEditor
+        <ReactDrafts
           ref={editor => this.editor = editor}
           content={storedContent}
           onFileUpload={this.handleFileUpload}

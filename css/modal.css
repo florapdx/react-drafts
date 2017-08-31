@@ -1,4 +1,4 @@
-.content-editor__modal {
+.drafts-editor__modal {
   position: absolute;
   top: 35%;
   left: 50%;
@@ -12,7 +12,7 @@
   z-index: 200;
 }
 
-.content-editor__modal .fa-times-circle {
+.drafts-editor__modal .fa-times-circle {
   position: absolute;
   top: 4px;
   right: 4px;
@@ -20,6 +20,6 @@
   font-size: 18px;
 }
 
-.content-editor__modal .wrapper {
+.drafts-editor__modal .wrapper {
   padding: 4px 0;
 }

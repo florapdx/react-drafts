@@ -42,7 +42,7 @@ class SimpleDropdown extends Component {
     const activeOption = this.getActiveOption();
 
     return (
-      <div className={`content-editor__menu ${menuFor}`}>
+      <div className={`drafts-editor__menu ${menuFor}`}>
         <div className="selection">
           <button
             className="label"

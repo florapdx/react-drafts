@@ -119,7 +119,7 @@ class LinkInput extends Component {
 
     return (
       <Modal onCloseClick={onCloseClick}>
-        <div className="content-editor__input link">
+        <div className="drafts-editor__input link">
           {
             file ? (
               <div key="preview" className="preview">

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 function RichMedia(props) {
   const { src, width, height, caption } = props.blockProps || props;
   return (
-    <figure className="content-editor__custom-block rich">
+    <figure className="drafts-editor__custom-block rich">
       <div className="rich-media-wrapper">
         <iframe
           src={src}

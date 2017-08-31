@@ -1,11 +1,11 @@
-.content-editor {
+.drafts-editor {
   width: 960px;
   margin: 1em auto 4em;
 }
 
-.content-editor__toolbar,
-.content-editor__toolbar .controls,
-.content-editor__toolbar.detached .controls {
+.drafts-editor__toolbar,
+.drafts-editor__toolbar .controls,
+.drafts-editor__toolbar.detached .controls {
   width: 960px;
 }
 

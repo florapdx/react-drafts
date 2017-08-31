@@ -125,7 +125,7 @@ class DocumentInput extends Component {
 
     return (
       <Modal onCloseClick={this.props.onCloseClick}>
-        <div className="content-editor__input document">
+        <div className="drafts-editor__input document">
           {
             file ? ([
               <div key="preview" className="preview">

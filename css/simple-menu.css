@@ -1,10 +1,10 @@
-.content-editor__menu {
+.drafts-editor__menu {
   position: relative;
   min-width: 160px;
   z-index: 100;
 }
 
-.content-editor__menu .click-off {
+.drafts-editor__menu .click-off {
   position: fixed;
   top: 0;
   left: 0;
@@ -14,7 +14,7 @@
   z-index: 101;
 }
 
-.content-editor__toolbar .content-editor__menu button {
+.drafts-editor__toolbar .drafts-editor__menu button {
   width: 100%;
   background-color: #fefefe;
   color: #3c3c3c;
@@ -26,38 +26,38 @@
   border: 0;
   outline: none;
 }
-.content-editor__menu .dropdown .btn {
+.drafts-editor__menu .dropdown .btn {
   font-weight: normal;
   font-size: 16px;
 }
 
-.content-editor__menu .label,
-.content-editor__menu .content-editor__toolbar-control {
+.drafts-editor__menu .label,
+.drafts-editor__menu .drafts-editor__toolbar-control {
   border: 0;
 }
 
-.content-editor__menu .deselect,
-.content-editor__menu .content-editor__toolbar-control button,
-.content-editor__menu .label {
+.drafts-editor__menu .deselect,
+.drafts-editor__menu .drafts-editor__toolbar-control button,
+.drafts-editor__menu .label {
   width: 100%;
 }
 
-.content-editor__menu .label .fa {
+.drafts-editor__menu .label .fa {
   display: inline-block;
   margin-left: 12px;
 }
 
-.content-editor__menu .deselect,
-.content-editor__menu .content-editor__toolbar-control button {
+.drafts-editor__menu .deselect,
+.drafts-editor__menu .drafts-editor__toolbar-control button {
   font-size: 16px;
   font-weight: normal;
 }
 
-.content-editor__menu .deselect {
+.drafts-editor__menu .deselect {
   height: 2em;
 }
 
-.content-editor__menu .dropdown {
+.drafts-editor__menu .dropdown {
   position: absolute;
   width: 100%;
   background-color: #fff;

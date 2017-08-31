@@ -78,7 +78,7 @@ function Toolbar(props) {
   }
 
   return (
-    <div className={`content-editor__toolbar ${detachToolbar && 'detached'}`}>
+    <div className={`drafts-editor__toolbar ${detachToolbar && 'detached'}`}>
       <div className="phantom-detached" />
       <ul className="controls">
         {buildControls(toolbarControls)}

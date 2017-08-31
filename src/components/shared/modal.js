@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 function Modal({ children, onCloseClick }) {
   return (
-    <div className="content-editor__modal">
+    <div className="drafts-editor__modal">
       <button
         className="fa fa-times-circle"
         type="button"

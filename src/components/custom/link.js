@@ -11,7 +11,7 @@ function Link(props) {
 
   return (
     <a
-      className="content-editor__custom-block link"
+      className="drafts-editor__custom-block link"
       href={href}
       alt={text}
       target={target ? "_blank" : "_self"}
