@@ -15,13 +15,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js" type="text/javascript"></script>
     <style>
+      .drafts-editor {
+        background-color: white;
+        border-radius: 5px;
+        margin: 30px auto 40px;
+        overflow: hidden;
+      }
+
       .drafts-editor,
       .drafts-editor__toolbar,
       .drafts-editor__toolbar .controls,
       .drafts-editor__toolbar.detached .controls {
         min-width: 760px;
-        background-color: white;
-        margin: 30px auto 40px;
       }
 
       .drafts-editor__external-controls {
@@ -29,8 +34,20 @@
         display: block;
       }
 
+      .drafts-editor__external-control {
+        width: 95px;
+        line-height: 2.4em;
+        margin-right: 6px;
+      }
+
+      .drafts-editor__toolbar .drafts-editor__menu button,
+      .drafts-editor__toolbar .btn {
+        color: #777;
+      }
+
       .demo-title-msg {
         font-weight: bold;
+        letter-spacing: 1px;
       }
 
       .save-msg {

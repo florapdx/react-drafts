@@ -27,13 +27,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js" type="text/javascript"></script>
     <style>
+      .drafts-editor {
+        background-color: white;
+        border-radius: 5px;
+        margin: 30px auto 40px;
+        overflow: hidden;
+      }
+
       .drafts-editor,
       .drafts-editor__toolbar,
       .drafts-editor__toolbar .controls,
       .drafts-editor__toolbar.detached .controls {
         min-width: 760px;
-        background-color: white;
-        margin: 30px auto 40px;
       }
 
       .drafts-editor__external-controls {
@@ -41,8 +46,20 @@
         display: block;
       }
 
+      .drafts-editor__external-control {
+        width: 95px;
+        line-height: 2.4em;
+        margin-right: 6px;
+      }
+
+      .drafts-editor__toolbar .drafts-editor__menu button,
+      .drafts-editor__toolbar .btn {
+        color: #777;
+      }
+
       .demo-title-msg {
         font-weight: bold;
+        letter-spacing: 1px;
       }
 
       .save-msg {
@@ -65,7 +82,7 @@
 
       <h2 id="feature-list">Feature list:</h2>
 <ul>
-  <li>Rich text editing, including:
+  <li><strong>Rich text editing, including</strong>:
     <ul>
       <li>heading levels,</li>
       <li>bold,</li>
@@ -77,7 +94,7 @@
       <li>text alignment</li>
     </ul>
   </li>
-  <li>Add links:
+  <li><strong>Add links</strong>:
     <ul>
       <li>select text to decorate with link, or add your own link text</li>
       <li>smart parsing into “mailto:” link string if email entered</li>
@@ -85,20 +102,20 @@
       <li>ability to set target:blank to open in a new tab (rel=”noopener noreferrer” added automatically)</li>
     </ul>
   </li>
-  <li>Add documents:
+  <li><strong>Add documents</strong>:
     <ul>
       <li>add documents via file-picker or drag-and-drop</li>
       <li>give documents captions</li>
       <li>edit embedded documents by selecting and clicking toolbar table button</li>
     </ul>
   </li>
-  <li>Add tables:
+  <li><strong>Add tables</strong>:
     <ul>
       <li>add tables with variable column and row counts</li>
       <li>edit embedded tables by selecting and clicking toolbar table button</li>
     </ul>
   </li>
-  <li>Photo embeds:
+  <li><strong>Photo embeds</strong>:
     <ul>
       <li>add photos via file-picker or drag-and-drop</li>
       <li>give users the option to set image width and (max)height (inlined styles)</li>
@@ -107,14 +124,14 @@
       <li>edit embedded photos by selecting and clicking toolbar photo button</li>
     </ul>
   </li>
-  <li>Rich embeds:
+  <li><strong>Rich embeds</strong>:
     <ul>
       <li>add YouTube videos, SoundCloud audio clips, PayPal “buy now” buttons – any service that can be embedded via iframe</li>
       <li>give rich embeds captions</li>
       <li>edit embedded content by selecting and clicking toolbar rich button (share icon)</li>
     </ul>
   </li>
-  <li>Import/export:
+  <li><strong>Import/export</strong>:
     <ul>
       <li>export to raw (Javascript), or to html for persistence to your render target (blog, website, etc)</li>
       <li>import from raw or from html back to editorState</li>

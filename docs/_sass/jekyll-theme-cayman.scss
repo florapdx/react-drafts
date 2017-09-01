@@ -89,8 +89,16 @@ a {
 .page-header {
   color: $header-heading-color;
   text-align: center;
-  background-color: $header-bg-color;
-  background-image: linear-gradient(120deg, $header-bg-color-secondary, $header-bg-color);
+  //background-color: $header-bg-color;
+  //background-image: linear-gradient(120deg, $header-bg-color-secondary, $header-bg-color);
+  background: rgba(212,228,239,1);
+  background: -moz-linear-gradient(top, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 34%, rgba(134,174,204,1) 65%, rgba(212,228,239,1) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(212,228,239,1)), color-stop(34%, rgba(134,174,204,1)), color-stop(65%, rgba(134,174,204,1)), color-stop(100%, rgba(212,228,239,1)));
+  background: -webkit-linear-gradient(top, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 34%, rgba(134,174,204,1) 65%, rgba(212,228,239,1) 100%);
+  background: -o-linear-gradient(top, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 34%, rgba(134,174,204,1) 65%, rgba(212,228,239,1) 100%);
+  background: -ms-linear-gradient(top, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 34%, rgba(134,174,204,1) 65%, rgba(212,228,239,1) 100%);
+  background: linear-gradient(to bottom, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 34%, rgba(134,174,204,1) 65%, rgba(212,228,239,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d4e4ef', endColorstr='#d4e4ef', GradientType=0 );
 
   @include large {
     padding: 5rem 6rem;
@@ -289,6 +297,10 @@ a {
     td {
       padding: 0.5rem 1rem;
       border: 1px solid $table-border-color;
+    }
+
+    tbody tr:nth-child(odd) {
+      background-color: #f9fbfd;
     }
   }
 

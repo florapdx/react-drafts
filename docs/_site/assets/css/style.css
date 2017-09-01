@@ -620,8 +620,14 @@ a {
 .page-header {
   color: #fff;
   text-align: center;
-  background-color: #159957;
-  background-image: linear-gradient(120deg, #155799, #159957); }
+  background: #d4e4ef;
+  background: -moz-linear-gradient(top, #d4e4ef 0%, #86aecc 34%, #86aecc 65%, #d4e4ef 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, #d4e4ef), color-stop(34%, #86aecc), color-stop(65%, #86aecc), color-stop(100%, #d4e4ef));
+  background: -webkit-linear-gradient(top, #d4e4ef 0%, #86aecc 34%, #86aecc 65%, #d4e4ef 100%);
+  background: -o-linear-gradient(top, #d4e4ef 0%, #86aecc 34%, #86aecc 65%, #d4e4ef 100%);
+  background: -ms-linear-gradient(top, #d4e4ef 0%, #86aecc 34%, #86aecc 65%, #d4e4ef 100%);
+  background: linear-gradient(to bottom, #d4e4ef 0%, #86aecc 34%, #86aecc 65%, #d4e4ef 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d4e4ef', endColorstr='#d4e4ef', GradientType=0 ); }
   @media screen and (min-width: 64em) {
     .page-header {
       padding: 5rem 6rem; } }
@@ -688,7 +694,7 @@ a {
     margin-top: 2rem;
     margin-bottom: 1rem;
     font-weight: normal;
-    color: #159957; }
+    color: #00b2ee; }
   .main-content p {
     margin-bottom: 1em; }
   .main-content code {
@@ -770,6 +776,8 @@ a {
     .main-content table td {
       padding: 0.5rem 1rem;
       border: 1px solid #e9ebec; }
+    .main-content table tbody tr:nth-child(odd) {
+      background-color: #f9fbfd; }
   .main-content dl {
     padding: 0; }
     .main-content dl dt {
