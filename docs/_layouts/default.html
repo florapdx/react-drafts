@@ -9,7 +9,7 @@
     <meta name="theme-color" content="#157878">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
-    <link rel="stylesheet" href="./dist/react-drafts.css" />
+    <link rel="stylesheet" href="https://unpkg.com/react-drafts@1.0.1/dist/react-drafts.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.3/es6-shim.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.23.1/babel.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js" type="text/javascript"></script>
@@ -19,27 +19,39 @@
       .drafts-editor__toolbar,
       .drafts-editor__toolbar .controls,
       .drafts-editor__toolbar.detached .controls {
-        width: 90%;
-        max-width: 960px;
+        min-width: 760px;
+        background-color: white;
         margin: 30px auto 40px;
+      }
+
+      .drafts-editor__external-controls {
+        width: 100%;
+        display: block;
+      }
+
+      .demo-title-msg {
+        font-weight: bold;
+      }
+
+      .save-msg {
+        position: absolute;
+        top: 16px;
+        right: 10%;
+        color: #bebebe;
       }
     </style>
   </head>
   <body>
     <section class="page-header">
-      <h1 class="project-name">{{ site.title | default: site.github.repository_name }}</h1>
-      <h2 class="project-tagline">{{ site.description | default: site.github.project_tagline }}</h2>
+      <h1 class="project-name">react-drafts</h1>
+      <h2 class="project-tagline">React-based WYSIWYG editor built using DraftJS. Supports the most commonly requested editor features, plus some uncommonly found features like tables.</h2>
       {% if site.github.is_project_page %}
         <a href="{{ site.github.repository_url }}" class="btn">View on GitHub</a>
       {% endif %}
-      {% if site.show_downloads %}
-        <a href="{{ site.github.zip_url }}" class="btn">Download .zip</a>
-        <a href="{{ site.github.tar_url }}" class="btn">Download .tar.gz</a>
-      {% endif %}
+      <div id="app"></div>
     </section>
 
     <section class="main-content">
-      <div id="app"></div>
 
       {{ content }}
 
@@ -51,7 +63,7 @@
       </footer>
     </section>
 
-    <script src="./dist/react-drafts.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/react-drafts@1.0.1/dist/react-drafts.js"" type="text/javascript"></script>
     <script type="text/babel">
       class DemoEditor extends React.Component {
         constructor() {
@@ -109,10 +121,11 @@
 
           return (
             <div className="demo-editor">
-              <p style={{position: 'absolute', top: '16px', right: '10%', color: '#bebebe'}}>
+              <p className="save-msg">
                 {lastSavedAt && `Last saved: ${lastSavedAt || ''}`}
               </p>
               <div className="drafts-editor__external-controls">
+                <p className="demo-title-msg">Demo: saves html content to localStorage</p>
                 <button className="drafts-editor__external-control clear" onClick={this.handleClear}>Clear</button>
                 <button className="drafts-editor__external-control save" onClick={this.handleSave}>
                   { isSaving ? 'Saving' : 'Save' }
@@ -124,7 +137,8 @@
                 onFileUpload={this.handleFileUpload}
                 allowPhotoLink={true}
                 allowPhotoSizeAdjust={true}
-                maxImgWidth={900}
+                maxImgWidth={960}
+                detachToolbarOnScroll={false}
                 linkInputAcceptsFiles={true}
                 exportTo="html"
               />

@@ -2,52 +2,41 @@
 layout: default
 ---
 
-
-## React Drafts
-
-React-based WYSIWYG editor built using DraftJS. Aim is to support the most commonly requested editor features, plus some uncommonly found features like support for tables.
-
-![react-drafts-features](https://user-images.githubusercontent.com/1137259/29945943-19044528-8e58-11e7-869f-ed6f002b47a7.png)
-
-## Installation
-
-`$ npm install react-drafts`
-
-
-## Use
-This package includes a Common module build at `/lib` and a UMD bundle in `/dist`. Most applications will use the Common build by importing `ReactDrafts` as below.
-
-```
-## editor parent component
-import React, { Component } from 'react';
-import ReactDrafts from 'react-drafts';
-
-class MyEditor extends Component {
-  ...
-
-  render() {
-    return (
-      <div>
-        <button onClick={this.handleSave}>Save</button>
-        <button onClick={this.handleClear}>Clear</button>
-        <ReactDrafts
-          onFileUpload={this.handleFileUpload}
-          exportTo="raw"
-        />
-      </div>
-    );
-  }
-}
-```
-
-To include styles, just import the css file from `/dist`, ie:
-
-```
-## manifest.css
-@import <path_to>/node_modules/react-drafts/dist/react-drafts.css
-```
-
-See the demo directory for a more complete example. Demo contains a sample editor parent container that instantiates the `ReactDrafts` component and passes in props.
+## Feature list:
+* Rich text editing, including:
+  * heading levels,
+  * bold,
+  * italic,
+  * strikethrough,
+  * underline,
+  * blockquotes,
+  * dividers (ie, `<hr>`)
+  * text alignment
+* Add links:
+  * select text to decorate with link, or add your own link text
+  * smart parsing into "mailto:" link string if email entered
+  * add downloadables as links via file-picker or drag-and-drop
+  * ability to set target:blank to open in a new tab (rel="noopener noreferrer" added automatically)
+* Add documents:
+  * add documents via file-picker or drag-and-drop
+  * give documents captions
+  * edit embedded documents by selecting and clicking toolbar table button
+* Add tables:
+  * add tables with variable column and row counts
+  * edit embedded tables by selecting and clicking toolbar table button
+* Photo embeds:
+  * add photos via file-picker or drag-and-drop
+  * give users the option to set image width and (max)height (inlined styles)
+  * give users the option to add photo links, and to open those links in a new tab
+  * give photos captions
+  * edit embedded photos by selecting and clicking toolbar photo button
+* Rich embeds:
+  * add YouTube videos, SoundCloud audio clips, PayPal "buy now" buttons -- any service that can be embedded via iframe
+  * give rich embeds captions
+  * edit embedded content by selecting and clicking toolbar rich button (share icon)
+* Import/export:
+  * export to raw (Javascript), or to html for persistence to your render target (blog, website, etc)
+  * import from raw or from html back to editorState
 
 
 ## Public methods
@@ -98,4 +87,44 @@ file
 photo
 rich
 ```
+
+## Installation
+
+`$ npm install react-drafts`
+
+
+## Use
+This package includes a Common module build at `/lib` and a UMD bundle in `/dist`. Most applications will use the Common build by importing `ReactDrafts` as below.
+
+```
+## editor parent component
+import React, { Component } from 'react';
+import ReactDrafts from 'react-drafts';
+
+class MyEditor extends Component {
+  ...
+
+  render() {
+    return (
+      <div>
+        <button onClick={this.handleSave}>Save</button>
+        <button onClick={this.handleClear}>Clear</button>
+        <ReactDrafts
+          onFileUpload={this.handleFileUpload}
+          exportTo="raw"
+        />
+      </div>
+    );
+  }
+}
+```
+
+To include styles, just import the css file from `/dist`, ie:
+
+```
+## manifest.css
+@import <path_to>/node_modules/react-drafts/dist/react-drafts.css
+```
+
+See the demo directory for a more complete example. Demo contains a sample editor parent container that instantiates the `ReactDrafts` component and passes in props.
 

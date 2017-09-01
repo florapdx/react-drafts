@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.3.0 -->
+<title>Cayman theme | Cayman is a clean, responsive theme for GitHub Pages.</title>
+<meta property="og:title" content="Cayman theme" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Cayman is a clean, responsive theme for GitHub Pages." />
+<meta property="og:description" content="Cayman is a clean, responsive theme for GitHub Pages." />
+<link rel="canonical" href="http://localhost:4000/" />
+<meta property="og:url" content="http://localhost:4000/" />
+<meta property="og:site_name" content="Cayman theme" />
+<script type="application/ld+json">
+{"name":"Cayman theme","description":"Cayman is a clean, responsive theme for GitHub Pages.","author":null,"@type":"WebSite","url":"http://localhost:4000/","publisher":null,"image":null,"headline":"Cayman theme","dateModified":null,"datePublished":null,"sameAs":null,"mainEntityOfPage":null,"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="description" content="Cayman is a clean, responsive theme for GitHub Pages."/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <link rel="stylesheet" href="https://unpkg.com/react-drafts@1.0.1/dist/react-drafts.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.3/es6-shim.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.23.1/babel.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js" type="text/javascript"></script>
+    <style>
+      .drafts-editor,
+      .drafts-editor__toolbar,
+      .drafts-editor__toolbar .controls,
+      .drafts-editor__toolbar.detached .controls {
+        min-width: 760px;
+        background-color: white;
+        margin: 30px auto 40px;
+      }
+
+      .drafts-editor__external-controls {
+        width: 100%;
+        display: block;
+      }
+
+      .demo-title-msg {
+        font-weight: bold;
+      }
+
+      .save-msg {
+        position: absolute;
+        top: 16px;
+        right: 10%;
+        color: #bebebe;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">react-drafts</h1>
+      <h2 class="project-tagline">React-based WYSIWYG editor built using DraftJS. Supports the most commonly requested editor features, plus some uncommonly found features like tables.</h2>
+      
+      <div id="app"></div>
+    </section>
+
+    <section class="main-content">
+
+      <h2 id="feature-list">Feature list:</h2>
+<ul>
+  <li>Rich text editing, including:
+    <ul>
+      <li>heading levels,</li>
+      <li>bold,</li>
+      <li>italic,</li>
+      <li>strikethrough,</li>
+      <li>underline,</li>
+      <li>blockquotes,</li>
+      <li>dividers (ie, <code class="highlighter-rouge">&lt;hr&gt;</code>)</li>
+      <li>text alignment</li>
+    </ul>
+  </li>
+  <li>Add links:
+    <ul>
+      <li>select text to decorate with link, or add your own link text</li>
+      <li>smart parsing into “mailto:” link string if email entered</li>
+      <li>add downloadables as links via file-picker or drag-and-drop</li>
+      <li>ability to set target:blank to open in a new tab (rel=”noopener noreferrer” added automatically)</li>
+    </ul>
+  </li>
+  <li>Add documents:
+    <ul>
+      <li>add documents via file-picker or drag-and-drop</li>
+      <li>give documents captions</li>
+      <li>edit embedded documents by selecting and clicking toolbar table button</li>
+    </ul>
+  </li>
+  <li>Add tables:
+    <ul>
+      <li>add tables with variable column and row counts</li>
+      <li>edit embedded tables by selecting and clicking toolbar table button</li>
+    </ul>
+  </li>
+  <li>Photo embeds:
+    <ul>
+      <li>add photos via file-picker or drag-and-drop</li>
+      <li>give users the option to set image width and (max)height (inlined styles)</li>
+      <li>give users the option to add photo links, and to open those links in a new tab</li>
+      <li>give photos captions</li>
+      <li>edit embedded photos by selecting and clicking toolbar photo button</li>
+    </ul>
+  </li>
+  <li>Rich embeds:
+    <ul>
+      <li>add YouTube videos, SoundCloud audio clips, PayPal “buy now” buttons – any service that can be embedded via iframe</li>
+      <li>give rich embeds captions</li>
+      <li>edit embedded content by selecting and clicking toolbar rich button (share icon)</li>
+    </ul>
+  </li>
+  <li>Import/export:
+    <ul>
+      <li>export to raw (Javascript), or to html for persistence to your render target (blog, website, etc)</li>
+      <li>import from raw or from html back to editorState</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="public-methods">Public methods</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>focus</td>
+      <td>Focus the editor.</td>
+    </tr>
+    <tr>
+      <td>save</td>
+      <td>Save content to whatever format is specified in the <code class="highlighter-rouge">exportTo</code> prop (see below). Returns a promise, and resolves with content or error message if an error is thrown.</td>
+    </tr>
+    <tr>
+      <td>clear</td>
+      <td>Clear content from the editor. Returns a promise.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="props">Props</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>PropName</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>content</td>
+      <td>string (html string or stringified JSON for raw)</td>
+      <td>HTML or raw content</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <td>placeholder</td>
+      <td>string</td>
+      <td>Editor placeholder message</td>
+      <td>‘Enter text here…’</td>
+    </tr>
+    <tr>
+      <td>spellcheckEnabled</td>
+      <td>boolean</td>
+      <td>Enable browser spellcheck (behavior is dependent on user settings)</td>
+      <td>true</td>
+    </tr>
+    <tr>
+      <td>customControls</td>
+      <td>array (of strings)</td>
+      <td>If you wish to exclude any of the default options, do so by passing an array of the control names that you do wish to include as <code class="highlighter-rouge">customControls</code> prop.</td>
+      <td>defaults (see list below)</td>
+    </tr>
+    <tr>
+      <td>detachToolbarOnScroll</td>
+      <td>boolean</td>
+      <td>Whether to detach the toolbar on scroll. Fixes to top of viewport for better user experience on longer posts.</td>
+      <td>true</td>
+    </tr>
+    <tr>
+      <td>allowPhotoLink</td>
+      <td>boolean</td>
+      <td>Whether to allow users to wrap uploaded photos in links.</td>
+      <td>false</td>
+    </tr>
+    <tr>
+      <td>allowPhotoSizeAdjust</td>
+      <td>boolean</td>
+      <td>Whether to allow users to adjust the size of uploaded images.</td>
+      <td>false</td>
+    </tr>
+    <tr>
+      <td>maxImgWidth</td>
+      <td>number</td>
+      <td>Setting this param will not constrain image upload sizes, but will warn users on photo upload that their image is too large and they need to size down below this max size.</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <td>linkInputAcceptsFiles</td>
+      <td>boolean</td>
+      <td>If you’d like to give users the option to add downloadable file links inlined, in addition to (or instead of) as block components with optional captions, pass true.</td>
+      <td>false</td>
+    </tr>
+    <tr>
+      <td>onFocus</td>
+      <td>function</td>
+      <td>Respond to editor focus event.</td>
+      <td>no-op</td>
+    </tr>
+    <tr>
+      <td>onBlur</td>
+      <td>function</td>
+      <td>Respond to editor blur event.</td>
+      <td>no-op</td>
+    </tr>
+    <tr>
+      <td>onFileUpload</td>
+      <td>function, *required</td>
+      <td>Respond to file upload event. Hook for saving file to server or cloud service.</td>
+      <td>none, required</td>
+    </tr>
+    <tr>
+      <td>exportTo</td>
+      <td>string (‘html’ or ‘raw’), *required</td>
+      <td>Import/Export format. Raw option exports DraftJS raw format, which can be parsed into markdown or other format.</td>
+      <td>none, required</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="toolbar-controls">Toolbar controls</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>headings
+bold
+italic
+underline
+strikethrough
+quotes
+bulletList
+orderedList
+alignLeft
+alignCenter
+alignRight
+divider
+link
+table
+file
+photo
+rich
+</code></pre>
+</div>
+
+<h2 id="installation">Installation</h2>
+
+<p><code class="highlighter-rouge">$ npm install react-drafts</code></p>
+
+<h2 id="use">Use</h2>
+<p>This package includes a Common module build at <code class="highlighter-rouge">/lib</code> and a UMD bundle in <code class="highlighter-rouge">/dist</code>. Most applications will use the Common build by importing <code class="highlighter-rouge">ReactDrafts</code> as below.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## editor parent component
+import React, { Component } from 'react';
+import ReactDrafts from 'react-drafts';
+
+class MyEditor extends Component {
+  ...
+
+  render() {
+    return (
+      &lt;div&gt;
+        &lt;button onClick={this.handleSave}&gt;Save&lt;/button&gt;
+        &lt;button onClick={this.handleClear}&gt;Clear&lt;/button&gt;
+        &lt;ReactDrafts
+          onFileUpload={this.handleFileUpload}
+          exportTo="raw"
+        /&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+</code></pre>
+</div>
+
+<p>To include styles, just import the css file from <code class="highlighter-rouge">/dist</code>, ie:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## manifest.css
+@import &lt;path_to&gt;/node_modules/react-drafts/dist/react-drafts.css
+</code></pre>
+</div>
+
+<p>See the demo directory for a more complete example. Demo contains a sample editor parent container that instantiates the <code class="highlighter-rouge">ReactDrafts</code> component and passes in props.</p>
+
+
+
+      <footer class="site-footer">
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </section>
+
+    <script src="https://unpkg.com/react-drafts@1.0.1/dist/react-drafts.js"" type="text/javascript"></script>
+    <script type="text/babel">
+      class DemoEditor extends React.Component {
+        constructor() {
+          super();
+
+          this.state = {
+            isSaving: false,
+            lastSavedAt: null
+          };
+
+          this.handleLoadSavedContent = this.handleLoadSavedContent.bind(this);
+          this.handleFileUpload = this.handleFileUpload.bind(this);
+          this.handleSave = this.handleSave.bind(this);
+          this.handleClear = this.handleClear.bind(this);
+        }
+
+        handleLoadSavedContent() {
+          const saved = localStorage.getItem('myContent');
+          return saved || '';
+        }
+
+        handleFileUpload(file) {
+          return Promise.resolve({
+            src: file.preview,
+            name: file.name
+          });
+        }
+
+        handleSave() {
+          this.setState({
+            isSaving: true
+          }, () => {
+            this.editor.save().then(content => {
+              localStorage.setItem('myContent', content);
+
+              const date = new Date();
+              setTimeout(() => {
+                this.setState({
+                  isSaving: false,
+                  lastSavedAt: date.toLocaleString()
+                });
+              }, 1000);
+            });
+          });
+        }
+
+        handleClear() {
+          localStorage.removeItem('myContent');
+          this.editor.clear();
+        }
+
+        render() {
+          const { isSaving, lastSavedAt } = this.state;
+          const storedContent = this.handleLoadSavedContent();
+
+          return (
+            <div className="demo-editor">
+              <p className="save-msg">
+                {lastSavedAt && `Last saved: ${lastSavedAt || ''}`}
+              </p>
+              <div className="drafts-editor__external-controls">
+                <p className="demo-title-msg">Demo: saves html content to localStorage</p>
+                <button className="drafts-editor__external-control clear" onClick={this.handleClear}>Clear</button>
+                <button className="drafts-editor__external-control save" onClick={this.handleSave}>
+                  { isSaving ? 'Saving' : 'Save' }
+                </button>
+              </div>
+              <ReactDrafts
+                ref={editor => this.editor = editor}
+                content={storedContent}
+                onFileUpload={this.handleFileUpload}
+                allowPhotoLink={true}
+                allowPhotoSizeAdjust={true}
+                maxImgWidth={960}
+                detachToolbarOnScroll={false}
+                linkInputAcceptsFiles={true}
+                exportTo="html"
+              />
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(
+        <DemoEditor />,
+        document.getElementById('app')
+      );
+    </script>
+
+    
+  </body>
+</html>
