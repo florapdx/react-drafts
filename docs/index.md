@@ -1,5 +1,6 @@
 ---
 layout: default
+title: React Drafts - a React-based WYSIWYG editor built using DraftJS.
 ---
 
 ## Feature list:
@@ -61,6 +62,7 @@ layout: default
 | allowPhotoSizeAdjust | boolean | Whether to allow users to adjust the size of uploaded images. | false |
 | maxImgWidth | number | Setting this param will not constrain image upload sizes, but will warn users on photo upload that their image is too large and they need to size down below this max size. | none |
 | linkInputAcceptsFiles | boolean | If you'd like to give users the option to add downloadable file links inlined, in addition to (or instead of) as block components with optional captions, pass true. | false |
+| onChange | function | Respond to editor changes (for external previews, etc). | undefined |
 | onFocus | function | Respond to editor focus event. | no-op |
 | onBlur | function | Respond to editor blur event. | no-op |
 | onFileUpload | function, *required | Respond to file upload event. Hook for saving file to server or cloud service. | none, required |

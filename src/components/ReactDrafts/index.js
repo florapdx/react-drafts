@@ -79,6 +79,7 @@ class ReactDrafts extends Component {
     this.clear = this.clear.bind(this);
 
     this.handleChange = this._handleChange.bind(this);
+    this.convertState = this._convertState.bind(this);
     this.handleKeyCommand = this._handleKeyCommand.bind(this);
     this.handleTab = this._handleTab.bind(this);
 
@@ -158,13 +159,51 @@ class ReactDrafts extends Component {
 
   /*
    ** Public method.
-   ** Returns promise.
-   * Convert editor state to specified format.
-   * Resolves with content or rejects with error message.
+   ** Returns promise via `convertState` method.
+   *  `convertState` resolves with converted content or rejects with error message.
    */
   save() {
-    const { exportTo } = this.props;
     const { editorState } = this.state;
+
+    return this.convertState(editorState);
+  }
+
+  /*
+   ** Public method.
+   ** Returns promise.
+   * Clear the editor and reset state.
+   * If `onChange` prop passed in, calls `onChange` passing empty string
+   * to resolved Promise.
+   */
+  clear() {
+    const { onChange } = this.props;
+    return new Promise((resolve, reject) => {
+      this.setState({
+        editorState: setNewEditorState({}, this.toolbarControls),
+        showLinkInput: false,
+        showTableInput: false,
+        showPhotoInput: false,
+        showRichInput: false,
+        showFileInput: false,
+        isSaving: false
+      }, () => {
+        if (onChange) {
+          onChange(Promise.resolve(''));
+        }
+
+        resolve();
+      });
+    });
+  }
+
+  /*
+   ** Private method.
+   ** Returns promise.
+   * Converts editor state to export format.
+   * Resolves with content or rejects with error message.
+   */
+  _convertState(editorState) {
+    const { exportTo } = this.props;
     const contentState = getContentState(editorState);
 
     return new Promise((resolve, reject) => {
@@ -188,27 +227,18 @@ class ReactDrafts extends Component {
   }
 
   /*
-   ** Public method.
-   ** Returns promise.
-   * Clear the editor and reset state.
+   ** Private method.
+   * Sets editor state.
+   * If `onChange` prop passed in, calls `onChange` with converted content
+   * or error via `convertState` method.
    */
-  clear() {
-    return new Promise((resolve, reject) => {
-      this.setState({
-        editorState: setNewEditorState({}, this.toolbarControls),
-        showLinkInput: false,
-        showTableInput: false,
-        showPhotoInput: false,
-        showRichInput: false,
-        showFileInput: false,
-        isSaving: false
-      }, () => {
-        resolve();
-      });
-    });
-  }
-
   _handleChange(editorState) {
+    const { onChange } = this.props;
+
+    if (onChange) {
+      onChange(this.convertState(editorState));
+    }
+
     this.setState({ editorState });
   }
 
@@ -734,6 +764,7 @@ ReactDrafts.propTypes = {
   linkInputAcceptsFiles: PropTypes.bool,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
+  onChange: PropTypes.func,
   onFileUpload: PropTypes.func.isRequired,
   exportTo: PropTypes.oneOf(['html', 'raw']).isRequired
 };
