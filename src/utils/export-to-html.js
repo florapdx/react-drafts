@@ -92,8 +92,7 @@ function cleanHTML(html) {
 
   parsed.querySelectorAll('.atomic')
     .forEach(figure => {
-      if (figure.childNodes.length === 2) {
-        // remove erroneously appended figcaption innerText on figure tags
+      while (figure.childNodes.length >= 2) {
         figure.removeChild(figure.childNodes[1]);
       }
     });
