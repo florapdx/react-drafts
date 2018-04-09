@@ -83,7 +83,7 @@
   },
   "dependencies": {
     "draft-convert": "^1.4.2",
-    "draft-js": "^0.10.1",
+    "draft-js": "^0.10.5",
     "immutable": "^3.8.1",
     "lodash.values": "^4.3.0",
     "react-dropzone": "^3.13.1"
